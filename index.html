@@ -748,7 +748,6 @@ function forceHideLoading() {
 // AUTH — Login/Logout
 // ══════════════════════════════════════════════
 async function doLogin() {
-
   const username = document.getElementById('loginUser').value.trim();
   const password = document.getElementById('loginPass').value.trim();
   const errEl = document.getElementById('loginError');
@@ -776,69 +775,54 @@ async function doLogin() {
 
     // error จาก supabase
     if (error) {
-      console.log(error);
+      console.error(error);
 
-      errEl.textContent = 'เกิดข้อผิดพลาด: ' + error.message;
+      errEl.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
       errEl.style.display = 'block';
       return;
     }
 
     // ไม่พบข้อมูล
     if (!data || data.length === 0) {
-
       errEl.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
       errEl.style.display = 'block';
       return;
     }
 
-    // ดึงข้อมูลแถวแรก
-    const userData = data[0];
+    // เอา row แรก
+    const user = data[0];
 
-    // ตรวจสอบการอนุมัติ
-    const approve = String(userData['การอนุมัติเข้าใช้'] || '');
+    // ตรวจสอบอนุมัติ
+    const approve = String(user['การอนุมัติเข้าใช้'] || '');
 
     if (approve.includes('ไม่')) {
-
       errEl.textContent = 'บัญชีนี้ยังไม่ได้รับการอนุมัติ';
       errEl.style.display = 'block';
       return;
     }
 
-    // เก็บข้อมูลผู้ใช้
+    // เก็บ session
     currentUser = {
-      id: userData['ID'] || '',
-      username: userData['Username'],
-      name: userData['ชื่อ-สกุล'] || '',
-      role: userData['สถานะ'] || 'User'
+      id: user['ID'] || '',
+      username: user['Username'],
+      name: user['ชื่อ-สกุล'] || '',
+      role: user['สถานะ'] || 'User'
     };
 
-    // save session
     sessionStorage.setItem(
       'hs_user',
       JSON.stringify(currentUser)
     );
 
-    // แสดงชื่อผู้ใช้ด้านบน
-    const cu = document.getElementById('currentUser');
-
-    if (cu) {
-      cu.innerText =
-        currentUser.name +
-        ' (' + currentUser.role + ')';
-    }
-
-    // เปิดระบบ
     showMainApp();
 
   } catch (e) {
 
     hideLoading();
 
-    console.log(e);
+    console.error(e);
 
-    errEl.textContent =
-      'เกิดข้อผิดพลาด: ' + e.message;
-
+    errEl.textContent = 'เกิดข้อผิดพลาด: ' + e.message;
     errEl.style.display = 'block';
   }
 }
