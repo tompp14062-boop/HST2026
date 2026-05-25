@@ -1323,7 +1323,35 @@ function htChangePage(dir) {
 }
 
 function _rebuildVmsDropdown(villageId) {
-  // ง่าย — ไม่ filter ตาม moo (อาจเพิ่มทีหลัง)
+  const sel = document.getElementById('ht_vms_select');
+  if (!sel) return;
+  // เก็บค่าเดิมไว้
+  const prev = sel.value;
+  // ล้างเฉพาะ option ที่ไม่ใช่ 2 ตัวแรก
+  while (sel.options.length > 2) sel.remove(2);
+
+  // หา vms_person_id ทั้งหมดจากบ้าน
+  const vmsIds = new Set();
+  allHouseData.forEach(h => {
+    const vid = String(h.village_id || '');
+    if (villageId === 'all' || vid === villageId) {
+      const id = String(h.vms_person_id || '').trim();
+      if (id && id !== '0') vmsIds.add(id);
+    }
+  });
+
+  // หาชื่อจาก allData
+  vmsIds.forEach(pid => {
+    const p = allData.find(x => String(x.person_id) === pid);
+    if (p) {
+      const label = (p.pname || '') + (p.fname || '') + ' ' + (p.lname || '');
+      const opt = new Option(label.trim(), p.cid);
+      sel.appendChild(opt);
+    }
+  });
+
+  // คืนค่าเดิมถ้ายังมีอยู่
+  sel.value = prev;
 }
 
 // ══ VIEW HOUSE MEMBERS ══
