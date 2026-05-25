@@ -710,6 +710,7 @@ const IMPORT_PASSWORD = 'admin1234'; // รหัสผ่านสำหรั�
 let sb;
 try {
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.supabase = sb;
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
     document.getElementById('supabase-config-banner').style.display = 'block';
   }
@@ -760,7 +761,7 @@ async function doLogin() {
 
   showLoading('กำลังตรวจสอบ...');
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('Users')
       .select('*')
       .eq('Username', username)
@@ -847,7 +848,7 @@ async function refreshData() {
     let personData = [];
     let from = 0, pageSize = 1000;
     while (true) {
-      const { data: batch, error } = await supabase
+      const { data: batch, error } = await sb
         .from('person')
         .select('*')
         .range(from, from + pageSize - 1);
