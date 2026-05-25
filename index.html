@@ -1552,82 +1552,114 @@ function _setRelationInfo(role, node, raw, errMsg) {
 
 function _loadRelationFromLocal(p) {
   var roles = [
-    { role:'father', pid:String(p.father_person_id||'').trim(), cid:String(p.father_cid||'').trim(), savedName:String(p.father_name||'').trim() },
-    { role:'mother', pid:String(p.mother_person_id||'').trim(), cid:String(p.mother_cid||'').trim(), savedName:String(p.mother_name||'').trim() },
-    { role:'sps',    pid:String(p.sps_person_id||'').trim(),    cid:String(p.sps_cid||'').trim(),    savedName:String(p.sps_name||'').trim()    }
+    {
+      role: 'father',
+      pid:       String(p.father_person_id || '').trim(),
+      cid:       String(p.father_cid       || '').trim(),
+      savedName: String(p.father_name      || '').trim()
+    },
+    {
+      role: 'mother',
+      pid:       String(p.mother_person_id || '').trim(),
+      cid:       String(p.mother_cid       || '').trim(),
+      savedName: String(p.mother_name      || '').trim()
+    },
+    {
+      role: 'sps',
+      pid:       String(p.sps_person_id || '').trim(),
+      cid:       String(p.sps_cid       || '').trim(),
+      savedName: String(p.sps_name      || '').trim()
+    }
   ];
 
   roles.forEach(function(r) {
-    // reset ทุกช่องก่อน
+    // reset UI ทุกช่องก่อน
     document.getElementById('crud_' + r.role + '_cid').value = '';
     document.getElementById('crud_' + r.role + '_pid').value = '';
     var nameInp = document.getElementById('crud_' + r.role + '_name');
     if (nameInp) nameInp.value = '';
-    _setRelationInfo(r.role, null);  // reset info box → แสดง "ยังไม่ระบุ" + ซ่อน name_wrap
+    _setRelationInfo(r.role, null);
+    _showNameFallback(r.role, false);
 
+    // ── helper: พบข้อมูลใน allData ──
     function _showFound(match) {
       document.getElementById('crud_' + r.role + '_cid').value = match.cid || '';
       document.getElementById('crud_' + r.role + '_pid').value = match.person_id;
-      var fullname = match.fullname || ((match.pname||'') + ' ' + (match.fname||'') + ' ' + (match.lname||'')).trim();
       _setRelationInfo(r.role, {
         person_id: match.person_id,
-        fullname:  fullname,
+        fullname:  match.fullname || ((match.pname||'') + ' ' + (match.fname||'') + ' ' + (match.lname||'')).trim(),
         sex:       match.sex,
         age_y:     match.age_y,
         birthdate: match.birthdate,
         death:     match.death
-      });
+      }, match);
       _showNameFallback(r.role, false);
     }
 
+    // ── helper: ไม่พบ → แสดงช่องชื่อ fallback ──
     function _showNameOnly(name) {
       var el = document.getElementById('crud_' + r.role + '_info');
-      if (name) {
+      if (name && name.trim()) {
         el.className = 'relation-info';
         el.innerHTML =
           '<span style="color:#6d28d9;font-size:12px;font-weight:600">📝 ' + name + '</span><br>' +
-          '<span style="color:#94a3b8;font-size:10px">(ไม่มีเลขบัตรในระบบ)</span>';
-        _showNameFallback(r.role, true, name);
+          '<span style="color:#94a3b8;font-size:10px">(ไม่พบในระบบ — ใช้ชื่อเชื่อมผังเครือญาติ)</span>';
       } else {
         el.className = 'relation-info empty';
         el.textContent = 'ยังไม่ระบุ';
-        _showNameFallback(r.role, true);  // ← แสดง name input ว่างให้กรอก
       }
+      // แสดงช่องชื่อเสมอ (ว่างหรือมีค่า)
+      _showNameFallback(r.role, true, name || '');
     }
 
-    // STEP 1: ค้นจาก person_id
+    // ── STEP 1: ค้นจาก person_id ──
     if (r.pid && r.pid !== '0') {
-      var byPid = allData.find(function(x){ return String(x.person_id) === r.pid; });
+      var byPid = allData.find(function(x) {
+        return String(x.person_id) === r.pid;
+      });
       if (byPid) { _showFound(byPid); return; }
     }
 
-    // STEP 2: ค้นจาก CID
+    // ── STEP 2: ค้นจาก CID ──
     if (r.cid && r.cid.length >= 10) {
-      var byCid = allData.find(function(x){ return String(x.cid).trim() === r.cid; });
+      var byCid = allData.find(function(x) {
+        return String(x.cid).trim() === r.cid;
+      });
       if (byCid) { _showFound(byCid); return; }
+
+      // มี CID แต่ไม่พบ → แสดง warning + ช่องชื่อ
+      document.getElementById('crud_' + r.role + '_cid').value = r.cid;
       var el2 = document.getElementById('crud_' + r.role + '_info');
       el2.className = 'relation-info';
-      el2.innerHTML = '<span style="color:#f59e0b;font-size:11px">⚠ เลขบัตร ' + r.cid + ' ไม่พบในระบบ</span>' +
-        (r.savedName ? '<br><span style="color:#6d28d9;font-size:11px">📝 ' + r.savedName + '</span>' : '');
-      document.getElementById('crud_' + r.role + '_cid').value = r.cid;
+      el2.innerHTML =
+        '<span style="color:#f59e0b;font-size:11px">⚠ เลขบัตร ' + r.cid + ' ไม่พบในระบบ</span>' +
+        (r.savedName
+          ? '<br><span style="color:#6d28d9;font-size:11px">📝 ' + r.savedName + '</span>'
+          : '');
+      // แสดงช่องชื่อ prefill ด้วยชื่อที่มีอยู่
       _showNameFallback(r.role, true, r.savedName);
       return;
     }
 
-    // STEP 3: ค้นจากชื่อ
+    // ── STEP 3: ค้นจากชื่อ ──
     if (r.savedName && r.savedName.length > 1) {
       var nameClean = r.savedName.replace(/\s+/g, ' ').trim();
       var byName = allData.find(function(x) {
-        var full  = ((x.pname||'') + ' ' + (x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g, ' ').trim();
-        var short = ((x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g, ' ').trim();
+        var full  = ((x.pname||'') + ' ' + (x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g,' ').trim();
+        var short = ((x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g,' ').trim();
         return full === nameClean || short === nameClean;
       });
-      if (byName) { _showFound(byName); return; }
+      if (byName) {
+        document.getElementById('crud_' + r.role + '_cid').value = byName.cid || '';
+        _showFound(byName);
+        return;
+      }
+      // ไม่พบแม้แต่ชื่อ → แสดงชื่อใน fallback
       _showNameOnly(r.savedName);
       return;
     }
 
-    // STEP 4: ไม่มีข้อมูลเลย → แสดง name input ว่างให้กรอก
+    // ── STEP 4: ไม่มีข้อมูลเลย → แสดงช่องว่างให้กรอก ──
     _showNameOnly('');
   });
 }
