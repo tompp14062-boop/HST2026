@@ -1967,11 +1967,15 @@ function genoDrawNode(n) {
   g.style.cursor='move';
   const isDM=n.dm,isHT=n.ht,isDMHT=isDM&&isHT,isSel=n===genoSelected;
 
-  if(n.sex==='1'){
+if(n.sex==='1'){
     const cx=TRI_W/2,pts=`${cx},2 2,${TRI_H} ${TRI_W-2},${TRI_H}`;
     const fill=isDMHT?'#fee2e2':isDM?'#fef9c3':isHT?'#dbeafe':n.index?'#ede9fe':'#7B4FA6';
     const tri=document.createElementNS(SVG_NS,'polygon');
-    tri.setAttribute('points',pts);tri.setAttribute('fill',fill);tri.setAttribute('stroke',isSel?'#a21caf':'#4A2D70');tri.setAttribute('stroke-width',isSel||n.index?3:1.8);
+    tri.setAttribute('points',pts);
+    tri.setAttribute('fill',fill);
+    tri.setAttribute('stroke',isSel?'#a21caf':'#4A2D70');
+    tri.setAttribute('stroke-width',isSel||n.index?3:1.8);
+    tri.setAttribute('stroke-dasharray',n._isGhost?'4,2':'none');
     g.appendChild(tri);
     const at=document.createElementNS(SVG_NS,'text');at.setAttribute('x',cx);at.setAttribute('y',TRI_H*0.68);at.setAttribute('text-anchor','middle');at.setAttribute('dominant-baseline','central');at.setAttribute('font-size','11');at.setAttribute('font-weight','600');at.setAttribute('fill',isDM||isHT||n.index?'#1e293b':'#fff');at.setAttribute('font-family','Sarabun,sans-serif');at.textContent=n.age||'';g.appendChild(at);
     if(n.dead){const l1=document.createElementNS(SVG_NS,'line');l1.setAttribute('x1',cx-14);l1.setAttribute('y1',8);l1.setAttribute('x2',cx+14);l1.setAttribute('y2',TRI_H-4);l1.setAttribute('stroke','#CC2222');l1.setAttribute('stroke-width','2.5');g.appendChild(l1);const l2=document.createElementNS(SVG_NS,'line');l2.setAttribute('x1',cx+14);l2.setAttribute('y1',8);l2.setAttribute('x2',cx-14);l2.setAttribute('y2',TRI_H-4);l2.setAttribute('stroke','#CC2222');l2.setAttribute('stroke-width','2.5');g.appendChild(l2);}
@@ -1981,7 +1985,15 @@ function genoDrawNode(n) {
   } else if(n.sex==='2'){
     const cx=GENO_R+2,cy=GENO_R+2;
     const fill=isDMHT?'#fee2e2':isDM?'#fef9c3':isHT?'#dbeafe':n.index?'#ede9fe':'#D4537E';
-    const c=document.createElementNS(SVG_NS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',GENO_R);c.setAttribute('fill',fill);c.setAttribute('stroke',isSel?'#be123c':'#99244D');c.setAttribute('stroke-width',isSel||n.index?3:1.8);g.appendChild(c);
+    const c=document.createElementNS(SVG_NS,'circle');
+    c.setAttribute('cx',cx);
+    c.setAttribute('cy',cy);
+    c.setAttribute('r',GENO_R);
+    c.setAttribute('fill',fill);
+    c.setAttribute('stroke',isSel?'#be123c':'#99244D');
+    c.setAttribute('stroke-width',isSel||n.index?3:1.8);
+    c.setAttribute('stroke-dasharray',n._isGhost?'4,2':'none');
+    g.appendChild(c);
     const at=document.createElementNS(SVG_NS,'text');at.setAttribute('x',cx);at.setAttribute('y',cy);at.setAttribute('text-anchor','middle');at.setAttribute('dominant-baseline','central');at.setAttribute('font-size','11');at.setAttribute('font-weight','600');at.setAttribute('fill',isDM||isHT||n.index?'#1e293b':'#fff');at.setAttribute('font-family','Sarabun,sans-serif');at.textContent=n.age||'';g.appendChild(at);
     if(n.dead){const l1=document.createElementNS(SVG_NS,'line');l1.setAttribute('x1',cx-GENO_R*0.65);l1.setAttribute('y1',cy-GENO_R*0.65);l1.setAttribute('x2',cx+GENO_R*0.65);l1.setAttribute('y2',cy+GENO_R*0.65);l1.setAttribute('stroke','#CC2222');l1.setAttribute('stroke-width','2.5');g.appendChild(l1);const l2=document.createElementNS(SVG_NS,'line');l2.setAttribute('x1',cx+GENO_R*0.65);l2.setAttribute('y1',cy-GENO_R*0.65);l2.setAttribute('x2',cx-GENO_R*0.65);l2.setAttribute('y2',cy+GENO_R*0.65);l2.setAttribute('stroke','#CC2222');l2.setAttribute('stroke-width','2.5');g.appendChild(l2);}
     if(n.index){const ul=document.createElementNS(SVG_NS,'line');ul.setAttribute('x1',2);ul.setAttribute('y1',cy+GENO_R+5);ul.setAttribute('x2',cx*2);ul.setAttribute('y2',cy+GENO_R+5);ul.setAttribute('stroke','#4A2D70');ul.setAttribute('stroke-width','3');g.appendChild(ul);}
@@ -2078,13 +2090,61 @@ function genoAutoLoad(personId) {
     return allData.find(function(x){ return String(x.cid).trim() === s; }) || null;
   }
 
-  var father = findById(self.father_person_id) || findByCid(self.father_cid);
-  var mother = findById(self.mother_person_id) || findByCid(self.mother_cid);
-  var spouse = findById(self.sps_person_id)    || findByCid(self.sps_cid);
+  // ── ค้นหาจากชื่อ (fallback สุดท้าย) ──
+  function findByName(name) {
+    if (!name || name.trim().length < 2) return null;
+    var nameClean = name.replace(/\s+/g, ' ').trim();
+    return allData.find(function(x) {
+      var full  = ((x.pname||'') + ' ' + (x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g,' ').trim();
+      var short = ((x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g,' ').trim();
+      return full === nameClean || short === nameClean;
+    }) || null;
+  }
+
+  // ── resolve: pid → cid → name ──
+  function resolve(pid, cid, name) {
+    return findById(pid) || findByCid(cid) || findByName(name) || null;
+  }
+
+  var father = resolve(self.father_person_id, self.father_cid, self.father_name);
+  var mother = resolve(self.mother_person_id, self.mother_cid, self.mother_name);
+  var spouse = resolve(self.sps_person_id,    self.sps_cid,    self.sps_name);
+
+  // ── ถ้าไม่พบในระบบ แต่มีชื่อ → สร้าง ghost node ──
+  function ghostNode(pid, cid, name, sex) {
+    if (!name || !name.trim()) return null;
+    return {
+      person_id:            null,  // ไม่มี person_id จริง
+      fullname:             name.trim(),
+      sex:                  sex || '',
+      age_y:                '',
+      birthdate:            '',
+      death:                false,
+      ncd_dm_history_type_id: '',
+      ncd_ht_history_type_id: '',
+      clinic_code_list:     '',
+      chronic_disease_list: '',
+      _isGhost:             true   // flag บอกว่าเป็น node สร้างจากชื่อ
+    };
+  }
+
+  // ถ้าไม่พบ → ใช้ ghost node จากชื่อที่บันทึกไว้
+  if (!father && self.father_name && self.father_name.trim()) {
+    father = ghostNode(null, self.father_cid, self.father_name, '1');
+  }
+  if (!mother && self.mother_name && self.mother_name.trim()) {
+    mother = ghostNode(null, self.mother_cid, self.mother_name, '2');
+  }
+  if (!spouse && self.sps_name && self.sps_name.trim()) {
+    // เดาเพศ spouse จากเพศ self (ถ้า self ชาย → spouse หญิง)
+    var spouseSex = self.sex === '1' ? '2' : '1';
+    spouse = ghostNode(null, self.sps_cid, self.sps_name, spouseSex);
+  }
 
   var selfPid = String(personId);
   var selfCid = String(self.cid || '').trim();
 
+  // ค้นลูก
   var children = allData.filter(function(x) {
     if (String(x.person_id) === selfPid) return false;
     if (String(x.father_person_id) === selfPid) return true;
@@ -2094,14 +2154,15 @@ function genoAutoLoad(personId) {
     return false;
   });
 
-  var fPid = father ? String(father.person_id) : '';
-  var mPid = mother ? String(mother.person_id) : '';
-  var fCid = father ? String(father.cid || '').trim() : '';
-  var mCid = mother ? String(mother.cid || '').trim() : '';
+  // ค้นพี่น้อง
+  var fPid = (father && father.person_id) ? String(father.person_id) : '';
+  var mPid = (mother && mother.person_id) ? String(mother.person_id) : '';
+  var fCid = (father && father.cid)       ? String(father.cid || '').trim() : '';
+  var mCid = (mother && mother.cid)       ? String(mother.cid || '').trim() : '';
 
   var siblings = allData.filter(function(x) {
     if (String(x.person_id) === selfPid) return false;
-    if (spouse && String(x.person_id) === String(spouse.person_id)) return false;
+    if (spouse && x.person_id && String(x.person_id) === String(spouse.person_id)) return false;
     if (fPid && (String(x.father_person_id) === fPid || String(x.mother_person_id) === fPid)) return true;
     if (mPid && (String(x.father_person_id) === mPid || String(x.mother_person_id) === mPid)) return true;
     if (fCid && (String(x.father_cid || '').trim() === fCid || String(x.mother_cid || '').trim() === fCid)) return true;
@@ -2111,20 +2172,20 @@ function genoAutoLoad(personId) {
 
   clearGeno();
 
-  // map allData person → format ที่ buildGenoFromTree ต้องการ
   function toNode(p) {
     if (!p) return null;
     return {
-      person_id:            p.person_id,
+      person_id:            p.person_id || null,
       fullname:             p.fullname || ((p.pname||'') + ' ' + (p.fname||'') + ' ' + (p.lname||'')).trim(),
-      sex:                  p.sex,
-      age_y:                p.age_y,
-      birthdate:            p.birthdate,
+      sex:                  p.sex || '',
+      age_y:                p.age_y || '',
+      birthdate:            p.birthdate || '',
       death:                p.death === 'Y' || p.death === true,
-      ncd_dm_history_type_id: p.ncd_dm_history_type_id,
-      ncd_ht_history_type_id: p.ncd_ht_history_type_id,
+      ncd_dm_history_type_id: p.ncd_dm_history_type_id || '',
+      ncd_ht_history_type_id: p.ncd_ht_history_type_id || '',
       clinic_code_list:     p.clinic_code_list || '',
-      chronic_disease_list: p.chronic_disease_list || ''
+      chronic_disease_list: p.chronic_disease_list || '',
+      _isGhost:             p._isGhost || false
     };
   }
 
