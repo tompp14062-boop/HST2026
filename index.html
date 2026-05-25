@@ -707,9 +707,9 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const IMPORT_PASSWORD = 'admin1234'; // รหัสผ่านสำหรับหน้า Import
 
 // ── Init Supabase ──
-let supabase;
+let sb;
 try {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
     document.getElementById('supabase-config-banner').style.display = 'block';
   }
@@ -836,11 +836,11 @@ async function refreshData() {
   dashRendered = false;
   try {
     // Load villages
-    const { data: villages } = await supabase.from('village').select('*');
+    const { data: villages } = await sb.from('village').select('*');
     allVillages = (villages || []).filter(v => String(v.village_id) !== '1');
 
     // Load house
-    const { data: houses } = await supabase.from('house').select('*');
+    const { data: houses } = await sb.from('house').select('*');
     const houseArr = houses || [];
 
     // Load person
@@ -1453,10 +1453,10 @@ async function saveCrud() {
   showLoading();
   try {
     if(!personId){
-      const{error}=await supabase.from('person').insert([updateData]);
+      const{error}=await sb.from('person').insert([updateData]);
       if(error) throw error;
     } else {
-      const{error}=await supabase.from('person').update(updateData).eq('person_id',personId);
+      const{error}=await sb.from('person').update(updateData).eq('person_id',personId);
       if(error) throw error;
     }
     hideLoading();
@@ -1472,7 +1472,7 @@ async function confirmDelete() {
   if(!res.isConfirmed)return;
   showLoading();
   try{
-    const{error}=await supabase.from('person').delete().eq('person_id',personId);
+    const{error}=await sb.from('person').delete().eq('person_id',personId);
     if(error)throw error;
     hideLoading();
     Swal.fire({icon:'success',title:'ลบสำเร็จ',timer:1500,showConfirmButton:false}).then(()=>{_getCrudModal().hide();refreshData();});
@@ -1513,8 +1513,8 @@ function checkImportPassword(event) {
 async function initImportTab() {
   if(!_importUnlocked)return;
   try{
-    const{count:hc}=await supabase.from('house').select('*',{count:'exact',head:true});
-    const{count:pc}=await supabase.from('person').select('*',{count:'exact',head:true});
+    const{count:hc}=await sb.from('house').select('*',{count:'exact',head:true});
+    const{count:pc}=await sb.from('person').select('*',{count:'exact',head:true});
     document.getElementById('imp_house_count').textContent=(hc||0).toLocaleString()+' หลัง';
     document.getElementById('imp_person_count').textContent=(pc||0).toLocaleString()+' คน';
     document.getElementById('imp_house_lastupdate').textContent='Supabase';
@@ -1556,12 +1556,12 @@ async function confirmImport(sheet) {
   if(!res.isConfirmed)return;
   showLoading('กำลังนำเข้าข้อมูล...');
   try{
-    const{error:delErr}=await supabase.from(sheet).delete().neq('house_id','-9999999');
+    const{error:delErr}=await sb.from(sheet).delete().neq('house_id','-9999999');
     if(delErr&&sheet==='house') throw delErr;
     const BATCH=200; let inserted=0;
     for(let i=0;i<data.length;i+=BATCH){
       const batch=data.slice(i,i+BATCH);
-      const{error}=await supabase.from(sheet).upsert(batch,{onConflict: sheet==='house'?'house_id':'person_id'});
+      const{error}=await sb.from(sheet).upsert(batch,{onConflict: sheet==='house'?'house_id':'person_id'});
       if(error)throw error;
       inserted+=batch.length;
       _impLog(`→ นำเข้า ${inserted}/${data.length}`,'warn');
@@ -1577,7 +1577,7 @@ async function exportSheetData(sheet,format) {
   try{
     let allRows=[], from=0, batch=1000;
     while(true){
-      const{data,error}=await supabase.from(sheet).select('*').range(from,from+batch-1);
+      const{data,error}=await sb.from(sheet).select('*').range(from,from+batch-1);
       if(error||!data||data.length===0)break;
       allRows=allRows.concat(data);
       if(data.length<batch)break;
