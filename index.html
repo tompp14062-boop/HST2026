@@ -1245,7 +1245,6 @@ function htChangePage(dir) {
   renderHouseTable();
 }
 
-// ══ HOUSE MEMBERS ══
 // แทนที่ทั้ง function viewHouseMembers
 function viewHouseMembers(houseId) {
   const h=allHouseData.find(x=>String(x.house_id)===String(houseId));
@@ -1287,7 +1286,7 @@ function viewHouseMembers(houseId) {
       </td></tr>`;
   }).join('');
 
-  // Mobile cards
+// แทนที่ทั้ง document.getElementById('hm_card_container').innerHTML = members.map(p => { ... }).join('');
   document.getElementById('hm_card_container').innerHTML=members.map(p=>{
     const disc=String(p.person_discharge||'').trim();
     const isDead=p.death==='Y'||disc==='1';
@@ -1304,11 +1303,11 @@ function viewHouseMembers(houseId) {
       <div style="margin-bottom:8px;font-size:12px">${diseaseHtml}</div>
       <div class="hm-card-actions">
         <button class="btn btn-sm btn-outline-primary rounded-pill flex-fill" style="font-size:12px"
-          onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎ แก้ไข</button>
+          onclick="_closeHmAndRun(()=>openEditCrud('${p.person_id}'))">✎ แก้ไข</button>
         <button class="btn btn-sm rounded-pill flex-fill text-white" style="font-size:12px;background:#0f766e"
-          onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openFamilyTree('${p.person_id}'),350)">🌳 เครือญาติ</button>
+          onclick="_closeHmAndRun(()=>openFamilyTree('${p.person_id}'))">🌳 ผัง</button>
         ${age15&&disc==='9'?`<button class="btn btn-sm rounded-pill text-white px-3" style="font-size:12px;background:#dc2626"
-          onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openScreeningModal('${p.person_id}'),350)">🚬</button>`:''}
+          onclick="_closeHmAndRun(()=>openScreeningModal('${p.person_id}'))">🚬</button>`:''}
       </div>
     </div>`;
   }).join('');
@@ -1716,39 +1715,6 @@ function genoClearRelHighlight(){if(genoRelFirst){genoRelFirst.el.style.opacity=
 function genoShowRelPanel(a,b){genoClearRelHighlight();if(genoRelPanelEl)genoRelPanelEl.remove();const wrap=document.getElementById('geno-canvas-wrap');const px=(a.x+b.x)/2+GENO_R,py=(a.y+b.y)/2+GENO_R;const panel=document.createElement('div');panel.id='geno-rel-panel';panel.style.left=px+'px';panel.style.top=py+'px';panel.innerHTML=`<div style="font-size:12px;margin-bottom:8px;color:#64748b;font-weight:600">เลือกความสัมพันธ์</div><select id="geno-rel-type"><option value="spouse">สมรส</option><option value="parent-child">พ่อ/แม่ → ลูก</option><option value="sibling">พี่น้อง</option></select><div style="display:flex;gap:6px"><button onclick="genoConfirmRel(${a.id},${b.id})">ยืนยัน</button><button onclick="genoCancelRel()">ยกเลิก</button></div>`;wrap.appendChild(panel);genoRelPanelEl=panel;}
 function genoConfirmRel(aId,bId){const rtype=document.getElementById('geno-rel-type').value;genoAddEdge(aId,bId,rtype);genoCancelRel();}
 function genoCancelRel(){if(genoRelPanelEl){genoRelPanelEl.remove();genoRelPanelEl=null;}genoRelFirst=null;}
-
-function buildGenoFromTree(d) {
-  const COL=130,ROW=140,svgW=1060,START_Y=40;
-  function calcX(i,total,cx){return cx-(total-1)*COL/2+i*COL;}
-  function createN(p,x,y,isIdx){
-    return genoCreateNode({x:x-(p.sex==='2'?28:21),y,sex:String(p.sex||''),name:p.fullname||'',age:p.age_y||'',dm:_hasDM(p),ht:_hasHT(p),dead:p.death||false,isIndex:isIdx,person_id:p.person_id||null});
-  }
-  function addE(fromN,toN,rt){if(fromN&&toN){const dup=genoEdges.find(e=>(e.from===fromN.id&&e.to===toN.id)||(e.from===toN.id&&e.to===fromN.id));if(!dup)genoAddEdge(fromN.id,toN.id,rt);}}
-
-  const gen1=[d.father,d.mother].filter(Boolean);
-  const gen1Ns=gen1.map((p,i)=>createN(p,calcX(i,gen1.length,svgW/2),START_Y,false));
-  const fN=d.father?gen1Ns[0]:null;
-  const mN=d.mother?(gen1Ns.length>1?gen1Ns[1]:gen1Ns[0]):null;
-  if(fN&&mN)addE(fN,mN,'spouse');
-
-  const self=d.self,spouse=d.spouse,siblings=d.siblings||[];
-  const gen2=[...siblings.filter(s=>(parseInt(s.age_y)||0)>(parseInt(self.age_y)||0)),self,...(spouse?[spouse]:[]),...siblings.filter(s=>(parseInt(s.age_y)||0)<=(parseInt(self.age_y)||0))];
-  const gen2Ns=gen2.map((p,i)=>createN(p,calcX(i,gen2.length,svgW/2),START_Y+ROW,String(p.person_id)===String(self.person_id)));
-  const selfN=gen2Ns[gen2.findIndex(p=>String(p.person_id)===String(self.person_id))];
-  const spouseN=spouse?gen2Ns[gen2.findIndex(p=>String(p.person_id)===String(spouse.person_id))]:null;
-  gen2Ns.forEach((sN,i)=>{const p=gen2[i];if(spouse&&String(p.person_id)===String(spouse.person_id))return;if(fN)addE(fN,sN,'parent-child');if(mN)addE(mN,sN,'parent-child');});
-  if(selfN&&spouseN)addE(selfN,spouseN,'spouse');
-
-  const children=d.children||[];
-  const midIdx=(gen2.findIndex(p=>String(p.person_id)===String(self.person_id))+(spouse?gen2.findIndex(p=>String(p.person_id)===String(spouse.person_id)):gen2.findIndex(p=>String(p.person_id)===String(self.person_id))))/2;
-  const midX=calcX(midIdx,gen2.length,svgW/2);
-  children.forEach((p,i)=>{
-    const cx=midX+(i-(children.length-1)/2)*COL;
-    const cN=createN(p,cx,START_Y+ROW*2,false);
-    if(selfN)addE(selfN,cN,'parent-child');
-    if(spouseN)addE(spouseN,cN,'parent-child');
-  });
-}
 
 // แทนที่ function genoAutoLoad เดิมทั้งหมด
 function genoAutoLoad(personId) {
