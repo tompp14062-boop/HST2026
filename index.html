@@ -473,11 +473,75 @@
         </div>
         <hr class="my-2">
         <p class="fw-bold mb-2" style="color:#6d28d9;font-size:12px">▍ ความสัมพันธ์</p>
-        <div class="row g-2">
-          <div class="col-12 col-md-4"><div class="rounded-3 border p-2" style="border-color:#e2e8f0!important"><p class="small fw-bold mb-2" style="font-size:12px">👨 พ่อ</p><div class="position-relative mb-2"><input type="text" id="crud_father_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('father',this.value)"><div id="crud_father_cid_drop" class="relation-drop" style="display:none"></div></div><input type="hidden" id="crud_father_pid"><div id="crud_father_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div></div></div>
-          <div class="col-12 col-md-4"><div class="rounded-3 border p-2" style="border-color:#e2e8f0!important"><p class="small fw-bold mb-2" style="font-size:12px">👩 แม่</p><div class="position-relative mb-2"><input type="text" id="crud_mother_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('mother',this.value)"><div id="crud_mother_cid_drop" class="relation-drop" style="display:none"></div></div><input type="hidden" id="crud_mother_pid"><div id="crud_mother_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div></div></div>
-          <div class="col-12 col-md-4"><div class="rounded-3 border p-2" style="border-color:#e2e8f0!important"><p class="small fw-bold mb-2" style="font-size:12px">💑 คู่สมรส</p><div class="position-relative mb-2"><input type="text" id="crud_sps_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('sps',this.value)"><div id="crud_sps_cid_drop" class="relation-drop" style="display:none"></div></div><input type="hidden" id="crud_sps_pid"><div id="crud_sps_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div></div></div>
-        </div>
+<div class="row g-2">
+
+  <!-- พ่อ -->
+  <div class="col-12 col-md-4">
+    <div class="rounded-3 border p-2 h-100" style="border-color:#e2e8f0!important">
+      <p class="small fw-bold mb-2" style="font-size:12px">👨 พ่อ</p>
+      <div class="position-relative mb-2">
+        <input type="text" id="crud_father_cid" maxlength="50"
+          class="form-control form-control-sm rounded-pill border-0 bg-light"
+          placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" autocomplete="off"
+          oninput="lookupRelative('father',this.value)">
+        <div id="crud_father_cid_drop" class="relation-drop" style="display:none"></div>
+      </div>
+      <input type="hidden" id="crud_father_pid">
+      <div id="crud_father_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div>
+      <div id="crud_father_name_wrap" class="mt-2" style="display:none">
+        <label class="small text-muted" style="font-size:10px">ชื่อบิดา <span style="color:#f59e0b">(ไม่พบในระบบ)</span></label>
+        <input type="text" id="crud_father_name"
+          class="form-control form-control-sm rounded-pill border-0 bg-light"
+          placeholder="ชื่อ-นามสกุลบิดา">
+      </div>
+    </div>
+  </div>
+
+  <!-- แม่ -->
+  <div class="col-12 col-md-4">
+    <div class="rounded-3 border p-2 h-100" style="border-color:#e2e8f0!important">
+      <p class="small fw-bold mb-2" style="font-size:12px">👩 แม่</p>
+      <div class="position-relative mb-2">
+        <input type="text" id="crud_mother_cid" maxlength="50"
+          class="form-control form-control-sm rounded-pill border-0 bg-light"
+          placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" autocomplete="off"
+          oninput="lookupRelative('mother',this.value)">
+        <div id="crud_mother_cid_drop" class="relation-drop" style="display:none"></div>
+      </div>
+      <input type="hidden" id="crud_mother_pid">
+      <div id="crud_mother_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div>
+      <div id="crud_mother_name_wrap" class="mt-2" style="display:none">
+        <label class="small text-muted" style="font-size:10px">ชื่อมารดา <span style="color:#f59e0b">(ไม่พบในระบบ)</span></label>
+        <input type="text" id="crud_mother_name"
+          class="form-control form-control-sm rounded-pill border-0 bg-light"
+          placeholder="ชื่อ-นามสกุลมารดา">
+      </div>
+    </div>
+  </div>
+
+  <!-- คู่สมรส -->
+  <div class="col-12 col-md-4">
+    <div class="rounded-3 border p-2 h-100" style="border-color:#e2e8f0!important">
+      <p class="small fw-bold mb-2" style="font-size:12px">💑 คู่สมรส</p>
+      <div class="position-relative mb-2">
+        <input type="text" id="crud_sps_cid" maxlength="50"
+          class="form-control form-control-sm rounded-pill border-0 bg-light"
+          placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" autocomplete="off"
+          oninput="lookupRelative('sps',this.value)">
+        <div id="crud_sps_cid_drop" class="relation-drop" style="display:none"></div>
+      </div>
+      <input type="hidden" id="crud_sps_pid">
+      <div id="crud_sps_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div>
+      <div id="crud_sps_name_wrap" class="mt-2" style="display:none">
+        <label class="small text-muted" style="font-size:10px">ชื่อสามี/ภรรยา <span style="color:#f59e0b">(ไม่พบในระบบ)</span></label>
+        <input type="text" id="crud_sps_name"
+          class="form-control form-control-sm rounded-pill border-0 bg-light"
+          placeholder="ชื่อ-นามสกุลคู่สมรส">
+      </div>
+    </div>
+  </div>
+
+</div>
       </div>
       <div class="modal-footer border-0 px-3 pb-3 pt-2 d-flex justify-content-between flex-wrap gap-2">
         <button class="btn btn-outline-danger rounded-pill px-3" id="crud_del_btn" onclick="confirmDelete()" style="display:none;font-size:13px">🗑 ลบ</button>
@@ -1377,27 +1441,123 @@ function openEditCrud(personId) {
   _getCrudModal().show();
 }
 
+function _showNameFallback(role, show, prefill) {
+  var wrap = document.getElementById('crud_' + role + '_name_wrap');
+  if (!wrap) return;
+  wrap.style.display = show ? '' : 'none';
+  if (prefill !== undefined) {
+    var inp = document.getElementById('crud_' + role + '_name');
+    if (inp && prefill) inp.value = prefill;
+  }
+}
+
+function _setRelationInfo(role, node, raw, errMsg) {
+  var el = document.getElementById('crud_' + role + '_info');
+  _showNameFallback(role, false);
+
+  if (!node && !errMsg) {
+    el.className = 'relation-info empty';
+    el.textContent = 'ยังไม่ระบุ';
+    var cidVal = (document.getElementById('crud_' + role + '_cid') || {}).value || '';
+    if (!cidVal.trim()) _showNameFallback(role, true);
+    return;
+  }
+  if (errMsg) {
+    el.className = 'relation-info';
+    el.innerHTML = errMsg;
+    _showNameFallback(role, true);
+    return;
+  }
+  var sexIcon = node.sex === '1' ? '👨' : '👩';
+  var isDead  = (node.death === true || node.death === 'Y' || node.death === 'y');
+  var deadBadge = isDead ? ' <span class="badge bg-danger" style="font-size:9px">เสียชีวิต</span>' : '';
+  el.className = 'relation-info found';
+  el.innerHTML =
+    sexIcon + ' <strong>' + (node.fullname || '') + '</strong>' + deadBadge + '<br>' +
+    '<span style="color:#94a3b8;font-size:10px">อายุ ' + (node.age_y || '?') + ' ปี' +
+    (node.birthdate ? ' | เกิด ' + toBE(node.birthdate) : '') + '</span>';
+  _showNameFallback(role, false);
+}
+
 function _loadRelationFromLocal(p) {
-  const roles=[
-    {role:'father',pid:String(p.father_person_id||'').trim(),cid:String(p.father_cid||'').trim(),name:String(p.father_name||'').trim()},
-    {role:'mother',pid:String(p.mother_person_id||'').trim(),cid:String(p.mother_cid||'').trim(),name:String(p.mother_name||'').trim()},
-    {role:'sps',pid:String(p.sps_person_id||'').trim(),cid:String(p.sps_cid||'').trim(),name:String(p.sps_name||'').trim()}
+  var roles = [
+    { role:'father', pid:String(p.father_person_id||'').trim(), cid:String(p.father_cid||'').trim(), savedName:String(p.father_name||'').trim() },
+    { role:'mother', pid:String(p.mother_person_id||'').trim(), cid:String(p.mother_cid||'').trim(), savedName:String(p.mother_name||'').trim() },
+    { role:'sps',    pid:String(p.sps_person_id||'').trim(),    cid:String(p.sps_cid||'').trim(),    savedName:String(p.sps_name||'').trim()    }
   ];
-  roles.forEach(r=>{
-    let match=null;
-    if(r.pid&&r.pid!=='0')match=allData.find(x=>String(x.person_id)===r.pid);
-    if(!match&&r.cid&&r.cid.length>=10)match=allData.find(x=>String(x.cid).trim()===r.cid);
-    if(match){
-      document.getElementById('crud_'+r.role+'_cid').value=match.cid||'';
-      document.getElementById('crud_'+r.role+'_pid').value=match.person_id;
-      const el=document.getElementById('crud_'+r.role+'_info');
-      el.className='relation-info found';
-      el.innerHTML=`<strong>${match.fullname||''}</strong><br><span style="color:#94a3b8;font-size:10px">อายุ ${match.age_y||'?'} ปี</span>`;
-    } else if(r.name){
-      const el=document.getElementById('crud_'+r.role+'_info');
-      el.className='relation-info';
-      el.innerHTML=`<span style="color:#6d28d9">${r.name}</span><br><span style="color:#94a3b8;font-size:10px">ไม่พบในระบบ</span>`;
+
+  roles.forEach(function(r) {
+    document.getElementById('crud_' + r.role + '_cid').value = '';
+    document.getElementById('crud_' + r.role + '_pid').value = '';
+    var nameInp = document.getElementById('crud_' + r.role + '_name');
+    if (nameInp) nameInp.value = r.savedName;
+    _setRelationInfo(r.role, null);
+
+    function _showFound(match) {
+      document.getElementById('crud_' + r.role + '_cid').value = match.cid || '';
+      document.getElementById('crud_' + r.role + '_pid').value = match.person_id;
+      var fullname = match.fullname || ((match.pname||'') + ' ' + (match.fname||'') + ' ' + (match.lname||'')).trim();
+      _setRelationInfo(r.role, {
+        person_id: match.person_id,
+        fullname:  fullname,
+        sex:       match.sex,
+        age_y:     match.age_y,
+        birthdate: match.birthdate,
+        death:     match.death
+      });
+      _showNameFallback(r.role, false);
     }
+
+    function _showNameOnly(name) {
+      var el = document.getElementById('crud_' + r.role + '_info');
+      if (name) {
+        el.className = 'relation-info';
+        el.innerHTML =
+          '<span style="color:#6d28d9;font-size:12px;font-weight:600">📝 ' + name + '</span><br>' +
+          '<span style="color:#94a3b8;font-size:10px">(ไม่มีเลขบัตรในระบบ)</span>';
+        _showNameFallback(r.role, true, name);
+      } else {
+        el.className = 'relation-info empty';
+        el.textContent = 'ยังไม่ระบุ';
+        _showNameFallback(r.role, true);
+      }
+    }
+
+    // STEP 1: ค้นจาก person_id
+    if (r.pid && r.pid !== '0') {
+      var byPid = allData.find(function(x){ return String(x.person_id) === r.pid; });
+      if (byPid) { _showFound(byPid); return; }
+    }
+
+    // STEP 2: ค้นจาก CID
+    if (r.cid && r.cid.length >= 10) {
+      var byCid = allData.find(function(x){ return String(x.cid).trim() === r.cid; });
+      if (byCid) { _showFound(byCid); return; }
+      // CID มีแต่ไม่พบ
+      var el2 = document.getElementById('crud_' + r.role + '_info');
+      el2.className = 'relation-info';
+      el2.innerHTML = '<span style="color:#f59e0b;font-size:11px">⚠ เลขบัตร ' + r.cid + ' ไม่พบในระบบ</span>' +
+        (r.savedName ? '<br><span style="color:#6d28d9;font-size:11px">📝 ' + r.savedName + '</span>' : '');
+      document.getElementById('crud_' + r.role + '_cid').value = r.cid;
+      _showNameFallback(r.role, true, r.savedName);
+      return;
+    }
+
+    // STEP 3: ค้นจากชื่อ
+    if (r.savedName && r.savedName.length > 1) {
+      var nameClean = r.savedName.replace(/\s+/g, ' ').trim();
+      var byName = allData.find(function(x) {
+        var full  = ((x.pname||'') + ' ' + (x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g, ' ').trim();
+        var short = ((x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g, ' ').trim();
+        return full === nameClean || short === nameClean;
+      });
+      if (byName) { _showFound(byName); return; }
+      _showNameOnly(r.savedName);
+      return;
+    }
+
+    // STEP 4: ไม่มีข้อมูล
+    _showNameOnly('');
   });
 }
 
@@ -1435,31 +1595,66 @@ document.addEventListener('click',function(e){
 });
 
 async function saveCrud() {
-  const personId=document.getElementById('crud_person_id').value;
-  const fname=document.getElementById('crud_fname').value.trim();
-  const lname=document.getElementById('crud_lname').value.trim();
-  if(!fname||!lname){Swal.fire({icon:'warning',title:'กรุณากรอกข้อมูล',text:'ชื่อและนามสกุลห้ามว่าง',confirmButtonColor:'#6d28d9'});return;}
-  const updateData={
-    pname:document.getElementById('crud_pname').value.trim(),fname,lname,
-    cid:document.getElementById('crud_cid').value.trim(),
-    sex:document.getElementById('crud_sex').value,
-    birthdate:toCE(document.getElementById('crud_birthdate').value.trim()),
-    house_id:document.getElementById('crud_house_id').value.trim(),
-    person_discharge_id:document.getElementById('crud_discharge').value||null,
-    father_person_id:document.getElementById('crud_father_pid').value||null,
-    mother_person_id:document.getElementById('crud_mother_pid').value||null,
-    sps_person_id:document.getElementById('crud_sps_pid').value||null,
-    father_cid:document.getElementById('crud_father_cid').value.trim()||null,
-    mother_cid:document.getElementById('crud_mother_cid').value.trim()||null,
-    sps_cid:document.getElementById('crud_sps_cid').value.trim()||null,
+  const personId = document.getElementById('crud_person_id').value;
+  const fname    = document.getElementById('crud_fname').value.trim();
+  const lname    = document.getElementById('crud_lname').value.trim();
+  if (!fname || !lname) {
+    Swal.fire({ icon:'warning', title:'กรุณากรอกข้อมูล', text:'ชื่อและนามสกุลห้ามว่าง', confirmButtonColor:'#6d28d9' });
+    return;
+  }
+
+  // ── ดึงชื่อ fallback ──
+  var fatherPid  = document.getElementById('crud_father_pid').value || '';
+  var motherPid  = document.getElementById('crud_mother_pid').value || '';
+  var spsPid     = document.getElementById('crud_sps_pid').value    || '';
+  var fatherCid  = document.getElementById('crud_father_cid').value.trim();
+  var motherCid  = document.getElementById('crud_mother_cid').value.trim();
+  var spsCid     = document.getElementById('crud_sps_cid').value.trim();
+
+  function _getName(pid, cid, role) {
+    var byPid = pid ? allData.find(function(x){ return String(x.person_id) === pid; }) : null;
+    if (byPid) return ((byPid.pname||'') + ' ' + (byPid.fname||'') + ' ' + (byPid.lname||'')).trim();
+    var byCid = cid ? allData.find(function(x){ return String(x.cid).trim() === cid; }) : null;
+    if (byCid) return ((byCid.pname||'') + ' ' + (byCid.fname||'') + ' ' + (byCid.lname||'')).trim();
+    var inp = document.getElementById('crud_' + role + '_name');
+    return inp ? inp.value.trim() : '';
+  }
+
+  const updateData = {
+    pname:            document.getElementById('crud_pname').value.trim(),
+    fname, lname,
+    cid:              document.getElementById('crud_cid').value.trim(),
+    sex:              document.getElementById('crud_sex').value,
+    birthdate:        toCE(document.getElementById('crud_birthdate').value.trim()),
+    house_id:         document.getElementById('crud_house_id').value.trim(),
+    person_discharge_id: document.getElementById('crud_discharge').value || null,
+    father_person_id: fatherPid || null,
+    mother_person_id: motherPid || null,
+    sps_person_id:    spsPid    || null,
+    father_cid:       fatherCid || null,
+    mother_cid:       motherCid || null,
+    sps_cid:          spsCid    || null,
+    father_name:      _getName(fatherPid, fatherCid, 'father') || null,
+    mother_name:      _getName(motherPid, motherCid, 'mother') || null,
+    sps_name:         _getName(spsPid,    spsCid,    'sps')    || null,
   };
+
   showLoading();
   try {
-    if(!personId){const{error}=await sb.from('person').insert([updateData]);if(error)throw error;}
-    else{const{error}=await sb.from('person').update(updateData).eq('person_id',personId);if(error)throw error;}
+    if (!personId) {
+      const { error } = await sb.from('person').insert([updateData]);
+      if (error) throw error;
+    } else {
+      const { error } = await sb.from('person').update(updateData).eq('person_id', personId);
+      if (error) throw error;
+    }
     hideLoading();
-    Swal.fire({icon:'success',title:'บันทึกสำเร็จ',timer:1500,timerProgressBar:true,showConfirmButton:false}).then(()=>{_getCrudModal().hide();refreshData();});
-  }catch(e){hideLoading();Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:e.message,confirmButtonColor:'#6d28d9'});}
+    Swal.fire({ icon:'success', title:'บันทึกสำเร็จ', timer:1500, timerProgressBar:true, showConfirmButton:false })
+      .then(() => { _getCrudModal().hide(); refreshData(); });
+  } catch(e) {
+    hideLoading();
+    Swal.fire({ icon:'error', title:'เกิดข้อผิดพลาด', text:e.message, confirmButtonColor:'#6d28d9' });
+  }
 }
 
 async function confirmDelete() {
