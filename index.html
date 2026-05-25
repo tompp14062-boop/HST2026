@@ -11,53 +11,37 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://api.longdo.com/map/?key=badbd62aba856c0a6e5fe71f59605804"></script>
 
   <style>
     :root {
-      --purple: #6d28d9;
-      --purple-light: #a78bfa;
-      --teal: #0f766e;
-      --teal-light: #14b8a6;
-      --red: #dc2626;
-      --amber: #b45309;
+      --purple: #6d28d9; --purple-light: #a78bfa;
+      --teal: #0f766e; --teal-light: #14b8a6;
+      --red: #dc2626; --amber: #b45309;
       --shadow-sm: 0 2px 8px rgba(109,40,217,0.08);
       --shadow-md: 0 4px 15px rgba(109,40,217,0.12);
     }
-
     * { box-sizing: border-box; }
     body { font-family: 'Sarabun', sans-serif; background: #f8fafc; color: #334155; margin: 0; }
 
-    /* ─── TOPBAR ─── */
+    /* TOPBAR */
     #topbar {
       background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 60%, #7c3aed 100%);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 12px rgba(76,29,149,0.3);
+      padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+      position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 12px rgba(76,29,149,0.3);
     }
     #topbar h1 { font-size: 16px; font-weight: 600; color: white; margin: 0; }
     #topbar .sub { font-size: 11px; color: rgba(255,255,255,0.7); margin: 0; }
 
-    /* ─── LOGIN ─── */
+    /* LOGIN */
     #loginScreen {
       min-height: 100vh;
       background: linear-gradient(135deg, #4c1d95, #6d28d9, #7c3aed);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
     }
     .login-card {
-      background: white;
-      border-radius: 24px;
-      padding: 2.5rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      background: white; border-radius: 24px; padding: 2.5rem;
+      width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
     }
     .login-logo { text-align: center; margin-bottom: 1.5rem; }
     .login-logo h2 { font-size: 20px; font-weight: 600; color: #6d28d9; margin: 8px 0 4px; }
@@ -65,53 +49,33 @@
     .login-field { margin-bottom: 14px; }
     .login-field label { font-size: 12px; color: #64748b; font-weight: 600; display: block; margin-bottom: 6px; }
     .login-field input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: 'Sarabun', sans-serif;
-      outline: none;
-      transition: border-color 0.2s;
-      background: #f8fafc;
+      width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0;
+      border-radius: 12px; font-size: 15px; font-family: 'Sarabun', sans-serif;
+      outline: none; transition: border-color 0.2s; background: #f8fafc;
     }
     .login-field input:focus { border-color: #6d28d9; background: white; }
     .btn-login {
-      width: 100%;
-      padding: 13px;
+      width: 100%; padding: 13px;
       background: linear-gradient(135deg, #6d28d9, #7c3aed);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      font-family: 'Sarabun', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
+      color: white; border: none; border-radius: 12px; font-size: 15px;
+      font-weight: 600; font-family: 'Sarabun', sans-serif; cursor: pointer; transition: all 0.2s;
     }
     .btn-login:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(109,40,217,0.3); }
     .login-error { background: #fee2e2; color: #991b1b; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-top: 10px; display: none; }
 
-    /* ─── MAIN APP ─── */
     #mainApp { display: none; }
 
-    /* ─── CARDS ─── */
-    .k-card {
-      background: white;
-      border-radius: 20px;
-      border: none;
-      box-shadow: var(--shadow-sm);
-      transition: 0.3s;
-    }
+    /* CARDS */
+    .k-card { background: white; border-radius: 20px; border: none; box-shadow: var(--shadow-sm); transition: 0.3s; }
     .k-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
-    /* ─── TABS ─── */
+    /* TABS */
     .nav-pills { gap: 4px; }
     .nav-pills .nav-link { color: #6d28d9; font-weight: 600; border-radius: 50px; padding: 7px 14px; font-size: 13px; white-space: nowrap; }
     .nav-pills .nav-link.active { background: #6d28d9; color: white; }
     .nav-pills .nav-link:hover:not(.active) { background: #ede9fe; }
 
-    /* ─── KPI ─── */
+    /* KPI */
     .kpi-card { background: #f8fafc; border-radius: 12px; padding: 14px 16px; border: 0.5px solid #e2e8f0; flex: 1; min-width: 0; }
     .kpi-label { font-size: 12px; color: #64748b; margin: 0 0 4px; }
     .kpi-val { font-size: 22px; font-weight: 600; color: #1e293b; margin: 0; }
@@ -119,40 +83,24 @@
     .db-card { background: white; border-radius: 16px; padding: 1rem 1.25rem; box-shadow: var(--shadow-sm); }
     .sec-title { font-size: 13px; font-weight: 600; color: #64748b; margin: 0 0 12px; }
 
-    /* ─── LOADING ─── */
-    #loadingOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(255,255,255,0.75);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-    }
-    .spin-box {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem 2.5rem;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      min-width: 240px;
-    }
+    /* LOADING */
+    #loadingOverlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.75); z-index: 9999; align-items: center; justify-content: center; }
+    .spin-box { background: white; border-radius: 20px; padding: 2rem 2.5rem; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.12); min-width: 240px; }
     .spin { width: 48px; height: 48px; border: 4px solid #ede9fe; border-top-color: #6d28d9; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes ldot { 0%,80%,100%{transform:scale(1);opacity:.3} 40%{transform:scale(1.4);opacity:1} }
 
-    /* ─── TABLE ─── */
+    /* TABLE */
     .table-green-stripe tbody tr:nth-child(odd) td { background: #fdfbf0; }
     .table-green-stripe tbody tr:nth-child(even) td { background: #dcfce7; }
     .table-green-stripe tbody tr:hover td { background: #bbf7d0 !important; cursor: pointer; }
 
-    /* ─── RISK DOT ─── */
+    /* RISK */
     .risk-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
     .risk-bar-bg { flex: 1; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
     .risk-bar { height: 8px; border-radius: 4px; }
     .risk-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 
-    /* ─── PYRAMID ─── */
+    /* PYRAMID */
     .pyr-header { background: #E87722; color: #fff; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 12px 12px 0 0; }
     .pyr-body { border: 0.5px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; padding: 12px 8px 8px; background: white; }
     .pyr-row { display: flex; align-items: center; margin-bottom: 3px; }
@@ -163,7 +111,7 @@
     .pyr-bar-f { background: #E8A0B0; height: 16px; border-radius: 0 2px 2px 0; min-width: 1px; }
     .pyr-pct { font-size: 9px; color: #64748b; white-space: nowrap; flex-shrink: 0; }
 
-    /* ─── HOUSE CARDS (mobile) ─── */
+    /* HOUSE CARDS */
     .ht-card { background: white; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; box-shadow: var(--shadow-sm); border: 0.5px solid #e2e8f0; }
     .ht-card-addr { font-size: 15px; font-weight: 700; color: #6d28d9; }
     .ht-card-reg { font-size: 11px; color: #94a3b8; font-family: monospace; }
@@ -175,7 +123,7 @@
     .hm-card-meta { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; color: #64748b; margin-bottom: 8px; align-items: center; }
     .hm-card-actions { display: flex; gap: 6px; }
 
-    /* ─── RELATION ─── */
+    /* RELATION */
     .relation-drop { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 0.5px solid #e2e8f0; border-radius: 10px; z-index: 200; max-height: 160px; overflow-y: auto; box-shadow: 0 4px 16px rgba(0,0,0,.10); }
     .rel-drop-item { padding: 7px 12px; font-size: 12px; cursor: pointer; color: #334155; border-bottom: 0.5px solid #f1f5f9; }
     .rel-drop-item:last-child { border-bottom: none; }
@@ -186,26 +134,42 @@
     .relation-info.found { border-color: #a78bfa; background: #f5f3ff; }
     .relation-info.empty { color: #94a3b8; font-style: italic; }
 
-    /* ─── SCREENING ─── */
-    #scr_cig_panel .form-check-label,
-    #scr_alc_panel .form-check-label { font-size: 13px; }
+    /* GENOGRAM */
+    #geno-toolbar { display:flex; gap:6px; flex-wrap:wrap; padding:10px 14px; background:#f8fafc; border-bottom:1px solid #e2e8f0; align-items:center; }
+    .geno-sym-btn { display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid #e2e8f0; border-radius:8px; background:white; cursor:pointer; transition:background .15s; font-size:10px; color:#64748b; }
+    .geno-sym-btn:hover, .geno-sym-btn.active { background:#ede9fe; border-color:#a78bfa; color:#6d28d9; }
+    .geno-divider { width:1px; height:28px; background:#e2e8f0; margin:0 2px; }
+    .geno-search-wrap { display:flex; gap:6px; align-items:center; margin-left:auto; position:relative; }
+    .geno-search-wrap input { padding:6px 10px; border:1px solid #e2e8f0; border-radius:8px; background:white; color:#334155; font-size:13px; width:200px; font-family:'Sarabun',sans-serif; }
+    .geno-search-wrap input:focus { outline:none; border-color:#a78bfa; }
+    #geno-search-results { position:absolute; top:calc(100% + 4px); right:0; background:white; border:1px solid #e2e8f0; border-radius:10px; z-index:99; min-width:260px; max-height:220px; overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,.10); }
+    .gsr-item { padding:9px 14px; font-size:13px; cursor:pointer; color:#334155; border-bottom:0.5px solid #f1f5f9; }
+    .gsr-item:hover { background:#f8fafc; }
+    #geno-canvas-wrap { position:relative; overflow:auto; background:white; min-height:500px; border-radius:0 0 16px 16px; }
+    #genoSVG { display:block; cursor:crosshair; user-select:none; }
+    #geno-node-panel { padding:10px 14px; border-top:1px solid #e2e8f0; background:#f8fafc; display:none; align-items:center; gap:8px; flex-wrap:wrap; font-size:13px; border-radius:0 0 16px 16px; }
+    #geno-node-panel input { padding:5px 9px; border:1px solid #e2e8f0; border-radius:7px; font-size:12px; width:170px; background:white; color:#334155; font-family:'Sarabun',sans-serif; }
+    #geno-node-panel button { padding:5px 12px; border:1px solid #e2e8f0; border-radius:7px; background:white; cursor:pointer; font-size:12px; font-family:'Sarabun',sans-serif; color:#334155; }
+    #geno-node-panel button:hover { background:#ede9fe; color:#6d28d9; }
+    #geno-node-panel button.danger { border-color:#fecaca; color:#ef4444; }
+    #geno-rel-panel { position:absolute; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:14px; z-index:60; box-shadow:0 4px 20px rgba(0,0,0,.12); min-width:210px; }
+    #geno-rel-panel select { width:100%; padding:6px 9px; border:1px solid #e2e8f0; border-radius:7px; font-size:13px; margin-bottom:10px; background:white; color:#334155; font-family:'Sarabun',sans-serif; }
+    #geno-rel-panel button { padding:5px 12px; border-radius:7px; border:1px solid #e2e8f0; cursor:pointer; font-size:12px; background:#f8fafc; color:#334155; font-family:'Sarabun',sans-serif; }
 
-    /* ─── FORM SELECT FIX ─── */
+    /* MAP */
+    #overviewMap, #editMap, #houseMapDiv { width: 100%; height: 500px; border-radius: 20px; }
+
+    /* SELECT FIX */
     select, .form-select {
-      font-size: 16px !important;
-      min-height: 44px !important;
-      padding: 10px 36px 10px 12px !important;
-      border-radius: 12px !important;
-      background-color: #ffffff !important;
-      border: 1.5px solid #cbd5e1 !important;
-      appearance: none !important;
-      -webkit-appearance: none !important;
-      cursor: pointer;
+      font-size: 16px !important; min-height: 44px !important;
+      padding: 10px 36px 10px 12px !important; border-radius: 12px !important;
+      background-color: #ffffff !important; border: 1.5px solid #cbd5e1 !important;
+      appearance: none !important; -webkit-appearance: none !important; cursor: pointer;
     }
     select:focus, .form-select:focus { border-color: #6d28d9 !important; box-shadow: 0 0 0 3px rgba(109,40,217,0.15) !important; outline: none; }
     input, textarea { font-size: 16px !important; }
 
-    /* ─── RESPONSIVE ─── */
+    /* RESPONSIVE */
     @media (max-width: 767px) {
       .container { padding-left: 12px; padding-right: 12px; }
       #mainTab { flex-wrap: nowrap !important; overflow-x: auto; justify-content: flex-start !important; padding-bottom: 4px; }
@@ -213,32 +177,26 @@
       #ht_card_list { display: block !important; }
       #hm_table_wrap { display: none !important; }
       #hm_card_list { display: block !important; }
+      #overviewMap, #editMap, #houseMapDiv { height: 300px !important; }
     }
     @media (min-width: 768px) {
       #ht_card_list { display: none !important; }
       #hm_card_list { display: none !important; }
     }
 
-    /* ─── IMPORT LOG ─── */
+    /* IMPORT LOG */
     #imp_log { background: #0f172a; border-radius: 12px; padding: 12px 16px; min-height: 80px; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace; color: #94a3b8; }
 
-    /* ─── MISC ─── */
+    /* MISC */
     .badge-custom { font-size: .75rem; padding: 5px 12px; border-radius: 50px; }
     .profile-img { width: 65px; height: 65px; border-radius: 15px; object-fit: cover; background: #f1f5f9; }
     .modal { outline: none; }
     .btn { min-height: 40px; font-size: 14px; touch-action: manipulation; }
-    #overviewMap { width: 100%; height: 500px; border-radius: 20px; }
-    #editMap { width: 100%; height: 400px; border-radius: 16px; }
     .table-green-stripe { font-size: 13px; }
-    #supabase-config-banner { background: #fef9c3; border-bottom: 1px solid #f59e0b; padding: 8px 16px; font-size: 12px; color: #92400e; display: none; }
+    .gleg { display:flex; align-items:center; gap:4px; font-size:11px; color:#64748b; }
   </style>
 </head>
 <body>
-
-<!-- Supabase Config Banner -->
-<div id="supabase-config-banner">
-  ⚠️ กรุณาตั้งค่า Supabase URL และ Anon Key ในไฟล์ <strong>config.js</strong> ก่อนใช้งาน
-</div>
 
 <!-- LOADING -->
 <div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.75);z-index:9999;align-items:center;justify-content:center;">
@@ -250,7 +208,7 @@
   </div>
 </div>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">
@@ -266,8 +224,7 @@
     </div>
     <div class="login-field">
       <label>รหัสผ่าน (Password)</label>
-      <input type="password" id="loginPass" placeholder="กรอก Password" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter') doLogin()">
+      <input type="password" id="loginPass" placeholder="กรอก Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
     </div>
     <button class="btn-login" onclick="doLogin()">เข้าสู่ระบบ</button>
     <div class="login-error" id="loginError"></div>
@@ -275,9 +232,8 @@
   </div>
 </div>
 
-<!-- ═══ MAIN APP ═══ -->
+<!-- MAIN APP -->
 <div id="mainApp">
-  <!-- Topbar -->
   <div id="topbar">
     <div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="white" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -295,23 +251,19 @@
       <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#dashPanel" onclick="if(!dashRendered&&allData.length>0){renderDashboard();dashRendered=true;}">📊 สถิติ</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#housePanel" onclick="initHouseTab()">🏠 บ้าน</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#listPanel">👥 ประชากร</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#mapPanel" onclick="loadOverviewMap()">🗺 แผนที่</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#searchPanel" onclick="initSearchTab()">🔍 ค้นหา</button></li>
       <li class="nav-item"><button class="nav-link" id="importTabBtn" data-bs-toggle="pill" data-bs-target="#importPanel" onclick="checkImportPassword(event)">📥 นำเข้า</button></li>
     </ul>
 
     <div class="tab-content">
 
-      <!-- ══ DASHBOARD ══ -->
+      <!-- DASHBOARD -->
       <div class="tab-pane fade show active" id="dashPanel">
-        <div id="dashContent">
-          <div class="text-center py-5 text-muted">
-            <div style="font-size:3rem">📊</div>
-            <p>กำลังโหลดข้อมูล...</p>
-          </div>
-        </div>
+        <div id="dashContent"><div class="text-center py-5 text-muted"><div style="font-size:3rem">📊</div><p>กำลังโหลดข้อมูล...</p></div></div>
       </div>
 
-      <!-- ══ HOUSE TAB ══ -->
+      <!-- HOUSE TAB -->
       <div class="tab-pane fade" id="housePanel">
         <div class="k-card p-3 mb-3">
           <div class="row g-2 align-items-end">
@@ -381,88 +333,40 @@
         </div>
       </div>
 
-      <!-- ══ POPULATION LIST ══ -->
+      <!-- POPULATION LIST -->
       <div class="tab-pane fade" id="listPanel">
         <div class="k-card p-3 mb-4">
           <div class="row g-2">
-            <div class="col-12 col-md-2">
-              <label class="small text-muted ms-2">หมู่บ้าน</label>
-              <select id="filterVillage" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option></select>
-            </div>
-            <div class="col-6 col-md-1">
-              <label class="small text-muted ms-2">บ้านเลขที่</label>
-              <input type="text" id="filterAddress" class="form-control rounded-pill border-0 bg-light" placeholder="เช่น 12/1">
-            </div>
-            <div class="col-12 col-md-2">
-              <label class="small text-muted ms-2">เลขบัตร</label>
-              <input type="text" id="filterCid" class="form-control rounded-pill border-0 bg-light" placeholder="13 หลัก">
-            </div>
-            <div class="col-12 col-md-3">
-              <label class="small text-muted ms-2">ชื่อ - นามสกุล</label>
-              <input type="text" id="filterName" class="form-control rounded-pill border-0 bg-light" placeholder="ระบุชื่อหรือนามสกุล" onkeydown="if(event.key==='Enter')searchData()">
-            </div>
-            <div class="col-12 col-md-2">
-              <label class="small text-muted ms-2">สถานะบุคคล</label>
-              <select id="filterDischarge" class="form-select rounded-pill border-0 bg-light">
-                <option value="all">ทั้งหมด</option>
-                <option value="9">ยังอาศัยอยู่ (9)</option>
-                <option value="1">เสียชีวิต (1)</option>
-                <option value="2">ย้าย (2)</option>
-                <option value="">ไม่ระบุ</option>
-              </select>
-            </div>
+            <div class="col-12 col-md-2"><label class="small text-muted ms-2">หมู่บ้าน</label><select id="filterVillage" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option></select></div>
+            <div class="col-6 col-md-1"><label class="small text-muted ms-2">บ้านเลขที่</label><input type="text" id="filterAddress" class="form-control rounded-pill border-0 bg-light" placeholder="เช่น 12/1"></div>
+            <div class="col-12 col-md-2"><label class="small text-muted ms-2">เลขบัตร</label><input type="text" id="filterCid" class="form-control rounded-pill border-0 bg-light" placeholder="13 หลัก"></div>
+            <div class="col-12 col-md-3"><label class="small text-muted ms-2">ชื่อ - นามสกุล</label><input type="text" id="filterName" class="form-control rounded-pill border-0 bg-light" placeholder="ระบุชื่อหรือนามสกุล" onkeydown="if(event.key==='Enter')searchData()"></div>
+            <div class="col-12 col-md-2"><label class="small text-muted ms-2">สถานะบุคคล</label><select id="filterDischarge" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option><option value="9">ยังอาศัยอยู่ (9)</option><option value="1">เสียชีวิต (1)</option><option value="2">ย้าย (2)</option><option value="">ไม่ระบุ</option></select></div>
             <div class="col-auto d-flex align-items-end gap-2">
               <button class="btn btn-success rounded-pill fw-bold" onclick="searchData()">🔍</button>
               <button class="btn btn-primary rounded-pill" onclick="refreshData()">🔄</button>
             </div>
           </div>
         </div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-8">
-            <div class="k-card p-3"><canvas id="riskChart" style="max-height:150px;"></canvas></div>
-          </div>
-        </div>
+        <div class="row g-3 mb-4"><div class="col-md-8"><div class="k-card p-3"><canvas id="riskChart" style="max-height:150px;"></canvas></div></div></div>
         <div id="personContainer" class="row"></div>
       </div>
 
-      <!-- ══ SEARCH TAB ══ -->
+      <!-- MAP TAB -->
+      <div class="tab-pane fade" id="mapPanel">
+        <div class="k-card p-0"><div id="overviewMap"></div></div>
+      </div>
+
+      <!-- SEARCH TAB -->
       <div class="tab-pane fade" id="searchPanel">
         <div class="k-card p-3 mb-3">
           <div class="row g-2 align-items-end">
-            <div class="col-12 col-md-2">
-              <label class="small text-muted ms-1">หมู่บ้าน</label>
-              <select id="sq_village" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option></select>
-            </div>
-            <div class="col-6 col-md-1">
-              <label class="small text-muted ms-1">อายุ (จาก)</label>
-              <input type="number" id="sq_age_min" class="form-control rounded-pill border-0 bg-light" placeholder="0" min="0" max="120">
-            </div>
-            <div class="col-6 col-md-1">
-              <label class="small text-muted ms-1">ถึง</label>
-              <input type="number" id="sq_age_max" class="form-control rounded-pill border-0 bg-light" placeholder="120" min="0" max="120">
-            </div>
-            <div class="col-12 col-md-2">
-              <label class="small text-muted ms-1">สถานะ</label>
-              <select id="sq_discharge" class="form-select rounded-pill border-0 bg-light">
-                <option value="all">ทั้งหมด</option>
-                <option value="9">ยังอาศัยอยู่</option>
-                <option value="1">เสียชีวิต</option>
-                <option value="2">ย้าย</option>
-                <option value="">ไม่ระบุ</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-1">
-              <label class="small text-muted ms-1">เพศ</label>
-              <select id="sq_sex" class="form-select rounded-pill border-0 bg-light">
-                <option value="all">ทั้งหมด</option>
-                <option value="1">ชาย</option>
-                <option value="2">หญิง</option>
-              </select>
-            </div>
-            <div class="col-12 col-md-3">
-              <label class="small text-muted ms-1">ชื่อ / เลขบัตร</label>
-              <input type="text" id="sq_keyword" class="form-control rounded-pill border-0 bg-light" placeholder="ชื่อ-นามสกุล หรือ เลขบัตรฯ" onkeydown="if(event.key==='Enter')runSearchTab()">
-            </div>
+            <div class="col-12 col-md-2"><label class="small text-muted ms-1">หมู่บ้าน</label><select id="sq_village" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option></select></div>
+            <div class="col-6 col-md-1"><label class="small text-muted ms-1">อายุ (จาก)</label><input type="number" id="sq_age_min" class="form-control rounded-pill border-0 bg-light" placeholder="0" min="0" max="120"></div>
+            <div class="col-6 col-md-1"><label class="small text-muted ms-1">ถึง</label><input type="number" id="sq_age_max" class="form-control rounded-pill border-0 bg-light" placeholder="120" min="0" max="120"></div>
+            <div class="col-12 col-md-2"><label class="small text-muted ms-1">สถานะ</label><select id="sq_discharge" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option><option value="9">ยังอาศัยอยู่</option><option value="1">เสียชีวิต</option><option value="2">ย้าย</option><option value="">ไม่ระบุ</option></select></div>
+            <div class="col-6 col-md-1"><label class="small text-muted ms-1">เพศ</label><select id="sq_sex" class="form-select rounded-pill border-0 bg-light"><option value="all">ทั้งหมด</option><option value="1">ชาย</option><option value="2">หญิง</option></select></div>
+            <div class="col-12 col-md-3"><label class="small text-muted ms-1">ชื่อ / เลขบัตร</label><input type="text" id="sq_keyword" class="form-control rounded-pill border-0 bg-light" placeholder="ชื่อ-นามสกุล หรือ เลขบัตรฯ" onkeydown="if(event.key==='Enter')runSearchTab()"></div>
             <div class="col-auto d-flex gap-2">
               <button class="btn btn-success rounded-pill fw-bold" onclick="runSearchTab()">🔍</button>
               <button class="btn btn-outline-secondary rounded-pill" onclick="clearSearchTab()">✕</button>
@@ -473,19 +377,17 @@
         <div class="k-card p-0" style="overflow:hidden">
           <div style="overflow-x:auto">
             <table class="table table-hover mb-0 table-green-stripe" style="min-width:800px;">
-              <thead style="background:#f8fafc">
-                <tr>
-                  <th class="px-3 py-2 text-muted fw-normal" style="width:44px">#</th>
-                  <th class="px-3 py-2 text-muted fw-normal">เลขบัตรประชาชน</th>
-                  <th class="px-3 py-2 text-muted fw-normal">ชื่อ-นามสกุล</th>
-                  <th class="px-3 py-2 text-muted fw-normal text-center">เพศ</th>
-                  <th class="px-3 py-2 text-muted fw-normal">วันเกิด</th>
-                  <th class="px-3 py-2 text-muted fw-normal text-center">อายุ</th>
-                  <th class="px-3 py-2 text-muted fw-normal">ที่อยู่</th>
-                  <th class="px-3 py-2 text-muted fw-normal">สถานะ</th>
-                  <th class="px-3 py-2 text-muted fw-normal text-center">จัดการ</th>
-                </tr>
-              </thead>
+              <thead style="background:#f8fafc"><tr>
+                <th class="px-3 py-2 text-muted fw-normal" style="width:44px">#</th>
+                <th class="px-3 py-2 text-muted fw-normal">เลขบัตรประชาชน</th>
+                <th class="px-3 py-2 text-muted fw-normal">ชื่อ-นามสกุล</th>
+                <th class="px-3 py-2 text-muted fw-normal text-center">เพศ</th>
+                <th class="px-3 py-2 text-muted fw-normal">วันเกิด</th>
+                <th class="px-3 py-2 text-muted fw-normal text-center">อายุ</th>
+                <th class="px-3 py-2 text-muted fw-normal">ที่อยู่</th>
+                <th class="px-3 py-2 text-muted fw-normal">สถานะ</th>
+                <th class="px-3 py-2 text-muted fw-normal text-center">จัดการ</th>
+              </tr></thead>
               <tbody id="sq_tbody"><tr><td colspan="9" class="text-center text-muted py-5">กรุณากดค้นหา</td></tr></tbody>
             </table>
           </div>
@@ -499,7 +401,7 @@
         </div>
       </div>
 
-      <!-- ══ IMPORT TAB ══ -->
+      <!-- IMPORT TAB -->
       <div class="tab-pane fade" id="importPanel">
         <div id="import_lock_screen" class="text-center py-5">
           <div style="max-width:360px;margin:0 auto">
@@ -513,95 +415,43 @@
           <div class="row g-3">
             <div class="col-12 col-lg-6">
               <div class="k-card p-0" style="overflow:hidden">
-                <div style="background:linear-gradient(135deg,#0f766e,#14b8a6);padding:1rem 1.25rem">
-                  <div class="d-flex align-items-center gap-2">
-                    <span style="font-size:1.5rem">🏠</span>
-                    <div><h6 class="fw-bold m-0 text-white">ข้อมูลบ้าน (house)</h6><p class="m-0 text-white" style="opacity:.8;font-size:11px">นำเข้า/ส่งออกข้อมูลทะเบียนบ้าน</p></div>
-                  </div>
-                </div>
+                <div style="background:linear-gradient(135deg,#0f766e,#14b8a6);padding:1rem 1.25rem"><div class="d-flex align-items-center gap-2"><span style="font-size:1.5rem">🏠</span><div><h6 class="fw-bold m-0 text-white">ข้อมูลบ้าน (house)</h6><p class="m-0 text-white" style="opacity:.8;font-size:11px">นำเข้า/ส่งออกข้อมูลทะเบียนบ้าน</p></div></div></div>
                 <div class="p-3">
-                  <div class="d-flex gap-2 mb-3">
-                    <div class="kpi-card text-center flex-fill"><p class="kpi-label">จำนวนบ้าน</p><p class="kpi-val" id="imp_house_count" style="color:#0f766e">—</p></div>
-                    <div class="kpi-card text-center flex-fill"><p class="kpi-label">อัปเดตล่าสุด</p><p class="kpi-val" style="font-size:13px;color:#64748b" id="imp_house_lastupdate">—</p></div>
-                  </div>
-                  <div class="mb-3">
-                    <label class="small fw-bold mb-1" style="color:#0f766e">📂 นำเข้าจากไฟล์ Excel</label>
-                    <input type="file" id="imp_house_file" accept=".xlsx,.xls,.csv" class="form-control form-control-sm rounded-pill border-0 bg-light" onchange="previewImport('house',this)">
-                    <div id="imp_house_preview" class="mt-2" style="display:none">
-                      <div class="rounded-3 p-2 mb-2" style="background:#f0fdfa;border:0.5px solid #14b8a6;font-size:12px"><span id="imp_house_preview_text"></span></div>
-                      <button class="btn btn-sm rounded-pill text-white fw-bold w-100" style="background:#dc2626;font-size:12px" onclick="confirmImport('house')">🗑 ลบข้อมูลเก่า แล้วนำเข้าใหม่</button>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="small fw-bold mb-1" style="color:#0f766e">📤 ส่งออกข้อมูล</label>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-sm btn-outline-success rounded-pill flex-fill fw-bold" onclick="exportSheetData('house','excel')" style="font-size:12px">📊 Excel</button>
-                    </div>
-                  </div>
+                  <div class="d-flex gap-2 mb-3"><div class="kpi-card text-center flex-fill"><p class="kpi-label">จำนวนบ้าน</p><p class="kpi-val" id="imp_house_count" style="color:#0f766e">—</p></div><div class="kpi-card text-center flex-fill"><p class="kpi-label">อัปเดตล่าสุด</p><p class="kpi-val" style="font-size:13px;color:#64748b" id="imp_house_lastupdate">—</p></div></div>
+                  <div class="mb-3"><label class="small fw-bold mb-1" style="color:#0f766e">📂 นำเข้าจากไฟล์ Excel</label><input type="file" id="imp_house_file" accept=".xlsx,.xls,.csv" class="form-control form-control-sm rounded-pill border-0 bg-light" onchange="previewImport('house',this)"><div id="imp_house_preview" class="mt-2" style="display:none"><div class="rounded-3 p-2 mb-2" style="background:#f0fdfa;border:0.5px solid #14b8a6;font-size:12px"><span id="imp_house_preview_text"></span></div><button class="btn btn-sm rounded-pill text-white fw-bold w-100" style="background:#dc2626;font-size:12px" onclick="confirmImport('house')">🗑 ลบข้อมูลเก่า แล้วนำเข้าใหม่</button></div></div>
+                  <div><label class="small fw-bold mb-1" style="color:#0f766e">📤 ส่งออกข้อมูล</label><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-success rounded-pill flex-fill fw-bold" onclick="exportSheetData('house','excel')" style="font-size:12px">📊 Excel</button></div></div>
                 </div>
               </div>
             </div>
             <div class="col-12 col-lg-6">
               <div class="k-card p-0" style="overflow:hidden">
-                <div style="background:linear-gradient(135deg,#6d28d9,#a78bfa);padding:1rem 1.25rem">
-                  <div class="d-flex align-items-center gap-2">
-                    <span style="font-size:1.5rem">👥</span>
-                    <div><h6 class="fw-bold m-0 text-white">ข้อมูลประชากร (person)</h6><p class="m-0 text-white" style="opacity:.8;font-size:11px">นำเข้า/ส่งออกข้อมูลทะเบียนราษฎร์</p></div>
-                  </div>
-                </div>
+                <div style="background:linear-gradient(135deg,#6d28d9,#a78bfa);padding:1rem 1.25rem"><div class="d-flex align-items-center gap-2"><span style="font-size:1.5rem">👥</span><div><h6 class="fw-bold m-0 text-white">ข้อมูลประชากร (person)</h6><p class="m-0 text-white" style="opacity:.8;font-size:11px">นำเข้า/ส่งออกข้อมูลทะเบียนราษฎร์</p></div></div></div>
                 <div class="p-3">
-                  <div class="d-flex gap-2 mb-3">
-                    <div class="kpi-card text-center flex-fill"><p class="kpi-label">จำนวนประชากร</p><p class="kpi-val" id="imp_person_count" style="color:#6d28d9">—</p></div>
-                    <div class="kpi-card text-center flex-fill"><p class="kpi-label">อัปเดตล่าสุด</p><p class="kpi-val" style="font-size:13px;color:#64748b" id="imp_person_lastupdate">—</p></div>
-                  </div>
-                  <div class="mb-3">
-                    <label class="small fw-bold mb-1" style="color:#6d28d9">📂 นำเข้าจากไฟล์ Excel</label>
-                    <input type="file" id="imp_person_file" accept=".xlsx,.xls,.csv" class="form-control form-control-sm rounded-pill border-0 bg-light" onchange="previewImport('person',this)">
-                    <div id="imp_person_preview" class="mt-2" style="display:none">
-                      <div class="rounded-3 p-2 mb-2" style="background:#f5f3ff;border:0.5px solid #a78bfa;font-size:12px"><span id="imp_person_preview_text"></span></div>
-                      <button class="btn btn-sm rounded-pill text-white fw-bold w-100" style="background:#dc2626;font-size:12px" onclick="confirmImport('person')">🗑 ลบข้อมูลเก่า แล้วนำเข้าใหม่</button>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="small fw-bold mb-1" style="color:#6d28d9">📤 ส่งออกข้อมูล</label>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-sm btn-outline-success rounded-pill flex-fill fw-bold" onclick="exportSheetData('person','excel')" style="font-size:12px">📊 Excel</button>
-                    </div>
-                  </div>
+                  <div class="d-flex gap-2 mb-3"><div class="kpi-card text-center flex-fill"><p class="kpi-label">จำนวนประชากร</p><p class="kpi-val" id="imp_person_count" style="color:#6d28d9">—</p></div><div class="kpi-card text-center flex-fill"><p class="kpi-label">อัปเดตล่าสุด</p><p class="kpi-val" style="font-size:13px;color:#64748b" id="imp_person_lastupdate">—</p></div></div>
+                  <div class="mb-3"><label class="small fw-bold mb-1" style="color:#6d28d9">📂 นำเข้าจากไฟล์ Excel</label><input type="file" id="imp_person_file" accept=".xlsx,.xls,.csv" class="form-control form-control-sm rounded-pill border-0 bg-light" onchange="previewImport('person',this)"><div id="imp_person_preview" class="mt-2" style="display:none"><div class="rounded-3 p-2 mb-2" style="background:#f5f3ff;border:0.5px solid #a78bfa;font-size:12px"><span id="imp_person_preview_text"></span></div><button class="btn btn-sm rounded-pill text-white fw-bold w-100" style="background:#dc2626;font-size:12px" onclick="confirmImport('person')">🗑 ลบข้อมูลเก่า แล้วนำเข้าใหม่</button></div></div>
+                  <div><label class="small fw-bold mb-1" style="color:#6d28d9">📤 ส่งออกข้อมูล</label><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-success rounded-pill flex-fill fw-bold" onclick="exportSheetData('person','excel')" style="font-size:12px">📊 Excel</button></div></div>
                 </div>
               </div>
             </div>
-            <div class="col-12">
-              <div class="k-card p-3">
-                <p class="sec-title mb-2">📋 บันทึกการดำเนินการ</p>
-                <div id="imp_log"><span style="color:#475569">— รอการดำเนินการ —</span></div>
-                <div class="mt-2 d-flex justify-content-end">
-                  <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" style="font-size:12px" onclick="document.getElementById('imp_log').innerHTML='<span style=\'color:#475569\'>— ล้างแล้ว —</span>'">🗑 ล้าง Log</button>
-                </div>
-              </div>
-            </div>
+            <div class="col-12"><div class="k-card p-3"><p class="sec-title mb-2">📋 บันทึกการดำเนินการ</p><div id="imp_log"><span style="color:#475569">— รอการดำเนินการ —</span></div><div class="mt-2 d-flex justify-content-end"><button class="btn btn-sm btn-outline-secondary rounded-pill px-3" style="font-size:12px" onclick="document.getElementById('imp_log').innerHTML='<span style=\'color:#475569\'>— ล้างแล้ว —</span>'">🗑 ล้าง Log</button></div></div></div>
           </div>
         </div>
       </div>
 
-    </div><!-- /tab-content -->
-  </div><!-- /container -->
-</div><!-- /mainApp -->
+    </div>
+  </div>
+</div>
 
-<!-- ═══ MODAL: แก้ไขบุคคล ═══ -->
+<!-- MODAL: แก้ไขบุคคล -->
 <div class="modal fade" id="crudModal" tabindex="-1">
   <div class="modal-dialog modal-xl" style="max-width:800px">
     <div class="modal-content border-0" style="border-radius:20px">
       <div class="modal-header border-0 pb-0" style="background:linear-gradient(135deg,#6d28d9,#a78bfa);border-radius:20px 20px 0 0;padding:1rem 1.5rem">
-        <div class="me-auto">
-          <h5 class="fw-bold m-0 text-white fs-6" id="crud_title">แก้ไขข้อมูลบุคคล</h5>
-          <p class="m-0 text-white" id="crud_subtitle" style="opacity:.8;font-size:11px"></p>
-        </div>
+        <div class="me-auto"><h5 class="fw-bold m-0 text-white fs-6" id="crud_title">แก้ไขข้อมูลบุคคล</h5><p class="m-0 text-white" id="crud_subtitle" style="opacity:.8;font-size:11px"></p></div>
         <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-3 p-md-4" style="overflow-y:auto;max-height:calc(100dvh - 160px)">
-        <input type="hidden" id="crud_person_id">
-        <input type="hidden" id="crud_row_index">
+        <input type="hidden" id="crud_person_id"><input type="hidden" id="crud_row_index">
         <p class="fw-bold mb-2" style="color:#6d28d9;font-size:12px">▍ ข้อมูลส่วนตัว</p>
         <div class="row g-2 mb-2">
           <div class="col-4 col-sm-2"><label class="small text-muted d-block" style="font-size:11px">คำนำหน้า</label><input type="text" id="crud_pname" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="นาย/นาง..."></div>
@@ -623,30 +473,9 @@
         <hr class="my-2">
         <p class="fw-bold mb-2" style="color:#6d28d9;font-size:12px">▍ ความสัมพันธ์</p>
         <div class="row g-2">
-          <div class="col-12 col-md-4">
-            <div class="rounded-3 border p-2" style="border-color:#e2e8f0!important">
-              <p class="small fw-bold mb-2" style="font-size:12px">👨 พ่อ</p>
-              <div class="position-relative mb-2"><input type="text" id="crud_father_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('father',this.value)"><div id="crud_father_cid_drop" class="relation-drop" style="display:none"></div></div>
-              <input type="hidden" id="crud_father_pid">
-              <div id="crud_father_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div>
-            </div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="rounded-3 border p-2" style="border-color:#e2e8f0!important">
-              <p class="small fw-bold mb-2" style="font-size:12px">👩 แม่</p>
-              <div class="position-relative mb-2"><input type="text" id="crud_mother_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('mother',this.value)"><div id="crud_mother_cid_drop" class="relation-drop" style="display:none"></div></div>
-              <input type="hidden" id="crud_mother_pid">
-              <div id="crud_mother_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div>
-            </div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="rounded-3 border p-2" style="border-color:#e2e8f0!important">
-              <p class="small fw-bold mb-2" style="font-size:12px">💑 คู่สมรส</p>
-              <div class="position-relative mb-2"><input type="text" id="crud_sps_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('sps',this.value)"><div id="crud_sps_cid_drop" class="relation-drop" style="display:none"></div></div>
-              <input type="hidden" id="crud_sps_pid">
-              <div id="crud_sps_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div>
-            </div>
-          </div>
+          <div class="col-12 col-md-4"><div class="rounded-3 border p-2" style="border-color:#e2e8f0!important"><p class="small fw-bold mb-2" style="font-size:12px">👨 พ่อ</p><div class="position-relative mb-2"><input type="text" id="crud_father_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('father',this.value)"><div id="crud_father_cid_drop" class="relation-drop" style="display:none"></div></div><input type="hidden" id="crud_father_pid"><div id="crud_father_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div></div></div>
+          <div class="col-12 col-md-4"><div class="rounded-3 border p-2" style="border-color:#e2e8f0!important"><p class="small fw-bold mb-2" style="font-size:12px">👩 แม่</p><div class="position-relative mb-2"><input type="text" id="crud_mother_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('mother',this.value)"><div id="crud_mother_cid_drop" class="relation-drop" style="display:none"></div></div><input type="hidden" id="crud_mother_pid"><div id="crud_mother_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div></div></div>
+          <div class="col-12 col-md-4"><div class="rounded-3 border p-2" style="border-color:#e2e8f0!important"><p class="small fw-bold mb-2" style="font-size:12px">💑 คู่สมรส</p><div class="position-relative mb-2"><input type="text" id="crud_sps_cid" class="form-control form-control-sm rounded-pill border-0 bg-light" placeholder="เลขบัตร หรือ ชื่อ-นามสกุล" oninput="lookupRelative('sps',this.value)"><div id="crud_sps_cid_drop" class="relation-drop" style="display:none"></div></div><input type="hidden" id="crud_sps_pid"><div id="crud_sps_info" class="relation-info empty" style="font-size:11px;min-height:40px">ยังไม่ระบุ</div></div></div>
         </div>
       </div>
       <div class="modal-footer border-0 px-3 pb-3 pt-2 d-flex justify-content-between flex-wrap gap-2">
@@ -660,7 +489,7 @@
   </div>
 </div>
 
-<!-- ═══ MODAL: สมาชิกในบ้าน ═══ -->
+<!-- MODAL: สมาชิกในบ้าน -->
 <div class="modal fade" id="houseMembersModal" tabindex="-1">
   <div class="modal-dialog modal-xl" style="max-width:1000px">
     <div class="modal-content border-0" style="border-radius:20px">
@@ -672,19 +501,17 @@
       <div class="modal-body p-3">
         <div id="hm_table_wrap" style="overflow-x:auto">
           <table class="table table-hover mb-0 table-green-stripe" style="min-width:700px;font-size:13px">
-            <thead style="background:#f0fdfa">
-              <tr>
-                <th class="px-3 py-2 text-muted fw-normal">#</th>
-                <th class="px-3 py-2 text-muted fw-normal">เลขบัตร</th>
-                <th class="px-3 py-2 text-muted fw-normal">ชื่อ-นามสกุล</th>
-                <th class="px-3 py-2 text-muted fw-normal text-center">เพศ</th>
-                <th class="px-3 py-2 text-muted fw-normal">วันเกิด</th>
-                <th class="px-3 py-2 text-muted fw-normal text-center">อายุ</th>
-                <th class="px-3 py-2 text-muted fw-normal">โรคประจำตัว</th>
-                <th class="px-3 py-2 text-muted fw-normal text-center">สถานะ</th>
-                <th class="px-3 py-2 text-muted fw-normal text-center">จัดการ</th>
-              </tr>
-            </thead>
+            <thead style="background:#f0fdfa"><tr>
+              <th class="px-3 py-2 text-muted fw-normal">#</th>
+              <th class="px-3 py-2 text-muted fw-normal">เลขบัตร</th>
+              <th class="px-3 py-2 text-muted fw-normal">ชื่อ-นามสกุล</th>
+              <th class="px-3 py-2 text-muted fw-normal text-center">เพศ</th>
+              <th class="px-3 py-2 text-muted fw-normal">วันเกิด</th>
+              <th class="px-3 py-2 text-muted fw-normal text-center">อายุ</th>
+              <th class="px-3 py-2 text-muted fw-normal">โรคประจำตัว</th>
+              <th class="px-3 py-2 text-muted fw-normal text-center">สถานะ</th>
+              <th class="px-3 py-2 text-muted fw-normal text-center">จัดการ</th>
+            </tr></thead>
             <tbody id="hm_tbody"></tbody>
           </table>
         </div>
@@ -697,35 +524,192 @@
   </div>
 </div>
 
+<!-- MODAL: ผังเครือญาติ -->
+<div class="modal fade" id="familyModal" tabindex="-1">
+  <div class="modal-dialog modal-xl" style="max-width:1100px">
+    <div class="modal-content border-0" style="border-radius:25px;overflow:hidden">
+      <div class="modal-header border-0 pb-0" style="background:linear-gradient(135deg,#6d28d9,#a78bfa);border-radius:25px 25px 0 0;padding:1.2rem 1.5rem">
+        <div><h5 class="fw-bold m-0 text-white">🌳 ผังเครือญาติ</h5><p class="text-white m-0" id="fm_title" style="opacity:.8;font-size:12px"></p></div>
+        <div class="d-flex gap-2 ms-auto me-3">
+          <button class="btn btn-sm btn-light rounded-pill px-3" onclick="genoAutoLoad(currentGenoPersonId)">โหลดอัตโนมัติ 🔗</button>
+          <button class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="clearGeno()">ล้างผัง 🗑</button>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:8px 16px;font-size:10px;color:#64748b;background:#f8fafc;border-bottom:1px solid #e2e8f0;align-items:center;">
+        <span class="gleg"><svg width="14" height="14"><polygon points="7,1 1,13 13,13" fill="none" stroke="#334155" stroke-width="1.5"/></svg>ชาย</span>
+        <span class="gleg"><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="none" stroke="#334155" stroke-width="1.5"/></svg>หญิง</span>
+        <span class="gleg"><svg width="22" height="12"><line x1="0" y1="5" x2="22" y2="5" stroke="#334155" stroke-width="1.5"/><line x1="0" y1="9" x2="22" y2="9" stroke="#334155" stroke-width="1.5"/></svg>สมรส</span>
+        <span class="gleg"><svg width="22" height="12"><line x1="0" y1="7" x2="22" y2="7" stroke="#94a3b8" stroke-width="1.5"/></svg>สายเลือด</span>
+        <span class="gleg" style="color:#6d28d9">▁ Index</span>
+        <span class="gleg"><span style="display:inline-block;padding:1px 5px;border-radius:3px;background:#fef9c3;border:1px solid #d97706;color:#78350f;font-weight:700;font-size:9px">DM</span>เบาหวาน</span>
+        <span class="gleg"><span style="display:inline-block;padding:1px 5px;border-radius:3px;background:#dbeafe;border:1px solid #2563eb;color:#1e3a8a;font-weight:700;font-size:9px">HT</span>ความดัน</span>
+      </div>
+      <div id="geno-toolbar">
+        <span style="font-size:12px;color:#64748b;font-weight:600;">วางสัญลักษณ์:</span>
+        <button class="geno-sym-btn active" id="gbtn-male" title="ชาย" onclick="genoSelectTool('male')"><svg width="20" height="20"><rect x="2" y="2" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+        <button class="geno-sym-btn" id="gbtn-female" title="หญิง" onclick="genoSelectTool('female')"><svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+        <button class="geno-sym-btn" id="gbtn-unknown" title="ไม่ระบุเพศ" onclick="genoSelectTool('unknown')"><svg width="20" height="20"><rect x="2" y="2" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4,2"/></svg></button>
+        <div class="geno-divider"></div>
+        <span style="font-size:12px;color:#64748b;font-weight:600;">เชื่อม:</span>
+        <button class="geno-sym-btn" id="gbtn-rel" title="เชื่อมความสัมพันธ์" onclick="genoSelectTool('rel')"><svg width="20" height="20"><line x1="2" y1="9" x2="18" y2="9" stroke="currentColor" stroke-width="2"/><line x1="2" y1="13" x2="18" y2="13" stroke="currentColor" stroke-width="2"/></svg></button>
+        <div class="geno-divider"></div>
+        <button class="geno-sym-btn" id="gbtn-dm" title="DM" style="font-size:9px;font-weight:700" onclick="genoToggleFlag('dm')">DM</button>
+        <button class="geno-sym-btn" id="gbtn-ht" title="HT" style="font-size:9px;font-weight:700" onclick="genoToggleFlag('ht')">HT</button>
+        <button class="geno-sym-btn" id="gbtn-dead" title="เสียชีวิต" onclick="genoToggleFlag('dead')"><svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="3" y1="3" x2="17" y2="17" stroke="#e74c3c" stroke-width="2"/><line x1="17" y1="3" x2="3" y2="17" stroke="#e74c3c" stroke-width="2"/></svg></button>
+        <button class="geno-sym-btn" id="gbtn-index" title="Index Person" onclick="genoToggleFlag('index')" style="font-size:9px;font-weight:700;color:#6d28d9;">★</button>
+        <div class="geno-search-wrap">
+          <input id="geno-name-search" placeholder="🔍 ค้นหาชื่อเพื่อเพิ่มในผัง..." oninput="genoSearchName(this.value)" autocomplete="off">
+          <div id="geno-search-results" style="display:none;"></div>
+        </div>
+      </div>
+      <div id="geno-canvas-wrap">
+        <svg id="genoSVG" width="1060" height="700">
+          <defs><marker id="geno-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+          <g id="geno-lines"></g><g id="geno-nodes"></g>
+          <text id="geno-hint" x="530" y="290" text-anchor="middle" font-size="14" fill="#cbd5e1" font-family="Sarabun,sans-serif">คลิกบนพื้นที่เพื่อวางสัญลักษณ์ หรือกด "โหลดอัตโนมัติ" เพื่อดึงข้อมูลจากระบบ</text>
+        </svg>
+      </div>
+      <div id="geno-node-panel">
+        <strong id="geno-panel-name" style="color:#334155;min-width:80px"></strong>
+        <input id="geno-edit-name" placeholder="ชื่อ-นามสกุล" oninput="genoUpdateName(this.value)">
+        <input id="geno-edit-age" placeholder="อายุ" style="width:60px" oninput="genoUpdateAge(this.value)">
+        <button onclick="genoDeleteSelected()" class="danger">ลบ</button>
+        <button onclick="genoClearSelection()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: คัดกรองบุหรี่/สุรา -->
+<div class="modal fade" id="screeningModal" tabindex="-1">
+  <div class="modal-dialog modal-lg" style="max-width:750px">
+    <div class="modal-content border-0" style="border-radius:20px">
+      <div class="modal-header border-0 pb-0" style="background:linear-gradient(135deg,#dc2626,#ef4444);border-radius:20px 20px 0 0;padding:1.1rem 1.5rem">
+        <div><h5 class="fw-bold m-0 text-white">🚬 แบบคัดกรองบุหรี่และสุรา</h5><p class="m-0 text-white" id="scr_subtitle" style="opacity:.8;font-size:12px"></p></div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <input type="hidden" id="scr_person_id"><input type="hidden" id="scr_cid">
+        <div class="rounded-3 bg-light px-3 py-2 mb-3" id="scr_person_info" style="font-size:13px"></div>
+        <ul class="nav nav-pills mb-3" id="scrTab">
+          <li class="nav-item"><button class="nav-link active" onclick="switchScrTab('cig',this)" style="font-size:13px;background:#dc2626;color:white;border-radius:50px">🚬 บุหรี่</button></li>
+          <li class="nav-item ms-2"><button class="nav-link" onclick="switchScrTab('alc',this)" style="font-size:13px;border-radius:50px">🍺 สุรา</button></li>
+        </ul>
+
+        <!-- บุหรี่ -->
+        <div id="scr_cig_panel">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6"><label class="small fw-bold mb-1" style="color:#dc2626">สถานที่บริการ</label><select id="scr_cig_place" class="form-select form-select-sm rounded-pill border-0 bg-light"><option value="1">ในสถานบริการ</option><option value="2" selected>นอกสถานบริการ</option></select></div>
+            <div class="col-md-6"><label class="small fw-bold mb-1" style="color:#dc2626">วันที่คัดกรอง</label><input type="date" id="scr_cig_date" class="form-control form-control-sm rounded-pill border-0 bg-light"></div>
+          </div>
+          <div class="rounded-3 border p-3 mb-2" style="border-color:#fecaca!important;background:#fff5f5">
+            <p class="fw-bold mb-2" style="color:#dc2626;font-size:13px">1. ท่านสูบบุหรี่หรือไม่ (ใน 1 เดือนที่ผ่านมา)</p>
+            <div class="d-flex flex-column gap-2 ps-2">
+              <div class="form-check"><input class="form-check-input" type="radio" name="cig_smoke" id="cig_s_never" value="1B52" onchange="updateCigCode()"><label class="form-check-label small" for="cig_s_never">ไม่เคยสูบ (1B52)</label></div>
+              <div class="form-check"><input class="form-check-input" type="radio" name="cig_smoke" id="cig_s_quit" value="1B51" onchange="updateCigCode()"><label class="form-check-label small" for="cig_s_quit">เคยสูบแต่เลิกแล้ว (1B51)</label></div>
+              <div class="form-check"><input class="form-check-input" type="radio" name="cig_smoke" id="cig_s_yes" value="1B50" onchange="updateCigCode()"><label class="form-check-label small" for="cig_s_yes">สูบ (1B50)</label></div>
+            </div>
+            <div id="cig_freq_wrap" style="display:none;margin-top:12px">
+              <p class="small fw-bold text-muted mb-2">2. จำนวนมวน/วัน</p>
+              <div class="d-flex flex-column gap-1 ps-2">
+                <div class="form-check"><input class="form-check-input" type="radio" name="cig_freq" value="1B501" onchange="updateCigCode()"><label class="form-check-label small">1-10 มวน/วัน (1B501)</label></div>
+                <div class="form-check"><input class="form-check-input" type="radio" name="cig_freq" value="1B502" onchange="updateCigCode()"><label class="form-check-label small">11-19 มวน/วัน (1B502)</label></div>
+                <div class="form-check"><input class="form-check-input" type="radio" name="cig_freq" value="1B503" onchange="updateCigCode()"><label class="form-check-label small">20 มวนขึ้นไป (1B503)</label></div>
+              </div>
+              <p class="small fw-bold text-muted mb-2 mt-2">3. สูบมวนแรกหลังตื่นนอน</p>
+              <div class="d-flex flex-column gap-1 ps-2">
+                <div class="form-check"><input class="form-check-input" type="radio" name="cig_time" value="1B504" onchange="updateCigCode()"><label class="form-check-label small">น้อยกว่า 30 นาที (1B504)</label></div>
+                <div class="form-check"><input class="form-check-input" type="radio" name="cig_time" value="1B505" onchange="updateCigCode()"><label class="form-check-label small">30 นาที - 1 ชั่วโมง (1B505)</label></div>
+                <div class="form-check"><input class="form-check-input" type="radio" name="cig_time" value="1B506" onchange="updateCigCode()"><label class="form-check-label small">มากกว่า 1 ชั่วโมง (1B506)</label></div>
+              </div>
+            </div>
+            <div class="border-top pt-3 mt-2">
+              <p class="small fw-bold text-muted mb-2">การให้บริการ</p>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="cig_svc_1B530" value="1B530" onchange="updateCigCode()"><label class="form-check-label small" for="cig_svc_1B530">Brief Advice (1B530)</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="cig_svc_1BS31" value="1B531" onchange="updateCigCode()"><label class="form-check-label small" for="cig_svc_1BS31">Counseling Advice (1B531)</label></div>
+            </div>
+          </div>
+          <div id="cig_code_preview" class="rounded-3 px-3 py-2 mt-2" style="font-size:12px;background:#fef2f2;border:0.5px solid #fecaca;color:#7f1d1d">รหัสที่จะบันทึก: —</div>
+        </div>
+
+        <!-- สุรา -->
+        <div id="scr_alc_panel" style="display:none">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6"><label class="small fw-bold mb-1" style="color:#b45309">สถานที่บริการ</label><select id="scr_alc_place" class="form-select form-select-sm rounded-pill border-0 bg-light"><option value="1">ในสถานบริการ</option><option value="2" selected>นอกสถานบริการ</option></select></div>
+            <div class="col-md-6"><label class="small fw-bold mb-1" style="color:#b45309">วันที่คัดกรอง</label><input type="date" id="scr_alc_date" class="form-control form-control-sm rounded-pill border-0 bg-light"></div>
+          </div>
+          <div class="rounded-3 border p-3" style="border-color:#fde68a!important;background:#fffbeb">
+            <p class="fw-bold mb-2" style="color:#b45309;font-size:13px">การคัดกรองสุรา</p>
+            <div class="d-flex flex-column gap-2 ps-2 mb-3">
+              <div class="form-check"><input class="form-check-input" type="radio" name="alc_screen" id="alc_s_never" value="1B600" onchange="updateAlcCode()"><label class="form-check-label small" for="alc_s_never">ไม่ดื่ม (1B600)</label></div>
+              <div class="form-check"><input class="form-check-input" type="radio" name="alc_screen" id="alc_s_quit" value="1B601" onchange="updateAlcCode()"><label class="form-check-label small" for="alc_s_quit">เคยดื่มแต่หยุดแล้ว 1 ปีขึ้นไป (1B601)</label></div>
+              <div class="form-check"><input class="form-check-input" type="radio" name="alc_screen" id="alc_s_drink" value="drink" onchange="updateAlcCode()"><label class="form-check-label small" for="alc_s_drink">ดื่ม (ประเมิน ASSIST)</label></div>
+            </div>
+            <div id="alc_risk_wrap" style="display:none">
+              <div class="row g-2">
+                <div class="col-md-4"><label class="small fw-bold mb-1">ความถี่การดื่ม (ใน 3 เดือน)</label>
+                  <div class="d-flex flex-column gap-1">
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_freq" value="0" onchange="calcAlcRisk()"><label class="form-check-label small">ไม่เคย (0)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_freq" value="2" onchange="calcAlcRisk()"><label class="form-check-label small">ครั้งสองครั้ง (2)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_freq" value="3" onchange="calcAlcRisk()"><label class="form-check-label small">ทุกเดือน (3)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_freq" value="4" onchange="calcAlcRisk()"><label class="form-check-label small">ทุกสัปดาห์ (4)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_freq" value="6" onchange="calcAlcRisk()"><label class="form-check-label small">เกือบทุกวัน (6)</label></div>
+                  </div>
+                </div>
+                <div class="col-md-4"><label class="small fw-bold mb-1">ปัญหาที่เกิดจากดื่ม</label>
+                  <div class="d-flex flex-column gap-1">
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_prob" value="0" onchange="calcAlcRisk()"><label class="form-check-label small">ไม่มี (0)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_prob" value="3" onchange="calcAlcRisk()"><label class="form-check-label small">บางครั้ง (3)</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="alc_prob" value="5" onchange="calcAlcRisk()"><label class="form-check-label small">บ่อยครั้ง (5)</label></div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="rounded-3 p-3 text-center" style="background:#fef3c7;border:0.5px solid #f59e0b">
+                    <p class="mb-1 small text-muted">คะแนนรวม</p>
+                    <p class="fw-bold mb-1" style="font-size:24px;color:#92400e" id="alc_score">0</p>
+                    <div id="alc_risk_label"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="alc_code_preview" class="rounded-3 px-3 py-2 mt-2" style="font-size:12px;background:#fffbeb;border:0.5px solid #f59e0b;color:#78350f">รหัสที่จะบันทึก: —</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 px-4 pb-4 pt-0 d-flex justify-content-between">
+        <button class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
+        <button class="btn rounded-pill px-4 fw-bold text-white" style="background:#dc2626" onclick="saveScreening()">💾 บันทึก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// ══════════════════════════════════════════════
-// SUPABASE CONFIG — แก้ไขค่าของคุณที่นี่
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
 const SUPABASE_URL = 'https://jhqnsdrvrzgbskzonvoc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpocW5zZHJ2cnpnYnNrem9udm9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTQ3NTIsImV4cCI6MjA5NTE3MDc1Mn0.3sB4K805x0O1bmlQHKv1Fdo2h5mg7hDnPy65ESIo4Qs';
-const IMPORT_PASSWORD = 'admin1234'; // รหัสผ่านสำหรับหน้า Import
+const IMPORT_PASSWORD = 'admin1234';
+const DEFAULT_LAT = 16.331002, DEFAULT_LNG = 100.4358208;
 
-// ── Init Supabase ──
 let sb;
 try {
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   window.supabase = sb;
-  if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
-    document.getElementById('supabase-config-banner').style.display = 'block';
-  }
-} catch(e) {
-  document.getElementById('supabase-config-banner').style.display = 'block';
-}
+} catch(e) { console.error('Supabase init error', e); }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // GLOBALS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 let allData = [], currentData = [], allHouseData = [];
 let allVillages = [], allVmsList = [];
-let dashRendered = false, riskChart;
+let dashRendered = false, riskChart, dashCharts = [];
 let currentUser = null;
-let dashCharts = [];
+let oMap = null, editMapObj = null, editMarker = null, editLat = null, editLng = null;
+let _importUnlocked = false, _importData = { house: null, person: null };
 
 // ══ LOADING ══
 let _loadingCount = 0;
@@ -744,79 +728,34 @@ function forceHideLoading() {
   document.getElementById('loadingOverlay').style.display = 'none';
 }
 
-// ══════════════════════════════════════════════
-// AUTH — Login/Logout
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
 async function doLogin() {
   const username = document.getElementById('loginUser').value.trim();
   const password = document.getElementById('loginPass').value.trim();
   const errEl = document.getElementById('loginError');
-
   errEl.style.display = 'none';
-
-  if (!username || !password) {
-    errEl.textContent = 'กรุณากรอก Username และ Password';
-    errEl.style.display = 'block';
-    return;
-  }
-
+  if (!username || !password) { errEl.textContent = 'กรุณากรอก Username และ Password'; errEl.style.display = 'block'; return; }
   showLoading('กำลังตรวจสอบ...');
-
   try {
-
-    const { data, error } = await sb
-      .from('Users')
-      .select('*')
-      .eq('Username', username)
-      .eq('Password', password)
-      .limit(1)
-      .maybeSingle();
-
+    const { data, error } = await sb.from('Users').select('*').eq('Username', username).eq('Password', password).limit(1).maybeSingle();
     hideLoading();
-
-    console.log(data);
-    console.log(error);
-
-    if (error || !data) {
-      errEl.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
-      errEl.style.display = 'block';
-      return;
-    }
-
+    if (error || !data) { errEl.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'; errEl.style.display = 'block'; return; }
     const approve = String(data['การอนุมัติเข้าใช้'] || '');
-
-    if (approve.includes('ไม่')) {
-      errEl.textContent = 'บัญชีนี้ยังไม่ได้รับการอนุมัติ';
-      errEl.style.display = 'block';
-      return;
-    }
-
-    currentUser = {
-      id: data.ID || '',
-      username: data.Username,
-      name: data['ชื่อ-สกุล'] || '',
-      role: data['สถานะ'] || 'User'
-    };
-
+    if (approve.includes('ไม่')) { errEl.textContent = 'บัญชีนี้ยังไม่ได้รับการอนุมัติ'; errEl.style.display = 'block'; return; }
+    currentUser = { id: data.ID || '', username: data.Username, name: data['ชื่อ-สกุล'] || '', role: data['สถานะ'] || 'User' };
     sessionStorage.setItem('hs_user', JSON.stringify(currentUser));
-
     showMainApp();
-
-  } catch (e) {
-
+  } catch(e) {
     hideLoading();
-
-    console.error(e);
-
-    errEl.textContent = 'เกิดข้อผิดพลาด: ' + e.message;
-    errEl.style.display = 'block';
+    errEl.textContent = 'เกิดข้อผิดพลาด: ' + e.message; errEl.style.display = 'block';
   }
 }
 
 function doLogout() {
   sessionStorage.removeItem('hs_user');
-  currentUser = null;
-  allData = []; currentData = [];
+  currentUser = null; allData = []; currentData = [];
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginUser').value = '';
@@ -830,58 +769,40 @@ function showMainApp() {
   refreshData();
 }
 
-// ── Check session on load ──
 window.addEventListener('DOMContentLoaded', () => {
   Chart.register(ChartDataLabels);
   const saved = sessionStorage.getItem('hs_user');
-  if (saved) {
-    try {
-      currentUser = JSON.parse(saved);
-      showMainApp();
-    } catch(e) {
-      sessionStorage.removeItem('hs_user');
-    }
-  }
+  if (saved) { try { currentUser = JSON.parse(saved); showMainApp(); } catch(e) { sessionStorage.removeItem('hs_user'); } }
 });
 
-// ══════════════════════════════════════════════
-// DATA LOADING — Supabase
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// DATA LOADING
+// ══════════════════════════════════════════
 async function refreshData() {
   showLoading('กำลังโหลดข้อมูล...');
   dashRendered = false;
   try {
-    // Load villages
     const { data: villages } = await sb.from('village').select('*');
     allVillages = (villages || []).filter(v => String(v.village_id) !== '1');
 
-    // Load house
     const { data: houses } = await sb.from('house').select('*');
     const houseArr = houses || [];
 
-    // Load person
     let personData = [];
-    let from = 0, pageSize = 1000;
+    let from = 0;
     while (true) {
-      const { data: batch, error } = await sb
-        .from('person')
-        .select('*')
-        .range(from, from + pageSize - 1);
+      const { data: batch, error } = await sb.from('person').select('*').range(from, from + 999);
       if (error || !batch || batch.length === 0) break;
       personData = personData.concat(batch);
-      if (batch.length < pageSize) break;
-      from += pageSize;
+      if (batch.length < 1000) break;
+      from += 1000;
     }
 
-    // Build village map
     const villageMap = {};
     allVillages.forEach(v => { villageMap[String(v.village_id)] = v; });
-
-    // Build house map
     const houseMap = {};
     houseArr.forEach(h => { houseMap[String(h.house_id)] = h; });
 
-    // Join person + house + village
     allData = [];
     personData.forEach(p => {
       const hid = String(p.house_id || '').trim();
@@ -889,130 +810,101 @@ async function refreshData() {
       const vid = String(p.village_id || h.village_id || '').trim();
       if (!vid || vid === '1' || !villageMap[vid]) return;
       const v = villageMap[vid];
-
-      const isDM = String(p.ncd_dm_history_type_id || '') === '1' || String(p.ncd_dm_history_type_id || '') === '2';
-      const isHT = String(p.ncd_ht_history_type_id || '') === '1' || String(p.ncd_ht_history_type_id || '') === '2';
-      const ageVal = parseInt(p.age_y) || 0;
-      const riskStatus = isDM && isHT ? 'high_risk' : isDM ? 'dm' : isHT ? 'ht' : ageVal >= 60 ? 'elderly' : 'normal';
-      const riskLabels = { high_risk:'DM+HT', dm:'เบาหวาน', ht:'ความดัน', elderly:'ผู้สูงอายุ', normal:'ทั่วไป' };
-
-      const addrRaw = String(h.address_int || h.address || '').trim() || hid;
-      const disc = String(p.person_discharge_id || p.person_discharge || '').trim();
-
+      const isDM = String(p.ncd_dm_history_type_id||'')==='1'||String(p.ncd_dm_history_type_id||'')==='2';
+      const isHT = String(p.ncd_ht_history_type_id||'')==='1'||String(p.ncd_ht_history_type_id||'')==='2';
+      const ageVal = parseInt(p.age_y)||0;
+      const riskStatus = isDM&&isHT?'high_risk':isDM?'dm':isHT?'ht':ageVal>=60?'elderly':'normal';
+      const riskLabels = {high_risk:'DM+HT',dm:'เบาหวาน',ht:'ความดัน',elderly:'ผู้สูงอายุ',normal:'ทั่วไป'};
+      const addrRaw = String(h.address_int||h.address||'').trim()||hid;
+      const disc = String(p.person_discharge_id||p.person_discharge||'').trim();
       allData.push({
-        person_id: p.person_id,
-        fname: String(p.fname || ''),
-        lname: String(p.lname || ''),
-        fullname: (String(p.pname||'') + ' ' + String(p.fname||'') + ' ' + String(p.lname||'')).trim(),
-        pname: String(p.pname || ''),
-        cid: String(p.cid || ''),
-        sex: String(p.sex || ''),
-        age_y: String(p.age_y || ''),
-        birthdate: String(p.birthdate || ''),
-        death: String(p.death || 'N'),
-        person_discharge: disc,
-        house_id: hid,
-        village_id: vid,
-        village_name: String(v.village_name || ''),
-        village_moo: String(v.village_moo || ''),
-        address_display: 'บ้านเลขที่ ' + addrRaw,
-        address_raw: addrRaw,
-        lat: parseFloat(h.latitude || h.lat || '') || null,
-        lng: parseFloat(h.longitude || h.lon || '') || null,
-        riskStatus, riskLabel: riskLabels[riskStatus],
-        ncd_dm_history_type_id: String(p.ncd_dm_history_type_id || ''),
-        ncd_ht_history_type_id: String(p.ncd_ht_history_type_id || ''),
-        chronic_disease_list: String(p.chronic_disease_list || ''),
-        clinic_code_list: String(p.clinic_code_list || ''),
-        pttype: String(p.pttype || p.pcode || ''),
-        house_regist_type_id: String(p.house_regist_type_id || ''),
-        father_person_id: String(p.father_person_id || ''),
-        mother_person_id: String(p.mother_person_id || ''),
-        sps_person_id: String(p.sps_person_id || ''),
-        father_cid: String(p.father_cid || ''),
-        mother_cid: String(p.mother_cid || ''),
-        sps_cid: String(p.sps_cid || ''),
-        father_name: String(p.father_name || ''),
-        mother_name: String(p.mother_name || ''),
-        sps_name: String(p.sps_name || ''),
-        __row: p.person_id
+        person_id:p.person_id, fname:String(p.fname||''), lname:String(p.lname||''),
+        fullname:(String(p.pname||'')+' '+String(p.fname||'')+' '+String(p.lname||'')).trim(),
+        pname:String(p.pname||''), cid:String(p.cid||''), sex:String(p.sex||''),
+        age_y:String(p.age_y||''), birthdate:String(p.birthdate||''),
+        death:String(p.death||'N'), person_discharge:disc,
+        house_id:hid, village_id:vid,
+        village_name:String(v.village_name||''), village_moo:String(v.village_moo||''),
+        address_display:'บ้านเลขที่ '+addrRaw, address_raw:addrRaw,
+        lat:parseFloat(h.latitude||h.lat||'')||null, lng:parseFloat(h.longitude||h.lon||'')||null,
+        riskStatus, riskLabel:riskLabels[riskStatus],
+        ncd_dm_history_type_id:String(p.ncd_dm_history_type_id||''),
+        ncd_ht_history_type_id:String(p.ncd_ht_history_type_id||''),
+        chronic_disease_list:String(p.chronic_disease_list||''),
+        clinic_code_list:String(p.clinic_code_list||''),
+        pttype:String(p.pttype||p.pcode||''),
+        house_regist_type_id:String(p.house_regist_type_id||''),
+        father_person_id:String(p.father_person_id||''), mother_person_id:String(p.mother_person_id||''),
+        sps_person_id:String(p.sps_person_id||''),
+        father_cid:String(p.father_cid||''), mother_cid:String(p.mother_cid||''),
+        sps_cid:String(p.sps_cid||''), father_name:String(p.father_name||''),
+        mother_name:String(p.mother_name||''), sps_name:String(p.sps_name||''),
+        __row:p.person_id
       });
     });
 
-    // Build house data with members
-    allHouseData = houseArr
-      .filter(h => {
-        const vid = String(h.village_id || '').trim();
-        return vid !== '1' && villageMap[vid];
-      })
-      .map(h => {
-        const vid = String(h.village_id || '').trim();
-        const v = villageMap[vid] || {};
-        const hid = String(h.house_id || '');
-        const members = allData.filter(p => String(p.house_id) === hid);
-        return {
-          house_id: hid,
-          village_id: vid,
-          village_name: String(v.village_name || ''),
-          village_moo: String(v.village_moo || ''),
-          address: String(h.address_int || h.address || '').trim() || hid,
-          house_reg: String(h.census_id || ''),
-          road: String(h.road || ''),
-          lat: parseFloat(h.latitude || h.lat || '') || null,
-          lon: parseFloat(h.longitude || h.lon || '') || null,
-          doctor_code: String(h.doctor_code || ''),
-          doctor_code2: String(h.doctor_code2 || ''),
-          vms_person_id: String(h.vms_person_id || ''),
-          person_count: members.length,
-          members,
-          __row: h.house_id
-        };
-      });
+    allHouseData = houseArr.filter(h => {
+      const vid = String(h.village_id||'').trim();
+      return vid!=='1'&&villageMap[vid];
+    }).map(h => {
+      const vid = String(h.village_id||'').trim();
+      const v = villageMap[vid]||{};
+      const hid = String(h.house_id||'');
+      const members = allData.filter(p => String(p.house_id)===hid);
+      return {
+        house_id:hid, village_id:vid,
+        village_name:String(v.village_name||''), village_moo:String(v.village_moo||''),
+        address:String(h.address_int||h.address||'').trim()||hid,
+        house_reg:String(h.census_id||''), road:String(h.road||''),
+        lat:parseFloat(h.latitude||h.lat||'')||null, lon:parseFloat(h.longitude||h.lon||'')||null,
+        doctor_code:String(h.doctor_code||''), doctor_code2:String(h.doctor_code2||''),
+        vms_person_id:String(h.vms_person_id||''),
+        person_count:members.length, members, __row:h.house_id
+      };
+    });
 
     loadVillageDropdowns();
     updateChart();
     renderDashboard();
     dashRendered = true;
     document.getElementById('totalCount').textContent = allData.length.toLocaleString();
-
   } catch(e) {
     console.error(e);
-    Swal.fire({ icon:'error', title:'เกิดข้อผิดพลาด', html: e.message, confirmButtonColor:'#6d28d9' });
+    Swal.fire({ icon:'error', title:'เกิดข้อผิดพลาด', html:e.message, confirmButtonColor:'#6d28d9' });
   }
   hideLoading();
 }
 
 function loadVillageDropdowns() {
-  const selIds = ['filterVillage','ht_village','sq_village'];
-  selIds.forEach(id => {
+  ['filterVillage','ht_village','sq_village'].forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
     while (sel.options.length > 1) sel.remove(1);
     allVillages.forEach(v => {
-      const o = new Option('ม.' + v.village_moo + ' ' + v.village_name, v.village_id);
+      const o = new Option('ม.'+v.village_moo+' '+v.village_name, v.village_id);
       sel.appendChild(o);
     });
   });
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // HELPERS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function toBE(dateStr) {
   if (!dateStr) return '';
   const s = String(dateStr).trim();
-  if (!s || s === 'undefined' || s === 'null') return '';
+  if (!s||s==='undefined'||s==='null') return '';
   if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
     const parts = s.substring(0,10).split('-');
     let y = parseInt(parts[0]);
-    if (y < 2400) y += 543;
-    return parts[2] + '/' + parts[1] + '/' + y;
+    if (y<2400) y+=543;
+    return parts[2]+'/'+parts[1]+'/'+y;
   }
   if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
     const pts = s.split('/');
     let yr = parseInt(pts[2]);
-    if (yr < 2400) yr += 543;
-    return pts[0].padStart(2,'0') + '/' + pts[1].padStart(2,'0') + '/' + yr;
+    if (yr<2400) yr+=543;
+    return pts[0].padStart(2,'0')+'/'+pts[1].padStart(2,'0')+'/'+yr;
   }
   return s;
 }
@@ -1020,27 +912,27 @@ function toBE(dateStr) {
 function toCE(dateStr) {
   if (!dateStr) return '';
   const parts = String(dateStr).trim().split('/');
-  if (parts.length !== 3) return dateStr;
+  if (parts.length!==3) return dateStr;
   let y = parseInt(parts[2]);
   if (isNaN(y)) return dateStr;
-  if (y > 2400) y -= 543;
-  return parts[0] + '/' + parts[1] + '/' + y;
+  if (y>2400) y-=543;
+  return parts[0]+'/'+parts[1]+'/'+y;
 }
 
 function getDefaultAvatar(sex) {
   const male = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#EBF3FB"/><ellipse cx="50" cy="85" rx="28" ry="20" fill="#2B5C9E"/><circle cx="50" cy="38" r="18" fill="#FDDBB4"/><rect x="30" y="22" width="40" height="6" rx="3" fill="#1a3d6e"/><rect x="34" y="10" width="32" height="14" rx="4" fill="#2B5C9E"/></svg>';
   const female = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#FDF0F5"/><ellipse cx="50" cy="85" rx="28" ry="20" fill="#D4537E"/><circle cx="50" cy="38" r="18" fill="#FDDBB4"/><ellipse cx="50" cy="24" rx="20" ry="10" fill="#5C3317"/></svg>';
-  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(sex === '1' ? male : female)));
+  return 'data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(sex==='1'?male:female)));
 }
 
 function _buildDiseaseHtml(codeStr, nameStr) {
-  const codes = String(codeStr || '').trim();
-  const names = String(nameStr || '').trim();
+  const codes = String(codeStr||'').trim();
+  const names = String(nameStr||'').trim();
   let items = [];
-  if (codes && codes !== 'undefined' && codes !== '0') {
-    codes.split(',').forEach(c => { c = c.trim(); if(c) items.push({code:c,name:c}); });
-  } else if (names && names !== 'undefined') {
-    names.split(',').forEach(n => { n = n.trim(); if(n) items.push({code:'',name:n}); });
+  if (codes&&codes!=='undefined'&&codes!=='0') {
+    codes.split(',').forEach(c => { c=c.trim(); if(c) items.push({name:c}); });
+  } else if (names&&names!=='undefined') {
+    names.split(',').forEach(n => { n=n.trim(); if(n) items.push({name:n}); });
   }
   if (!items.length) return '<span style="color:#94a3b8;font-size:12px">ไม่มีโรคประจำตัว</span>';
   return items.map(d => {
@@ -1053,38 +945,35 @@ function _buildDiseaseHtml(codeStr, nameStr) {
   }).join('');
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // DASHBOARD
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function renderDashboard() {
   if (!allData.length) return;
   dashCharts.forEach(c => c.destroy()); dashCharts = [];
-
   function getAge(p) {
     const a = parseInt(p.age_y); if(!isNaN(a)&&a>=0) return a;
     if(p.birthdate){const pts=p.birthdate.split('/');if(pts.length===3){let y=parseInt(pts[2]);if(y>2400)y-=543;return Math.floor((Date.now()-new Date(y,parseInt(pts[1])-1,parseInt(pts[0])))/(365.25*864e5));}}
     return null;
   }
-  const alive = allData.filter(p => p.death !== 'Y' && p.death !== 'y');
-  const total = alive.length || 1;
-  const males = alive.filter(p => p.sex==='1');
-  const females = alive.filter(p => p.sex==='2');
-  const elderly = alive.filter(p => { const a=getAge(p); return a!==null&&a>=60; });
-  const child = alive.filter(p => { const a=getAge(p); return a!==null&&a<=14; });
+  const alive = allData.filter(p => p.death!=='Y'&&p.death!=='y');
+  const total = alive.length||1;
+  const males = alive.filter(p=>p.sex==='1');
+  const females = alive.filter(p=>p.sex==='2');
+  const elderly = alive.filter(p=>{const a=getAge(p);return a!==null&&a>=60;});
+  const child = alive.filter(p=>{const a=getAge(p);return a!==null&&a<=14;});
 
   document.getElementById('dashContent').innerHTML = `
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem">
       <div class="kpi-card"><p class="kpi-label">ประชากร (ในเขต)</p><p class="kpi-val">${alive.length.toLocaleString()}</p></div>
-      <div class="kpi-card"><p class="kpi-label">เพศชาย</p><p class="kpi-val" style="color:#2B5C9E">${males.length.toLocaleString()}</p><p class="kpi-sub">${Math.round(males.length/total*100)}% ของทั้งหมด</p></div>
-      <div class="kpi-card"><p class="kpi-label">เพศหญิง</p><p class="kpi-val" style="color:#D4537E">${females.length.toLocaleString()}</p><p class="kpi-sub">${Math.round(females.length/total*100)}% ของทั้งหมด</p></div>
+      <div class="kpi-card"><p class="kpi-label">เพศชาย</p><p class="kpi-val" style="color:#2B5C9E">${males.length.toLocaleString()}</p><p class="kpi-sub">${Math.round(males.length/total*100)}%</p></div>
+      <div class="kpi-card"><p class="kpi-label">เพศหญิง</p><p class="kpi-val" style="color:#D4537E">${females.length.toLocaleString()}</p><p class="kpi-sub">${Math.round(females.length/total*100)}%</p></div>
       <div class="kpi-card"><p class="kpi-label">ผู้สูงอายุ (60+)</p><p class="kpi-val" style="color:#1D9E75">${elderly.length.toLocaleString()}</p><p class="kpi-sub">${Math.round(elderly.length/total*100)}%</p></div>
       <div class="kpi-card"><p class="kpi-label">วัยเด็ก (0–14)</p><p class="kpi-val">${child.length.toLocaleString()}</p><p class="kpi-sub">${Math.round(child.length/total*100)}%</p></div>
     </div>
     <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;margin-bottom:12px">
       <div><div class="pyr-header">จำนวนประชากรตามช่วงอายุ</div><div class="pyr-body"><div id="pyramidRows"></div></div></div>
-      <div>
-        <div class="db-card mb-3"><p class="sec-title">กลุ่มเสี่ยงโรคเรื้อรัง</p><div style="position:relative;width:100%;height:180px"><canvas id="dRiskDoughnut"></canvas></div><div id="dRiskLegend" style="margin-top:10px"></div></div>
-      </div>
+      <div><div class="db-card mb-3"><p class="sec-title">กลุ่มเสี่ยงโรคเรื้อรัง</p><div style="position:relative;width:100%;height:180px"><canvas id="dRiskDoughnut"></canvas></div><div id="dRiskLegend" style="margin-top:10px"></div></div></div>
     </div>
     <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px">
       <div class="db-card"><p class="sec-title">ประชากรแยกตามหมู่บ้าน</p><div style="position:relative;height:220px"><canvas id="dVillageChart"></canvas></div></div>
@@ -1092,94 +981,109 @@ function renderDashboard() {
     </div>`;
 
   // Pyramid
-  const bands = ['0','5','10','15','20','25','30','35','40','45','50','55','60','65','70','75','80','85','90','95','100'];
-  const mB = new Array(bands.length).fill(0), fB = new Array(bands.length).fill(0);
-  alive.forEach(p => {
-    const a = getAge(p); if(a===null||a<0) return;
-    const idx = Math.min(Math.floor(a/5), bands.length-1);
-    if(p.sex==='1') mB[idx]++; else fB[idx]++;
-  });
-  const pyrEl = document.getElementById('pyramidRows'); pyrEl.innerHTML='';
-  for (let i = bands.length-1; i >= 0; i--) {
-    const mp = mB[i]/total*100, fp = fB[i]/total*100;
-    const mw = Math.min(mp*25,100), fw = Math.min(fp*25,100);
-    const row = document.createElement('div'); row.className='pyr-row';
+  const bands=['0','5','10','15','20','25','30','35','40','45','50','55','60','65','70','75','80','85','90','95','100'];
+  const mB=new Array(bands.length).fill(0), fB=new Array(bands.length).fill(0);
+  alive.forEach(p=>{const a=getAge(p);if(a===null||a<0)return;const idx=Math.min(Math.floor(a/5),bands.length-1);if(p.sex==='1')mB[idx]++;else fB[idx]++;});
+  const pyrEl=document.getElementById('pyramidRows');pyrEl.innerHTML='';
+  for(let i=bands.length-1;i>=0;i--){
+    const mp=mB[i]/total*100,fp=fB[i]/total*100;
+    const mw=Math.min(mp*25,100),fw=Math.min(fp*25,100);
+    const row=document.createElement('div');row.className='pyr-row';
     row.innerHTML=`<div class="pyr-left">${mp>0?`<span class="pyr-pct">${mp.toFixed(1)}%</span>`:''}<div class="pyr-bar-m" style="width:${mw}px"></div></div><div class="pyr-age">${bands[i]}</div><div class="pyr-right"><div class="pyr-bar-f" style="width:${fw}px"></div>${fp>0?`<span class="pyr-pct">${fp.toFixed(1)}%</span>`:''}</div>`;
     pyrEl.appendChild(row);
   }
 
   // Risk doughnut
   let rH=0,rD=0,rT=0,rE=0,rN=0;
-  alive.forEach(p => {
-    const isDM = p.ncd_dm_history_type_id==='1'||p.ncd_dm_history_type_id==='2'||(p.chronic_disease_list||'').indexOf('เบาหวาน')>=0;
-    const isHT = p.ncd_ht_history_type_id==='1'||p.ncd_ht_history_type_id==='2'||(p.chronic_disease_list||'').indexOf('ความดัน')>=0;
-    const a = getAge(p);
-    if(isDM&&isHT)rH++; else if(isDM)rD++; else if(isHT)rT++; else if(a!==null&&a>=60)rE++; else rN++;
-  });
-  const rC=['#E24B4A','#EF9F27','#85B7EB','#1D9E75','#B4B2A9'], rL=['DM+HT','เบาหวาน','ความดัน','ผู้สูงอายุ','ทั่วไป'], rV=[rH,rD,rT,rE,rN];
+  alive.forEach(p=>{const isDM=p.ncd_dm_history_type_id==='1'||p.ncd_dm_history_type_id==='2';const isHT=p.ncd_ht_history_type_id==='1'||p.ncd_ht_history_type_id==='2';const a=getAge(p);if(isDM&&isHT)rH++;else if(isDM)rD++;else if(isHT)rT++;else if(a!==null&&a>=60)rE++;else rN++;});
+  const rC=['#E24B4A','#EF9F27','#85B7EB','#1D9E75','#B4B2A9'],rL=['DM+HT','เบาหวาน','ความดัน','ผู้สูงอายุ','ทั่วไป'],rV=[rH,rD,rT,rE,rN];
   dashCharts.push(new Chart(document.getElementById('dRiskDoughnut'),{type:'doughnut',data:{labels:rL,datasets:[{data:rV,backgroundColor:rC,borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}}));
   document.getElementById('dRiskLegend').innerHTML=rL.map((l,i)=>`<div class="risk-row"><span style="width:10px;height:10px;border-radius:2px;background:${rC[i]};flex-shrink:0;display:inline-block"></span><span style="font-size:12px;color:#64748b;width:60px">${l}</span><div class="risk-bar-bg"><div class="risk-bar" style="width:${Math.round(rV[i]/total*100)}%;background:${rC[i]}"></div></div><span style="font-size:12px;color:#1e293b;min-width:28px;text-align:right">${rV[i]}</span></div>`).join('');
 
   // Village chart
   const vm={},vmM={},vmF={};
-  alive.forEach(p => {
-    const k = p.village_moo?'ม.'+p.village_moo+' '+(p.village_name||''):('หมู่'+(p.village_id||'?'));
-    vm[k]=(vm[k]||0)+1;
-    if(p.sex==='1') vmM[k]=(vmM[k]||0)+1; else vmF[k]=(vmF[k]||0)+1;
-  });
-  const ve = Object.entries(vm).sort((a,b)=>{const ma=parseInt(a[0].replace('ม.',''))||0,mb=parseInt(b[0].replace('ม.',''))||0;return ma-mb;});
+  alive.forEach(p=>{const k=p.village_moo?'ม.'+p.village_moo+' '+(p.village_name||''):('หมู่'+(p.village_id||'?'));vm[k]=(vm[k]||0)+1;if(p.sex==='1')vmM[k]=(vmM[k]||0)+1;else vmF[k]=(vmF[k]||0)+1;});
+  const ve=Object.entries(vm).sort((a,b)=>{const ma=parseInt(a[0].replace('ม.',''))||0,mb=parseInt(b[0].replace('ม.',''))||0;return ma-mb;});
   dashCharts.push(new Chart(document.getElementById('dVillageChart'),{type:'bar',data:{labels:ve.map(e=>e[0]),datasets:[{label:'ชาย',data:ve.map(e=>vmM[e[0]]||0),backgroundColor:'#2B5C9E',borderRadius:4},{label:'หญิง',data:ve.map(e=>vmF[e[0]]||0),backgroundColor:'#E8A0B0',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'end',font:{size:9,weight:'bold'},formatter:v=>v>0?v:''}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{ticks:{font:{size:10}}}}}}));
 
-  // Age distribution
-  const ad = new Array(21).fill(0);
-  alive.forEach(p => { const a=getAge(p); if(a===null||a<0) return; ad[Math.min(Math.floor(a/5),20)]++; });
+  // Age dist
+  const ad=new Array(21).fill(0);
+  alive.forEach(p=>{const a=getAge(p);if(a===null||a<0)return;ad[Math.min(Math.floor(a/5),20)]++;});
   dashCharts.push(new Chart(document.getElementById('dAgeDistChart'),{type:'bar',data:{labels:Array.from({length:21},(_,i)=>i<20?i*5+'–'+(i*5+4):'100+'),datasets:[{data:ad,backgroundColor:'#5DCAA5',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{ticks:{font:{size:10}}}}}}));
 }
 
-// ══ LIST CHART ══
 function updateChart() {
   if (riskChart) riskChart.destroy();
-  const male = currentData.filter(p=>p.sex==='1').length;
-  const female = currentData.filter(p=>p.sex==='2').length;
-  const total = currentData.length;
-  riskChart = new Chart(document.getElementById('riskChart'),{type:'bar',data:{labels:['ชาย ('+male+' คน)','หญิง ('+female+' คน)','ทั้งหมด ('+total+' คน)'],datasets:[{label:'จำนวนคน',data:[male,female,total],backgroundColor:['#2B5C9E','#E8A0B0','#a78bfa'],borderRadius:10}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(128,128,128,0.1)'}},y:{grid:{display:false}}}}});
+  const male=currentData.filter(p=>p.sex==='1').length;
+  const female=currentData.filter(p=>p.sex==='2').length;
+  const total=currentData.length;
+  riskChart=new Chart(document.getElementById('riskChart'),{type:'bar',data:{labels:['ชาย ('+male+' คน)','หญิง ('+female+' คน)','ทั้งหมด ('+total+' คน)'],datasets:[{label:'จำนวนคน',data:[male,female,total],backgroundColor:['#2B5C9E','#E8A0B0','#a78bfa'],borderRadius:10}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(128,128,128,0.1)'}},y:{grid:{display:false}}}}});
 }
 
-// ══════════════════════════════════════════════
-// POPULATION LIST TAB
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// POPULATION LIST
+// ══════════════════════════════════════════
 function searchData() {
-  const v = document.getElementById('filterVillage').value;
-  const addr = document.getElementById('filterAddress').value.trim().toLowerCase();
-  const cid = document.getElementById('filterCid').value.trim();
-  const name = document.getElementById('filterName').value.trim().toLowerCase();
-  const disc = document.getElementById('filterDischarge').value;
-  currentData = allData.filter(p => {
-    const matchV = v==='all'||String(p.village_id)===v;
-    const matchAddr = !addr||(p.address_raw||'').toLowerCase().includes(addr);
-    const matchCid = !cid||(p.cid||'').includes(cid);
-    const matchName = !name||(p.fullname||'').toLowerCase().includes(name);
-    const matchDisc = disc==='all'||String(p.person_discharge).trim()===disc;
+  const v=document.getElementById('filterVillage').value;
+  const addr=document.getElementById('filterAddress').value.trim().toLowerCase();
+  const cid=document.getElementById('filterCid').value.trim();
+  const name=document.getElementById('filterName').value.trim().toLowerCase();
+  const disc=document.getElementById('filterDischarge').value;
+  currentData=allData.filter(p=>{
+    const matchV=v==='all'||String(p.village_id)===v;
+    const matchAddr=!addr||(p.address_raw||'').toLowerCase().includes(addr);
+    const matchCid=!cid||(p.cid||'').includes(cid);
+    const matchName=!name||(p.fullname||'').toLowerCase().includes(name);
+    const matchDisc=disc==='all'||String(p.person_discharge).trim()===disc;
     return matchV&&matchAddr&&matchCid&&matchName&&matchDisc;
   });
   renderList(); updateChart();
 }
 
 function renderList() {
-  const data = currentData.slice(0,100);
-  const container = document.getElementById('personContainer');
-  if (!data.length) { container.innerHTML='<div class="col-12 text-center text-muted py-5">ไม่พบข้อมูล</div>'; document.getElementById('totalCount').textContent='0'; return; }
-  document.getElementById('totalCount').textContent = currentData.length.toLocaleString();
-  const rColor = {high_risk:'#ef4444',dm:'#f59e0b',ht:'#f59e0b',elderly:'#0ea5e9',normal:'#10b981'};
-  container.innerHTML = data.map(p => `<div class="col-md-4 col-lg-3 mb-3"><div class="k-card p-3"><div class="d-flex align-items-center gap-2 mb-2"><img src="${getDefaultAvatar(p.sex)}" class="profile-img"><div><div class="fw-bold" style="font-size:13px">${p.fullname||''}</div><div class="text-muted" style="font-size:11px">${p.cid||''}</div></div></div><div style="font-size:12px;color:#64748b"><span class="risk-dot me-1" style="background:${rColor[p.riskStatus]||'#cbd5e1'}"></span>${p.riskLabel} | อายุ ${p.age_y||'?'} ปี<br>${p.address_display||''} ${p.village_moo?'ม.'+p.village_moo:''}</div><div class="mt-2"><button class="btn btn-sm btn-outline-primary rounded-pill w-100" style="font-size:11px" onclick="openEditCrud('${p.person_id}')">✎ แก้ไข</button></div></div></div>`).join('');
+  const data=currentData.slice(0,100);
+  const container=document.getElementById('personContainer');
+  if(!data.length){container.innerHTML='<div class="col-12 text-center text-muted py-5">ไม่พบข้อมูล</div>';document.getElementById('totalCount').textContent='0';return;}
+  document.getElementById('totalCount').textContent=currentData.length.toLocaleString();
+  const rColor={high_risk:'#ef4444',dm:'#f59e0b',ht:'#f59e0b',elderly:'#0ea5e9',normal:'#10b981'};
+  container.innerHTML=data.map(p=>`<div class="col-md-4 col-lg-3 mb-3"><div class="k-card p-3"><div class="d-flex align-items-center gap-2 mb-2"><img src="${getDefaultAvatar(p.sex)}" class="profile-img"><div><div class="fw-bold" style="font-size:13px">${p.fullname||''}</div><div class="text-muted" style="font-size:11px">${p.cid||''}</div></div></div><div style="font-size:12px;color:#64748b"><span class="risk-dot me-1" style="background:${rColor[p.riskStatus]||'#cbd5e1'}"></span>${p.riskLabel} | อายุ ${p.age_y||'?'} ปี<br>${p.address_display||''} ${p.village_moo?'ม.'+p.village_moo:''}</div><div class="mt-2 d-flex gap-1"><button class="btn btn-sm btn-outline-primary rounded-pill flex-fill" style="font-size:11px" onclick="openEditCrud('${p.person_id}')">✎ แก้ไข</button><button class="btn btn-sm rounded-pill flex-fill text-white" style="font-size:11px;background:#0f766e" onclick="openFamilyTree('${p.person_id}')">🌳</button><button class="btn btn-sm rounded-pill flex-fill text-white" style="font-size:11px;background:#dc2626" onclick="openScreeningModal('${p.person_id}')">🚬</button></div></div></div>`).join('');
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// MAP (Longdo)
+// ══════════════════════════════════════════
+function loadOverviewMap() {
+  if (window._mapLoading) return;
+  window._mapLoading = true;
+  setTimeout(() => {
+    try {
+      if (!oMap) {
+        oMap = new longdo.Map({ placeholder: document.getElementById('overviewMap'), zoom: 14, location: { lon: DEFAULT_LNG, lat: DEFAULT_LAT } });
+      }
+      oMap.Overlays.clear();
+      const mapData = currentData.length > 0 ? currentData : allData;
+      mapData.forEach(p => {
+        if (!p.lat || !p.lng) return;
+        const color = {high_risk:'#ef4444',dm:'#f59e0b',ht:'#f59e0b',elderly:'#0ea5e9',normal:'#10b981'}[p.riskStatus]||'#cbd5e1';
+        oMap.Overlays.add(new longdo.Marker(
+          { lon: p.lng, lat: p.lat },
+          { title: p.fullname, detail: (p.address_display||'')+'<br>'+p.riskLabel, icon: { html: `<div style="width:12px;height:12px;background:${color};border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)"></div>`, offset: { x:6, y:6 } } }
+        ));
+      });
+    } catch(e) { console.warn('Map error:', e); }
+    window._mapLoading = false;
+  }, 600);
+}
+
+// ══════════════════════════════════════════
 // SEARCH TAB
-// ══════════════════════════════════════════════
-let sqResults=[], sqPage=1; const SQ_PAGE_SIZE=20;
+// ══════════════════════════════════════════
+let sqResults=[], sqPage=1;
+const SQ_PAGE_SIZE=20;
 let sqTabInited=false;
-function initSearchTab() { if(sqTabInited)return; sqTabInited=true; }
+function initSearchTab() {
+  if(sqTabInited)return; sqTabInited=true;
+}
 
 function runSearchTab() {
   const v=document.getElementById('sq_village').value;
@@ -1201,7 +1105,7 @@ function runSearchTab() {
 }
 
 function clearSearchTab() {
-  ['sq_village','sq_discharge','sq_sex'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=el.tagName==='SELECT'?'all':'';});
+  ['sq_village','sq_discharge','sq_sex'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='all';});
   ['sq_age_min','sq_age_max','sq_keyword'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   sqResults=[]; sqPage=1; renderSearchTable();
 }
@@ -1229,7 +1133,7 @@ function renderSearchTable() {
     const dClass=discClass[disc]||'bg-secondary-subtle text-secondary';
     const sexHtml=p.sex==='1'?'<span style="color:#1d4ed8;font-weight:600">ชาย</span>':'<span style="color:#be185d;font-weight:600">หญิง</span>';
     const addr=(p.address_display||'')+(p.village_moo?' ม.'+p.village_moo+' '+p.village_name:'');
-    return `<tr style="cursor:pointer" onclick="openEditCrud('${p.person_id}')"><td class="px-3 text-muted" style="font-size:12px">${no}</td><td class="px-3" style="font-family:monospace;font-size:12px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:12px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong></td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center;font-weight:600">${p.age_y||'—'}</td><td class="px-3" style="font-size:12px;color:#64748b;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${addr}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center" onclick="event.stopPropagation()"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="openEditCrud('${p.person_id}')">✎</button></td></tr>`;
+    return `<tr style="cursor:pointer" onclick="openEditCrud('${p.person_id}')"><td class="px-3 text-muted" style="font-size:12px">${no}</td><td class="px-3" style="font-family:monospace;font-size:12px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:12px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong></td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center">${p.age_y||'—'}</td><td class="px-3" style="font-size:12px;color:#64748b;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${addr}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center" onclick="event.stopPropagation()"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="openEditCrud('${p.person_id}')">✎</button> <button class="btn btn-sm rounded-pill px-2 text-white" style="font-size:11px;background:#dc2626" onclick="openScreeningModal('${p.person_id}')">🚬</button></td></tr>`;
   }).join('');
 }
 
@@ -1239,16 +1143,35 @@ function sqChangePage(dir) {
   renderSearchTable();
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // HOUSE TAB
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 let htResults=[], htPage=1, htTabInited=false;
 const HT_PAGE_SIZE=20;
 
 function initHouseTab() {
-  if (!htTabInited) { htTabInited=true; }
-  htResults = allHouseData;
-  htPage=1; renderHouseTable();
+  if(!htTabInited){htTabInited=true;}
+  htResults=allHouseData; htPage=1; renderHouseTable();
+}
+
+function _rebuildVmsDropdown(villageId) {
+  const sel=document.getElementById('ht_vms_select');
+  if(!sel)return;
+  const prev=sel.value;
+  while(sel.options.length>2)sel.remove(2);
+  const vmsIds=new Set();
+  allHouseData.forEach(h=>{
+    const vid=String(h.village_id||'');
+    if(villageId==='all'||vid===villageId){
+      const id=String(h.vms_person_id||'').trim();
+      if(id&&id!=='0')vmsIds.add(id);
+    }
+  });
+  vmsIds.forEach(pid=>{
+    const p=allData.find(x=>String(x.person_id)===pid);
+    if(p){const label=(p.pname||'')+(p.fname||'')+' '+(p.lname||'');sel.appendChild(new Option(label.trim(),p.cid));}
+  });
+  sel.value=prev;
 }
 
 function runHouseTab() {
@@ -1259,8 +1182,8 @@ function runHouseTab() {
     const matchV=v==='all'||String(h.village_id)===v;
     const matchKW=!kw||String(h.address||'').toLowerCase().includes(kw)||String(h.house_reg||'').toLowerCase().includes(kw);
     let matchVms=true;
-    if(vmsSel==='__empty__') matchVms=!String(h.vms_person_id||'').trim()||String(h.vms_person_id||'').trim()==='0';
-    else if(vmsSel) { const p=allData.find(x=>String(x.cid).trim()===vmsSel); if(p) matchVms=String(h.vms_person_id||'').trim()===String(p.person_id); else matchVms=false; }
+    if(vmsSel==='__empty__')matchVms=!String(h.vms_person_id||'').trim()||String(h.vms_person_id||'').trim()==='0';
+    else if(vmsSel){const p=allData.find(x=>String(x.cid).trim()===vmsSel);if(p)matchVms=String(h.vms_person_id||'').trim()===String(p.person_id);else matchVms=false;}
     return matchV&&matchKW&&matchVms;
   });
   htPage=1; renderHouseTable();
@@ -1278,16 +1201,15 @@ function renderHouseTable() {
   const totalPerson=htResults.reduce((s,h)=>s+(h.person_count||0),0);
   document.getElementById('ht_summary').innerHTML=total===0?'<span class="badge rounded-pill bg-secondary">ไม่พบข้อมูล</span>':`<span class="badge rounded-pill text-bg-light border">บ้านทั้งหมด <strong>${total}</strong> หลัง</span> <span class="badge rounded-pill text-bg-light border">บุคคลรวม <strong>${totalPerson}</strong> คน</span>`;
   const totalPages=Math.max(1,Math.ceil(total/HT_PAGE_SIZE));
-  if(htPage>totalPages) htPage=totalPages;
+  if(htPage>totalPages)htPage=totalPages;
   const start=(htPage-1)*HT_PAGE_SIZE;
   const pageData=htResults.slice(start,start+HT_PAGE_SIZE);
   document.getElementById('ht_page_info').textContent=total>0?`หน้า ${htPage}/${totalPages} (${start+1}–${Math.min(start+HT_PAGE_SIZE,total)} จาก ${total})`:'—';
   document.getElementById('ht_prev').disabled=htPage<=1;
   document.getElementById('ht_next').disabled=htPage>=totalPages;
-  if(!pageData.length){document.getElementById('ht_tbody').innerHTML='<tr><td colspan="10" class="text-center text-muted py-5">ไม่พบข้อมูล</td></tr>';return;}
+  if(!pageData.length){document.getElementById('ht_tbody').innerHTML='<tr><td colspan="10" class="text-center text-muted py-5">ไม่พบข้อมูล</td></tr>';renderHouseCards();return;}
   document.getElementById('ht_tbody').innerHTML=pageData.map((h,idx)=>{
-    const no=start+idx+1;
-    const cnt=h.person_count||0;
+    const no=start+idx+1;const cnt=h.person_count||0;
     const latDisp=h.lat?parseFloat(h.lat).toFixed(7):'<span class="text-muted">—</span>';
     const lonDisp=h.lon?parseFloat(h.lon).toFixed(7):'<span class="text-muted">—</span>';
     const vmsId=String(h.vms_person_id||'').trim();
@@ -1301,7 +1223,7 @@ function renderHouseTable() {
 function renderHouseCards() {
   const total=htResults.length;
   const totalPages=Math.max(1,Math.ceil(total/HT_PAGE_SIZE));
-  if(htPage>totalPages) htPage=totalPages;
+  if(htPage>totalPages)htPage=totalPages;
   const start=(htPage-1)*HT_PAGE_SIZE;
   const pageData=htResults.slice(start,start+HT_PAGE_SIZE);
   const pm=document.getElementById('ht_page_info_m');
@@ -1322,48 +1244,14 @@ function htChangePage(dir) {
   renderHouseTable();
 }
 
-function _rebuildVmsDropdown(villageId) {
-  const sel = document.getElementById('ht_vms_select');
-  if (!sel) return;
-  // เก็บค่าเดิมไว้
-  const prev = sel.value;
-  // ล้างเฉพาะ option ที่ไม่ใช่ 2 ตัวแรก
-  while (sel.options.length > 2) sel.remove(2);
-
-  // หา vms_person_id ทั้งหมดจากบ้าน
-  const vmsIds = new Set();
-  allHouseData.forEach(h => {
-    const vid = String(h.village_id || '');
-    if (villageId === 'all' || vid === villageId) {
-      const id = String(h.vms_person_id || '').trim();
-      if (id && id !== '0') vmsIds.add(id);
-    }
-  });
-
-  // หาชื่อจาก allData
-  vmsIds.forEach(pid => {
-    const p = allData.find(x => String(x.person_id) === pid);
-    if (p) {
-      const label = (p.pname || '') + (p.fname || '') + ' ' + (p.lname || '');
-      const opt = new Option(label.trim(), p.cid);
-      sel.appendChild(opt);
-    }
-  });
-
-  // คืนค่าเดิมถ้ายังมีอยู่
-  sel.value = prev;
-}
-
-// ══ VIEW HOUSE MEMBERS ══
+// ══ HOUSE MEMBERS ══
 function viewHouseMembers(houseId) {
   const h=allHouseData.find(x=>String(x.house_id)===String(houseId));
   if(!h){alert('ไม่พบข้อมูลบ้าน');return;}
   document.getElementById('hm_title').textContent='บ้านเลขที่ '+(h.address||houseId);
   document.getElementById('hm_subtitle').textContent='ทะเบียนบ้าน: '+(h.house_reg||'—')+' | ม.'+h.village_moo+' '+h.village_name;
   const members=h.members||[];
-  const total=members.length;
-  const males=members.filter(p=>p.sex==='1').length;
-  const females=members.filter(p=>p.sex==='2').length;
+  const total=members.length,males=members.filter(p=>p.sex==='1').length,females=members.filter(p=>p.sex==='2').length;
   document.getElementById('hm_summary').innerHTML=`<span class="badge rounded-pill text-bg-light border">สมาชิก <strong>${total}</strong> คน</span> <span class="badge rounded-pill text-bg-light border" style="color:#1d4ed8">ชาย <strong>${males}</strong></span> <span class="badge rounded-pill text-bg-light border" style="color:#be185d">หญิง <strong>${females}</strong></span>`;
   const discLabel={'9':'ยังอาศัย','1':'เสียชีวิต','2':'ย้าย','':'ไม่ระบุ'};
   const discClass={'9':'bg-success-subtle text-success','1':'bg-danger-subtle text-danger','2':'bg-warning-subtle text-warning','':'bg-secondary-subtle text-secondary'};
@@ -1375,16 +1263,17 @@ function viewHouseMembers(houseId) {
     const sexHtml=p.sex==='1'?'<span style="color:#1d4ed8;font-weight:600">ชาย</span>':'<span style="color:#be185d;font-weight:600">หญิง</span>';
     const isDead=p.death==='Y'||disc==='1';
     const diseaseHtml=_buildDiseaseHtml(p.clinic_code_list||'',p.chronic_disease_list||'');
-    return `<tr style="${isDead?'opacity:0.55':''}"><td class="px-3 text-muted">${idx+1}</td><td class="px-3" style="font-family:monospace;font-size:11.5px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:11px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong>${isDead?' <span class="badge bg-danger" style="font-size:9px">เสียชีวิต</span>':''}</td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center;font-weight:600">${p.age_y||'—'}</td><td class="px-3">${diseaseHtml}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎</button></td></tr>`;
+    const age15=(parseInt(p.age_y)||0)>=15;
+    return `<tr style="${isDead?'opacity:0.55':''}"><td class="px-3 text-muted">${idx+1}</td><td class="px-3" style="font-family:monospace;font-size:11.5px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:11px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong>${isDead?' <span class="badge bg-danger" style="font-size:9px">เสียชีวิต</span>':''}</td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center">${p.age_y||'—'}</td><td class="px-3">${diseaseHtml}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center" style="white-space:nowrap"><button class="btn btn-sm btn-outline-primary rounded-pill px-2 me-1" style="font-size:11px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎</button><button class="btn btn-sm rounded-pill px-2 text-white me-1" style="font-size:11px;background:#0f766e" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openFamilyTree('${p.person_id}'),350)">🌳</button>${age15&&disc==='9'?`<button class="btn btn-sm rounded-pill px-2 text-white" style="font-size:11px;background:#dc2626" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openScreeningModal('${p.person_id}'),350)">🚬</button>`:''}
+    </td></tr>`;
   }).join('');
-  // Mobile cards
-  document.getElementById('hm_card_container').innerHTML=members.map(p=>`<div class="hm-card"><div class="hm-card-name">${p.pname||''} ${p.fname||''} ${p.lname||''}</div><div class="hm-card-cid">${p.cid||'—'}</div><div class="hm-card-meta"><span style="color:${p.sex==='1'?'#1d4ed8':'#be185d'};font-weight:600">${p.sex==='1'?'ชาย':'หญิง'}</span><span>อายุ ${p.age_y||'?'} ปี</span></div><div style="font-size:12px">${_buildDiseaseHtml(p.clinic_code_list||'',p.chronic_disease_list||'')}</div><div class="hm-card-actions mt-2"><button class="btn btn-sm btn-outline-primary rounded-pill flex-fill" style="font-size:12px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎ แก้ไข</button></div></div>`).join('');
+  document.getElementById('hm_card_container').innerHTML=members.map(p=>`<div class="hm-card"><div class="hm-card-name">${p.pname||''} ${p.fname||''} ${p.lname||''}</div><div class="hm-card-cid">${p.cid||'—'}</div><div class="hm-card-meta"><span style="color:${p.sex==='1'?'#1d4ed8':'#be185d'};font-weight:600">${p.sex==='1'?'ชาย':'หญิง'}</span><span>อายุ ${p.age_y||'?'} ปี</span></div><div style="font-size:12px">${_buildDiseaseHtml(p.clinic_code_list||'',p.chronic_disease_list||'')}</div><div class="hm-card-actions mt-2"><button class="btn btn-sm btn-outline-primary rounded-pill flex-fill" style="font-size:12px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎ แก้ไข</button><button class="btn btn-sm rounded-pill flex-fill text-white" style="font-size:12px;background:#dc2626" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openScreeningModal('${p.person_id}'),350)">🚬 คัดกรอง</button></div></div>`).join('');
   new bootstrap.Modal(document.getElementById('houseMembersModal')).show();
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // CRUD MODAL
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 let _crudModal=null;
 function _getCrudModal(){if(!_crudModal)_crudModal=new bootstrap.Modal(document.getElementById('crudModal'),{focus:false});return _crudModal;}
 
@@ -1425,8 +1314,8 @@ function _loadRelationFromLocal(p) {
   ];
   roles.forEach(r=>{
     let match=null;
-    if(r.pid&&r.pid!=='0') match=allData.find(x=>String(x.person_id)===r.pid);
-    if(!match&&r.cid&&r.cid.length>=10) match=allData.find(x=>String(x.cid).trim()===r.cid);
+    if(r.pid&&r.pid!=='0')match=allData.find(x=>String(x.person_id)===r.pid);
+    if(!match&&r.cid&&r.cid.length>=10)match=allData.find(x=>String(x.cid).trim()===r.cid);
     if(match){
       document.getElementById('crud_'+r.role+'_cid').value=match.cid||'';
       document.getElementById('crud_'+r.role+'_pid').value=match.person_id;
@@ -1447,9 +1336,9 @@ function lookupRelative(role,val) {
   if(!val){dropEl.style.display='none';return;}
   const isNum=/^\d+$/.test(val);
   let results=[];
-  if(isNum&&val.length===13) results=allData.filter(p=>String(p.cid)===val).slice(0,1);
-  else if(isNum&&val.length>=3) results=allData.filter(p=>String(p.cid||'').startsWith(val)).slice(0,8);
-  else if(!isNum&&val.length>=2) results=allData.filter(p=>(p.fullname||'').includes(val)||(p.fname||'').includes(val)).slice(0,8);
+  if(isNum&&val.length===13)results=allData.filter(p=>String(p.cid)===val).slice(0,1);
+  else if(isNum&&val.length>=3)results=allData.filter(p=>String(p.cid||'').startsWith(val)).slice(0,8);
+  else if(!isNum&&val.length>=2)results=allData.filter(p=>(p.fullname||'').includes(val)||(p.fname||'').includes(val)).slice(0,8);
   if(!results.length){dropEl.style.display='none';return;}
   dropEl.innerHTML=results.map(p=>`<div class="rel-drop-item" onclick="selectRelative('${role}','${p.person_id}')"><div class="rel-name">${p.pname||''}${p.fname||''} ${p.lname||''}</div><div class="rel-meta">${p.cid} | ${p.sex==='1'?'ชาย':'หญิง'} ${p.age_y||'?'}ปี</div></div>`).join('');
   dropEl.style.display='block';
@@ -1470,7 +1359,7 @@ document.addEventListener('click',function(e){
   ['father','mother','sps'].forEach(role=>{
     const inp=document.getElementById('crud_'+role+'_cid');
     const drop=document.getElementById('crud_'+role+'_cid_drop');
-    if(drop&&inp&&!drop.contains(e.target)&&e.target!==inp) drop.style.display='none';
+    if(drop&&inp&&!drop.contains(e.target)&&e.target!==inp)drop.style.display='none';
   });
 });
 
@@ -1480,8 +1369,7 @@ async function saveCrud() {
   const lname=document.getElementById('crud_lname').value.trim();
   if(!fname||!lname){Swal.fire({icon:'warning',title:'กรุณากรอกข้อมูล',text:'ชื่อและนามสกุลห้ามว่าง',confirmButtonColor:'#6d28d9'});return;}
   const updateData={
-    pname:document.getElementById('crud_pname').value.trim(),
-    fname,lname,
+    pname:document.getElementById('crud_pname').value.trim(),fname,lname,
     cid:document.getElementById('crud_cid').value.trim(),
     sex:document.getElementById('crud_sex').value,
     birthdate:toCE(document.getElementById('crud_birthdate').value.trim()),
@@ -1496,16 +1384,11 @@ async function saveCrud() {
   };
   showLoading();
   try {
-    if(!personId){
-      const{error}=await sb.from('person').insert([updateData]);
-      if(error) throw error;
-    } else {
-      const{error}=await sb.from('person').update(updateData).eq('person_id',personId);
-      if(error) throw error;
-    }
+    if(!personId){const{error}=await sb.from('person').insert([updateData]);if(error)throw error;}
+    else{const{error}=await sb.from('person').update(updateData).eq('person_id',personId);if(error)throw error;}
     hideLoading();
     Swal.fire({icon:'success',title:'บันทึกสำเร็จ',timer:1500,timerProgressBar:true,showConfirmButton:false}).then(()=>{_getCrudModal().hide();refreshData();});
-  } catch(e){hideLoading();Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:e.message,confirmButtonColor:'#6d28d9'});}
+  }catch(e){hideLoading();Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:e.message,confirmButtonColor:'#6d28d9'});}
 }
 
 async function confirmDelete() {
@@ -1523,24 +1406,369 @@ async function confirmDelete() {
   }catch(e){hideLoading();Swal.fire({icon:'error',title:'Error',text:e.message,confirmButtonColor:'#6d28d9'});}
 }
 
-// ══════════════════════════════════════════════
-// IMPORT TAB
-// ══════════════════════════════════════════════
-let _importUnlocked=false, _importData={house:null,person:null};
+// ══════════════════════════════════════════
+// SCREENING — คัดกรองบุหรี่/สุรา (Supabase)
+// ══════════════════════════════════════════
+let _scrModal=null;
+function _getScrModal(){if(!_scrModal)_scrModal=new bootstrap.Modal(document.getElementById('screeningModal'));return _scrModal;}
 
+function openScreeningModal(personId) {
+  const p=allData.find(x=>String(x.person_id)===String(personId));
+  if(!p){alert('ไม่พบข้อมูล');return;}
+  document.getElementById('scr_person_id').value=p.person_id;
+  document.getElementById('scr_cid').value=p.cid||'';
+  document.getElementById('scr_subtitle').textContent=(p.pname||'')+(p.fname||'')+' '+(p.lname||'')+' | อายุ '+(p.age_y||'?')+' ปี';
+  document.getElementById('scr_person_info').innerHTML=`<span style="color:#dc2626">🚬</span> <strong>${p.pname||''}${p.fname||''} ${p.lname||''}</strong> | ${p.cid||'—'} | อายุ ${p.age_y||'?'} ปี | ${p.sex==='1'?'ชาย':'หญิง'}`;
+  const today=new Date();
+  const dd=String(today.getDate()).padStart(2,'0');
+  const mm=String(today.getMonth()+1).padStart(2,'0');
+  const yyyy=today.getFullYear();
+  const todayStr=yyyy+'-'+mm+'-'+dd;
+  document.getElementById('scr_cig_date').value=todayStr;
+  document.getElementById('scr_alc_date').value=todayStr;
+  _resetScrForm();
+  _getScrModal().show();
+}
+
+function _resetScrForm() {
+  document.querySelectorAll('input[name="cig_smoke"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('input[name="cig_freq"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('input[name="cig_time"]').forEach(r=>r.checked=false);
+  ['cig_svc_1B530','cig_svc_1BS31'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  document.getElementById('cig_freq_wrap').style.display='none';
+  document.getElementById('cig_code_preview').textContent='รหัสที่จะบันทึก: —';
+  document.querySelectorAll('input[name="alc_screen"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('input[name="alc_freq"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('input[name="alc_prob"]').forEach(r=>r.checked=false);
+  const arw=document.getElementById('alc_risk_wrap');if(arw)arw.style.display='none';
+  const acp=document.getElementById('alc_code_preview');if(acp)acp.textContent='รหัสที่จะบันทึก: —';
+  const as=document.getElementById('alc_score');if(as)as.textContent='0';
+  const arl=document.getElementById('alc_risk_label');if(arl)arl.innerHTML='';
+  switchScrTab('cig',document.querySelector('#scrTab .nav-link'));
+}
+
+function switchScrTab(tab,btn) {
+  document.getElementById('scr_cig_panel').style.display=tab==='cig'?'':'none';
+  document.getElementById('scr_alc_panel').style.display=tab==='alc'?'':'none';
+  document.querySelectorAll('#scrTab .nav-link').forEach(b=>{b.style.background='#f1f5f9';b.style.color='#334155';});
+  if(btn){btn.style.background=tab==='cig'?'#dc2626':'#b45309';btn.style.color='white';}
+}
+
+function updateCigCode() {
+  const smoke=document.querySelector('input[name="cig_smoke"]:checked');
+  const smokeVal=smoke?smoke.value:'';
+  document.getElementById('cig_freq_wrap').style.display=smokeVal==='1B50'?'':'none';
+  const codes=[];
+  if(smokeVal==='1B52')codes.push('1B52');
+  else if(smokeVal==='1B51')codes.push('1B51');
+  else if(smokeVal==='1B50'){
+    codes.push('1B50');
+    const freq=document.querySelector('input[name="cig_freq"]:checked');
+    const time=document.querySelector('input[name="cig_time"]:checked');
+    if(freq)codes.push(freq.value);
+    if(time)codes.push(time.value);
+  }
+  ['cig_svc_1B530','cig_svc_1BS31'].forEach(id=>{const el=document.getElementById(id);if(el&&el.checked)codes.push(el.value);});
+  document.getElementById('cig_code_preview').textContent='รหัสที่จะบันทึก: '+(codes.length?codes.join(', '):'—');
+}
+
+function updateAlcCode() {
+  const sel=document.querySelector('input[name="alc_screen"]:checked');
+  const val=sel?sel.value:'';
+  const arw=document.getElementById('alc_risk_wrap');
+  if(arw)arw.style.display=val==='drink'?'':'none';
+  if(val==='1B600'){document.getElementById('alc_code_preview').textContent='รหัสที่จะบันทึก: 1B600';}
+  else if(val==='1B601'){document.getElementById('alc_code_preview').textContent='รหัสที่จะบันทึก: 1B601';}
+  else if(val==='drink'){calcAlcRisk();}
+}
+
+function calcAlcRisk() {
+  const freq=document.querySelector('input[name="alc_freq"]:checked');
+  const prob=document.querySelector('input[name="alc_prob"]:checked');
+  const fv=freq?parseInt(freq.value):0;
+  const pv=prob?parseInt(prob.value):0;
+  const total=fv+pv;
+  document.getElementById('alc_score').textContent=total;
+  let codes=[],label='';
+  if(total<=10){codes=['1B602','1B610'];label='<span class="badge bg-success">ความเสี่ยงต่ำ</span>';}
+  else if(total<=26){codes=['1B603','1B611'];label='<span class="badge bg-warning text-dark">ความเสี่ยงปานกลาง</span>';}
+  else{codes=['1B604','1B611','1B612'];label='<span class="badge bg-danger">ความเสี่ยงสูง</span>';}
+  document.getElementById('alc_risk_label').innerHTML=label;
+  document.getElementById('alc_code_preview').textContent='รหัสที่จะบันทึก: '+codes.join(', ')+' | ASSIST='+total;
+}
+
+async function saveScreening() {
+  const cid=document.getElementById('scr_cid').value;
+  if(!cid){alert('ไม่พบเลขบัตรประชาชน');return;}
+  const records=[];
+  const now=new Date();
+  const fmtDT=d=>{const dd=String(d.getDate()).padStart(2,'0');const mm=String(d.getMonth()+1).padStart(2,'0');return dd+'/'+mm+'/'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');};
+
+  // รหัสบุหรี่
+  const cigPlace=document.getElementById('scr_cig_place').value;
+  const smoke=document.querySelector('input[name="cig_smoke"]:checked');
+  const smokeVal=smoke?smoke.value:'';
+  const cigCodes=[];
+  if(smokeVal==='1B52')cigCodes.push('1B52');
+  else if(smokeVal==='1B51')cigCodes.push('1B51');
+  else if(smokeVal==='1B50'){
+    cigCodes.push('1B50');
+    const freq=document.querySelector('input[name="cig_freq"]:checked');
+    const time=document.querySelector('input[name="cig_time"]:checked');
+    if(freq)cigCodes.push(freq.value);
+    if(time)cigCodes.push(time.value);
+  }
+  ['cig_svc_1B530','cig_svc_1BS31'].forEach(id=>{const el=document.getElementById(id);if(el&&el.checked)cigCodes.push(el.value);});
+  cigCodes.forEach((code,i)=>{
+    const dt=new Date(now.getTime()+i*2000);
+    records.push({cid,vn:cid,pp_special_type_id:'14062',entry_datetime:fmtDT(dt),pp_special_service_place_type_id:cigPlace,pp_special_code:code,pp_special_text:''});
+  });
+
+  // รหัสสุรา
+  const alcPlace=document.getElementById('scr_alc_place').value;
+  const alcScreen=document.querySelector('input[name="alc_screen"]:checked');
+  const alcVal=alcScreen?alcScreen.value:'';
+  const alcCodes=[];
+  if(alcVal==='1B600')alcCodes.push('1B600');
+  else if(alcVal==='1B601')alcCodes.push('1B601');
+  else if(alcVal==='drink'){
+    const score=parseInt(document.getElementById('alc_score').textContent)||0;
+    if(score<=10)alcCodes.push('1B602','1B610');
+    else if(score<=26)alcCodes.push('1B603','1B611');
+    else alcCodes.push('1B604','1B611','1B612');
+  }
+  alcCodes.forEach((code,i)=>{
+    const dt=new Date(now.getTime()+(cigCodes.length+i)*2000);
+    records.push({cid,vn:cid,pp_special_type_id:'14062',entry_datetime:fmtDT(dt),pp_special_service_place_type_id:alcPlace,pp_special_code:code,pp_special_text:'ASSIST='+document.getElementById('alc_score').textContent});
+  });
+
+  if(!records.length){Swal.fire({icon:'warning',title:'ยังไม่มีข้อมูล',text:'กรุณาเลือกผลการคัดกรอง',confirmButtonColor:'#dc2626'});return;}
+
+  const res=await Swal.fire({icon:'question',title:'ยืนยันการบันทึก',html:`บันทึก <strong>${records.length}</strong> รายการ`,showCancelButton:true,confirmButtonColor:'#dc2626',cancelButtonColor:'#64748b',confirmButtonText:'บันทึก',cancelButtonText:'ยกเลิก'});
+  if(!res.isConfirmed)return;
+  showLoading();
+  try{
+    const{error}=await sb.from('pp_special').insert(records);
+    if(error)throw error;
+    hideLoading();
+    Swal.fire({icon:'success',title:'บันทึกสำเร็จ',text:'บันทึก '+records.length+' รายการเรียบร้อย',confirmButtonColor:'#dc2626',timer:2000,timerProgressBar:true}).then(()=>_getScrModal().hide());
+  }catch(e){hideLoading();Swal.fire({icon:'error',title:'Error',text:e.message,confirmButtonColor:'#dc2626'});}
+}
+
+// ══════════════════════════════════════════
+// GENOGRAM
+// ══════════════════════════════════════════
+const SVG_NS='http://www.w3.org/2000/svg';
+let genoNodes=[],genoEdges=[],genoSelected=null,genoRelFirst=null;
+let genoTool='male',genoNodeId=0,genoEdgeId=0;
+let genoRelPanelEl=null,currentGenoPersonId=null;
+const GENO_R=26,TRI_H=42,TRI_W=42;
+const genoSVG=document.getElementById('genoSVG');
+const genoNodesLayer=document.getElementById('geno-nodes');
+const genoLinesLayer=document.getElementById('geno-lines');
+const genoHint=document.getElementById('geno-hint');
+
+function _hasDM(n){return n.ncd_dm_history_type_id==='1'||n.ncd_dm_history_type_id==='2'||(String(n.chronic_disease_list||'')).includes('เบาหวาน');}
+function _hasHT(n){return n.ncd_ht_history_type_id==='1'||n.ncd_ht_history_type_id==='2'||(String(n.chronic_disease_list||'')).includes('ความดัน');}
+function genoCenterOf(n){if(n.sex==='2')return{x:n.x+GENO_R+2,y:n.y+GENO_R+2};return{x:n.x+TRI_W/2,y:n.y+TRI_H*2/3};}
+
+function genoDrawNode(n) {
+  if(n.el)n.el.remove();
+  const g=document.createElementNS(SVG_NS,'g');
+  g.setAttribute('transform',`translate(${n.x},${n.y})`);
+  g.style.cursor='move';
+  const isDM=n.dm,isHT=n.ht,isDMHT=isDM&&isHT,isSel=n===genoSelected;
+
+  if(n.sex==='1'){
+    const cx=TRI_W/2,pts=`${cx},2 2,${TRI_H} ${TRI_W-2},${TRI_H}`;
+    const fill=isDMHT?'#fee2e2':isDM?'#fef9c3':isHT?'#dbeafe':n.index?'#ede9fe':'#7B4FA6';
+    const tri=document.createElementNS(SVG_NS,'polygon');
+    tri.setAttribute('points',pts);tri.setAttribute('fill',fill);tri.setAttribute('stroke',isSel?'#a21caf':'#4A2D70');tri.setAttribute('stroke-width',isSel||n.index?3:1.8);
+    g.appendChild(tri);
+    const at=document.createElementNS(SVG_NS,'text');at.setAttribute('x',cx);at.setAttribute('y',TRI_H*0.68);at.setAttribute('text-anchor','middle');at.setAttribute('dominant-baseline','central');at.setAttribute('font-size','11');at.setAttribute('font-weight','600');at.setAttribute('fill',isDM||isHT||n.index?'#1e293b':'#fff');at.setAttribute('font-family','Sarabun,sans-serif');at.textContent=n.age||'';g.appendChild(at);
+    if(n.dead){const l1=document.createElementNS(SVG_NS,'line');l1.setAttribute('x1',cx-14);l1.setAttribute('y1',8);l1.setAttribute('x2',cx+14);l1.setAttribute('y2',TRI_H-4);l1.setAttribute('stroke','#CC2222');l1.setAttribute('stroke-width','2.5');g.appendChild(l1);const l2=document.createElementNS(SVG_NS,'line');l2.setAttribute('x1',cx+14);l2.setAttribute('y1',8);l2.setAttribute('x2',cx-14);l2.setAttribute('y2',TRI_H-4);l2.setAttribute('stroke','#CC2222');l2.setAttribute('stroke-width','2.5');g.appendChild(l2);}
+    if(n.index){const ul=document.createElementNS(SVG_NS,'line');ul.setAttribute('x1','0');ul.setAttribute('y1',TRI_H+5);ul.setAttribute('x2',TRI_W);ul.setAttribute('y2',TRI_H+5);ul.setAttribute('stroke','#4A2D70');ul.setAttribute('stroke-width','3');g.appendChild(ul);}
+    _addNameSVG(g,cx,TRI_H+(n.index?14:10),n.name);
+    if(isDM||isHT){const bl=document.createElementNS(SVG_NS,'text');bl.setAttribute('x',cx);bl.setAttribute('y',-4);bl.setAttribute('text-anchor','middle');bl.setAttribute('font-size','8');bl.setAttribute('fill',isDMHT?'#ef4444':isDM?'#d97706':'#2563eb');bl.setAttribute('font-weight','700');bl.setAttribute('font-family','Sarabun,sans-serif');bl.textContent=isDMHT?'DM+HT':isDM?'DM':'HT';g.appendChild(bl);}
+  } else if(n.sex==='2'){
+    const cx=GENO_R+2,cy=GENO_R+2;
+    const fill=isDMHT?'#fee2e2':isDM?'#fef9c3':isHT?'#dbeafe':n.index?'#ede9fe':'#D4537E';
+    const c=document.createElementNS(SVG_NS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',GENO_R);c.setAttribute('fill',fill);c.setAttribute('stroke',isSel?'#be123c':'#99244D');c.setAttribute('stroke-width',isSel||n.index?3:1.8);g.appendChild(c);
+    const at=document.createElementNS(SVG_NS,'text');at.setAttribute('x',cx);at.setAttribute('y',cy);at.setAttribute('text-anchor','middle');at.setAttribute('dominant-baseline','central');at.setAttribute('font-size','11');at.setAttribute('font-weight','600');at.setAttribute('fill',isDM||isHT||n.index?'#1e293b':'#fff');at.setAttribute('font-family','Sarabun,sans-serif');at.textContent=n.age||'';g.appendChild(at);
+    if(n.dead){const l1=document.createElementNS(SVG_NS,'line');l1.setAttribute('x1',cx-GENO_R*0.65);l1.setAttribute('y1',cy-GENO_R*0.65);l1.setAttribute('x2',cx+GENO_R*0.65);l1.setAttribute('y2',cy+GENO_R*0.65);l1.setAttribute('stroke','#CC2222');l1.setAttribute('stroke-width','2.5');g.appendChild(l1);const l2=document.createElementNS(SVG_NS,'line');l2.setAttribute('x1',cx+GENO_R*0.65);l2.setAttribute('y1',cy-GENO_R*0.65);l2.setAttribute('x2',cx-GENO_R*0.65);l2.setAttribute('y2',cy+GENO_R*0.65);l2.setAttribute('stroke','#CC2222');l2.setAttribute('stroke-width','2.5');g.appendChild(l2);}
+    if(n.index){const ul=document.createElementNS(SVG_NS,'line');ul.setAttribute('x1',2);ul.setAttribute('y1',cy+GENO_R+5);ul.setAttribute('x2',cx*2);ul.setAttribute('y2',cy+GENO_R+5);ul.setAttribute('stroke','#4A2D70');ul.setAttribute('stroke-width','3');g.appendChild(ul);}
+    _addNameSVG(g,cx,cy+GENO_R+(n.index?14:10),n.name);
+    if(isDM||isHT){const bl=document.createElementNS(SVG_NS,'text');bl.setAttribute('x',cx);bl.setAttribute('y',-4);bl.setAttribute('text-anchor','middle');bl.setAttribute('font-size','8');bl.setAttribute('fill',isDMHT?'#ef4444':isDM?'#d97706':'#2563eb');bl.setAttribute('font-weight','700');bl.setAttribute('font-family','Sarabun,sans-serif');bl.textContent=isDMHT?'DM+HT':isDM?'DM':'HT';g.appendChild(bl);}
+  } else {
+    const sq=document.createElementNS(SVG_NS,'rect');sq.setAttribute('x',2);sq.setAttribute('y',2);sq.setAttribute('width',TRI_W);sq.setAttribute('height',TRI_W);sq.setAttribute('fill','#f8fafc');sq.setAttribute('stroke','#94a3b8');sq.setAttribute('stroke-width','1.5');sq.setAttribute('stroke-dasharray','4,2');g.appendChild(sq);
+    const at=document.createElementNS(SVG_NS,'text');at.setAttribute('x',TRI_W/2+2);at.setAttribute('y',TRI_W/2+2);at.setAttribute('text-anchor','middle');at.setAttribute('dominant-baseline','central');at.setAttribute('font-size','11');at.setAttribute('fill','#94a3b8');at.setAttribute('font-family','Sarabun,sans-serif');at.textContent=n.age||'';g.appendChild(at);
+    _addNameSVG(g,TRI_W/2+2,TRI_W+12,n.name);
+  }
+
+  let dragging=false,ox=0,oy=0;
+  g.addEventListener('mousedown',e=>{e.stopPropagation();if(genoTool==='rel'){genoHandleRelClick(n);return;}if(genoSelected&&genoSelected!==n)genoClearSelection();genoSelectNode(n);dragging=true;const pt=genoSVGPoint(e);ox=pt.x-n.x;oy=pt.y-n.y;});
+  window.addEventListener('mousemove',e=>{if(!dragging)return;const pt=genoSVGPoint(e);n.x=pt.x-ox;n.y=pt.y-oy;g.setAttribute('transform',`translate(${n.x},${n.y})`);genoRedrawEdges();});
+  window.addEventListener('mouseup',()=>{dragging=false;});
+  n.el=g;genoNodesLayer.appendChild(g);
+}
+
+function _addNameSVG(g,cx,baseY,name){
+  if(!name)return;
+  const parts=name.split(' ');
+  const line1=parts.slice(0,2).join(' ');
+  const t=document.createElementNS(SVG_NS,'text');t.setAttribute('x',cx);t.setAttribute('y',baseY+14);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','10');t.setAttribute('fill','#1e293b');t.setAttribute('font-family','Sarabun,sans-serif');t.textContent=line1;g.appendChild(t);
+  if(parts.length>2){const t2=document.createElementNS(SVG_NS,'text');t2.setAttribute('x',cx);t2.setAttribute('y',baseY+26);t2.setAttribute('text-anchor','middle');t2.setAttribute('font-size','10');t2.setAttribute('fill','#1e293b');t2.setAttribute('font-family','Sarabun,sans-serif');t2.textContent=parts.slice(2).join(' ');g.appendChild(t2);}
+}
+
+function genoRedrawNode(n){genoDrawNode(n);genoRedrawEdges();}
+
+function genoCreateNode(opts) {
+  if(genoHint)genoHint.style.display='none';
+  const id=++genoNodeId;
+  const n={id,x:opts.x||100,y:opts.y||120,sex:opts.sex||genoTool,name:opts.name||'',age:opts.age||'',dm:opts.dm||false,ht:opts.ht||false,dead:opts.dead||false,index:opts.isIndex||false,person_id:opts.person_id||null,el:null};
+  genoNodes.push(n);genoDrawNode(n);return n;
+}
+
+function genoDrawEdge(e) {
+  if(e.el)e.el.remove();
+  const a=genoNodes.find(n=>n.id===e.from),b=genoNodes.find(n=>n.id===e.to);
+  if(!a||!b)return;
+  const ca=genoCenterOf(a),cb=genoCenterOf(b);
+  const g=document.createElementNS(SVG_NS,'g');
+  if(e.type==='spouse'){
+    [[-3],[3]].forEach(([dy])=>{const l=document.createElementNS(SVG_NS,'line');l.setAttribute('x1',ca.x);l.setAttribute('y1',ca.y+dy);l.setAttribute('x2',cb.x);l.setAttribute('y2',cb.y+dy);l.setAttribute('stroke','#4A2D70');l.setAttribute('stroke-width','2');g.appendChild(l);});
+  } else {
+    const my3=(ca.y+cb.y)/2;
+    const path=document.createElementNS(SVG_NS,'path');
+    path.setAttribute('d',`M${ca.x},${ca.y} L${ca.x},${my3} L${cb.x},${my3} L${cb.x},${cb.y}`);
+    path.setAttribute('fill','none');path.setAttribute('stroke','#94a3b8');path.setAttribute('stroke-width','1.5');
+    if(e.type==='sibling')path.setAttribute('stroke-dasharray','5,3');
+    g.appendChild(path);
+  }
+  e.el=g;genoLinesLayer.appendChild(g);
+}
+
+function genoRedrawEdges(){genoEdges.forEach(e=>genoDrawEdge(e));}
+function genoAddEdge(fromId,toId,rtype){const dup=genoEdges.find(e=>(e.from===fromId&&e.to===toId)||(e.from===toId&&e.to===fromId));if(dup)return;const e={id:++genoEdgeId,from:fromId,to:toId,type:rtype,el:null};genoEdges.push(e);genoDrawEdge(e);}
+function genoSVGPoint(e){const pt=genoSVG.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;return pt.matrixTransform(genoSVG.getScreenCTM().inverse());}
+
+genoSVG.addEventListener('click',e=>{
+  if(genoTool==='rel')return;
+  if(e.target!==genoSVG&&e.target.id!=='geno-hint')return;
+  const pt=genoSVGPoint(e);genoCreateNode({x:pt.x-TRI_W/2,y:pt.y-TRI_H/2});
+});
+
+const GENO_TOOLS=['male','female','unknown','rel'];
+function genoSelectTool(t){genoTool=t;GENO_TOOLS.forEach(id=>{const btn=document.getElementById('gbtn-'+id);if(btn)btn.classList.toggle('active',id===t);});genoSVG.style.cursor=t==='rel'?'cell':'crosshair';if(t!=='rel'){genoRelFirst=null;genoClearRelHighlight();}}
+function genoToggleFlag(flag){if(!genoSelected)return;genoSelected[flag]=!genoSelected[flag];genoRedrawNode(genoSelected);}
+function genoSelectNode(n){genoSelected=n;genoRedrawNode(n);const panel=document.getElementById('geno-node-panel');panel.style.display='flex';document.getElementById('geno-panel-name').textContent=n.name||'Node #'+n.id;document.getElementById('geno-edit-name').value=n.name||'';document.getElementById('geno-edit-age').value=n.age||'';}
+function genoClearSelection(){const prev=genoSelected;genoSelected=null;if(prev)genoRedrawNode(prev);document.getElementById('geno-node-panel').style.display='none';genoRelFirst=null;genoClearRelHighlight();}
+function genoUpdateName(v){if(!genoSelected)return;genoSelected.name=v;document.getElementById('geno-panel-name').textContent=v||'Node #'+genoSelected.id;genoRedrawNode(genoSelected);}
+function genoUpdateAge(v){if(!genoSelected)return;genoSelected.age=v;genoRedrawNode(genoSelected);}
+function genoDeleteSelected(){if(!genoSelected)return;genoSelected.el.remove();genoEdges=genoEdges.filter(e=>{if(e.from===genoSelected.id||e.to===genoSelected.id){e.el&&e.el.remove();return false;}return true;});genoNodes=genoNodes.filter(n=>n!==genoSelected);genoSelected=null;document.getElementById('geno-node-panel').style.display='none';}
+function genoHandleRelClick(n){if(!genoRelFirst){genoRelFirst=n;n.el.style.opacity='0.55';return;}if(genoRelFirst===n){genoClearRelHighlight();return;}genoShowRelPanel(genoRelFirst,n);}
+function genoClearRelHighlight(){if(genoRelFirst){genoRelFirst.el.style.opacity='1';genoRelFirst=null;}}
+function genoShowRelPanel(a,b){genoClearRelHighlight();if(genoRelPanelEl)genoRelPanelEl.remove();const wrap=document.getElementById('geno-canvas-wrap');const px=(a.x+b.x)/2+GENO_R,py=(a.y+b.y)/2+GENO_R;const panel=document.createElement('div');panel.id='geno-rel-panel';panel.style.left=px+'px';panel.style.top=py+'px';panel.innerHTML=`<div style="font-size:12px;margin-bottom:8px;color:#64748b;font-weight:600">เลือกความสัมพันธ์</div><select id="geno-rel-type"><option value="spouse">สมรส</option><option value="parent-child">พ่อ/แม่ → ลูก</option><option value="sibling">พี่น้อง</option></select><div style="display:flex;gap:6px"><button onclick="genoConfirmRel(${a.id},${b.id})">ยืนยัน</button><button onclick="genoCancelRel()">ยกเลิก</button></div>`;wrap.appendChild(panel);genoRelPanelEl=panel;}
+function genoConfirmRel(aId,bId){const rtype=document.getElementById('geno-rel-type').value;genoAddEdge(aId,bId,rtype);genoCancelRel();}
+function genoCancelRel(){if(genoRelPanelEl){genoRelPanelEl.remove();genoRelPanelEl=null;}genoRelFirst=null;}
+
+function buildGenoFromTree(d) {
+  const COL=130,ROW=140,svgW=1060,START_Y=40;
+  function calcX(i,total,cx){return cx-(total-1)*COL/2+i*COL;}
+  function createN(p,x,y,isIdx){
+    return genoCreateNode({x:x-(p.sex==='2'?28:21),y,sex:String(p.sex||''),name:p.fullname||'',age:p.age_y||'',dm:_hasDM(p),ht:_hasHT(p),dead:p.death||false,isIndex:isIdx,person_id:p.person_id||null});
+  }
+  function addE(fromN,toN,rt){if(fromN&&toN){const dup=genoEdges.find(e=>(e.from===fromN.id&&e.to===toN.id)||(e.from===toN.id&&e.to===fromN.id));if(!dup)genoAddEdge(fromN.id,toN.id,rt);}}
+
+  const gen1=[d.father,d.mother].filter(Boolean);
+  const gen1Ns=gen1.map((p,i)=>createN(p,calcX(i,gen1.length,svgW/2),START_Y,false));
+  const fN=d.father?gen1Ns[0]:null;
+  const mN=d.mother?(gen1Ns.length>1?gen1Ns[1]:gen1Ns[0]):null;
+  if(fN&&mN)addE(fN,mN,'spouse');
+
+  const self=d.self,spouse=d.spouse,siblings=d.siblings||[];
+  const gen2=[...siblings.filter(s=>(parseInt(s.age_y)||0)>(parseInt(self.age_y)||0)),self,...(spouse?[spouse]:[]),...siblings.filter(s=>(parseInt(s.age_y)||0)<=(parseInt(self.age_y)||0))];
+  const gen2Ns=gen2.map((p,i)=>createN(p,calcX(i,gen2.length,svgW/2),START_Y+ROW,String(p.person_id)===String(self.person_id)));
+  const selfN=gen2Ns[gen2.findIndex(p=>String(p.person_id)===String(self.person_id))];
+  const spouseN=spouse?gen2Ns[gen2.findIndex(p=>String(p.person_id)===String(spouse.person_id))]:null;
+  gen2Ns.forEach((sN,i)=>{const p=gen2[i];if(spouse&&String(p.person_id)===String(spouse.person_id))return;if(fN)addE(fN,sN,'parent-child');if(mN)addE(mN,sN,'parent-child');});
+  if(selfN&&spouseN)addE(selfN,spouseN,'spouse');
+
+  const children=d.children||[];
+  const midIdx=(gen2.findIndex(p=>String(p.person_id)===String(self.person_id))+(spouse?gen2.findIndex(p=>String(p.person_id)===String(spouse.person_id)):gen2.findIndex(p=>String(p.person_id)===String(self.person_id))))/2;
+  const midX=calcX(midIdx,gen2.length,svgW/2);
+  children.forEach((p,i)=>{
+    const cx=midX+(i-(children.length-1)/2)*COL;
+    const cN=createN(p,cx,START_Y+ROW*2,false);
+    if(selfN)addE(selfN,cN,'parent-child');
+    if(spouseN)addE(spouseN,cN,'parent-child');
+  });
+}
+
+function genoAutoLoad(personId) {
+  if(!personId)return;
+  // สร้าง family tree จาก allData โดยตรง (ไม่ต้องเรียก backend)
+  const self=allData.find(x=>String(x.person_id)===String(personId));
+  if(!self){alert('ไม่พบข้อมูล');return;}
+  const father=self.father_person_id?allData.find(x=>String(x.person_id)===self.father_person_id):null;
+  const mother=self.mother_person_id?allData.find(x=>String(x.person_id)===self.mother_person_id):null;
+  const spouse=self.sps_person_id?allData.find(x=>String(x.person_id)===self.sps_person_id):null;
+  const children=allData.filter(x=>(String(x.father_person_id)===String(personId)||String(x.mother_person_id)===String(personId)));
+  const siblings=father||mother?allData.filter(x=>x.person_id!==personId&&((father&&String(x.father_person_id)===String(father.person_id))||(mother&&String(x.mother_person_id)===String(mother.person_id)))):[];
+  clearGeno();
+  buildGenoFromTree({self,father,mother,spouse,children,siblings});
+}
+
+function clearGeno(){genoNodes.forEach(n=>n.el&&n.el.remove());genoEdges.forEach(e=>e.el&&e.el.remove());genoNodes=[];genoEdges=[];genoSelected=null;genoRelFirst=null;genoNodeId=0;genoEdgeId=0;if(genoHint)genoHint.style.display='block';document.getElementById('geno-node-panel').style.display='none';}
+
+function openFamilyTree(personId) {
+  currentGenoPersonId=personId;
+  const p=allData.find(x=>String(x.person_id)===String(personId));
+  if(!p)return;
+  document.getElementById('fm_title').textContent=p.fullname+' | '+p.address_display;
+  clearGeno();
+  const modal=new bootstrap.Modal(document.getElementById('familyModal'));
+  modal.show();
+  document.getElementById('familyModal').addEventListener('shown.bs.modal',function handler(){
+    document.getElementById('familyModal').removeEventListener('shown.bs.modal',handler);
+    genoAutoLoad(personId);
+  });
+}
+
+function genoSearchName(q) {
+  const box=document.getElementById('geno-search-results');
+  if(!q||q.length<2){box.style.display='none';return;}
+  const results=allData.filter(p=>(p.fullname||'').includes(q)||(p.cid||'').includes(q)).slice(0,12);
+  if(!results.length){box.style.display='none';return;}
+  box.style.display='block';
+  box.innerHTML=results.map(p=>`<div class="gsr-item" onclick="genoAddFromSearch(${JSON.stringify({person_id:p.person_id,fullname:p.fullname,sex:p.sex,age_y:p.age_y,death:p.death,ncd_dm_history_type_id:p.ncd_dm_history_type_id,ncd_ht_history_type_id:p.ncd_ht_history_type_id})})"><strong>${p.fullname||''}</strong> <span style="color:#94a3b8;font-size:11px">${p.sex==='1'?'ชาย':'หญิง'} ${p.age_y||'?'}ปี</span></div>`).join('');
+}
+
+function genoAddFromSearch(p) {
+  document.getElementById('geno-search-results').style.display='none';
+  document.getElementById('geno-name-search').value='';
+  if(genoNodes.find(n=>n.person_id&&String(n.person_id)===String(p.person_id))){alert('บุคคลนี้อยู่ในผังแล้ว');return;}
+  const sx=80+(genoNodes.length%8)*120,sy=60+Math.floor(genoNodes.length/8)*165;
+  genoCreateNode({x:sx,y:sy,sex:String(p.sex)||'unknown',name:p.fullname||'',age:p.age_y||'',dm:_hasDM(p),ht:_hasHT(p),dead:p.death==='Y',person_id:p.person_id});
+}
+
+document.addEventListener('click',e=>{
+  const box=document.getElementById('geno-search-results');
+  const inp=document.getElementById('geno-name-search');
+  if(box&&inp&&!box.contains(e.target)&&e.target!==inp)box.style.display='none';
+});
+
+// ══════════════════════════════════════════
+// IMPORT TAB
+// ══════════════════════════════════════════
 function checkImportPassword(event) {
   if(event&&event.preventDefault){event.preventDefault();event.stopPropagation();}
   if(_importUnlocked){initImportTab();return;}
   Swal.fire({
     title:'🔒 กรุณากรอกรหัสผ่าน',
-    html:'<input id="swal_imp_pwd" type="password" class="swal2-input" placeholder="รหัสผ่าน" onkeydown="if(event.key===\'Enter\'){document.querySelector(\'.swal2-confirm\').click()}">',
+    html:'<input id="swal_imp_pwd" type="password" class="swal2-input" placeholder="รหัสผ่าน">',
     showCancelButton:true,confirmButtonColor:'#6d28d9',cancelButtonColor:'#64748b',confirmButtonText:'เข้าสู่ระบบ',cancelButtonText:'ยกเลิก',
-    didOpen:()=>setTimeout(()=>{const el=document.getElementById('swal_imp_pwd');if(el)el.focus();},100),
-    preConfirm:()=>{
-      const val=document.getElementById('swal_imp_pwd').value;
-      if(!val){Swal.showValidationMessage('กรุณากรอกรหัสผ่าน');return false;}
-      return val;
-    }
+    preConfirm:()=>{const val=document.getElementById('swal_imp_pwd').value;if(!val){Swal.showValidationMessage('กรุณากรอกรหัสผ่าน');return false;}return val;}
   }).then(res=>{
     if(!res.isConfirmed)return;
     if(res.value===IMPORT_PASSWORD){
@@ -1575,7 +1803,7 @@ function _impLog(msg,type){
 }
 
 function previewImport(sheet,inputEl) {
-  const file=inputEl.files[0]; if(!file)return;
+  const file=inputEl.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
     try{
@@ -1583,10 +1811,8 @@ function previewImport(sheet,inputEl) {
       const ws=wb.Sheets[wb.SheetNames[0]];
       const rawData=XLSX.utils.sheet_to_json(ws,{defval:'',raw:false,dateNF:'dd/mm/yyyy'});
       _importData[sheet]=rawData;
-      const previewEl=document.getElementById('imp_'+sheet+'_preview');
-      const textEl=document.getElementById('imp_'+sheet+'_preview_text');
-      previewEl.style.display='';
-      textEl.innerHTML=`✅ อ่านไฟล์: <strong>${file.name}</strong><br>📊 <strong>${rawData.length.toLocaleString()}</strong> แถว`;
+      document.getElementById('imp_'+sheet+'_preview').style.display='';
+      document.getElementById('imp_'+sheet+'_preview_text').innerHTML=`✅ อ่านไฟล์: <strong>${file.name}</strong><br>📊 <strong>${rawData.length.toLocaleString()}</strong> แถว`;
       _impLog(`โหลด ${sheet}: ${rawData.length} แถว`,'warn');
     }catch(err){_impLog('❌ อ่านไฟล์ผิดพลาด: '+err.message,'error');}
   };
@@ -1600,12 +1826,14 @@ async function confirmImport(sheet) {
   if(!res.isConfirmed)return;
   showLoading('กำลังนำเข้าข้อมูล...');
   try{
-    const{error:delErr}=await sb.from(sheet).delete().neq('house_id','-9999999');
-    if(delErr&&sheet==='house') throw delErr;
-    const BATCH=200; let inserted=0;
+    // ลบข้อมูลเก่า
+    if(sheet==='house'){const{error:delErr}=await sb.from('house').delete().neq('house_id','-9999999');if(delErr)throw delErr;}
+    else{const{error:delErr}=await sb.from('person').delete().neq('person_id','-9999999');if(delErr)console.warn('delete person warning:',delErr);}
+    // insert ทีละ batch
+    const BATCH=200;let inserted=0;
     for(let i=0;i<data.length;i+=BATCH){
       const batch=data.slice(i,i+BATCH);
-      const{error}=await sb.from(sheet).upsert(batch,{onConflict: sheet==='house'?'house_id':'person_id'});
+      const{error}=await sb.from(sheet).upsert(batch,{onConflict:sheet==='house'?'house_id':'person_id'});
       if(error)throw error;
       inserted+=batch.length;
       _impLog(`→ นำเข้า ${inserted}/${data.length}`,'warn');
@@ -1619,7 +1847,7 @@ async function confirmImport(sheet) {
 async function exportSheetData(sheet,format) {
   showLoading('กำลังส่งออก...');
   try{
-    let allRows=[], from=0, batch=1000;
+    let allRows=[],from=0,batch=1000;
     while(true){
       const{data,error}=await sb.from(sheet).select('*').range(from,from+batch-1);
       if(error||!data||data.length===0)break;
@@ -1637,8 +1865,7 @@ async function exportSheetData(sheet,format) {
   }catch(e){hideLoading();Swal.fire({icon:'error',title:'Error',text:e.message,confirmButtonColor:'#6d28d9'});}
 }
 
-// Safety timeout
-setTimeout(forceHideLoading, 30000);
+setTimeout(forceHideLoading,30000);
 </script>
 </body>
 </html>
