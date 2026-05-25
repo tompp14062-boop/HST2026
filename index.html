@@ -1314,7 +1314,6 @@ function viewHouseMembers(houseId) {
       </td></tr>`;
   }).join('');
 
-// แทนที่ทั้ง document.getElementById('hm_card_container').innerHTML = members.map(p => { ... }).join('');
   document.getElementById('hm_card_container').innerHTML=members.map(p=>{
     const disc=String(p.person_discharge||'').trim();
     const isDead=p.death==='Y'||disc==='1';
@@ -1331,11 +1330,11 @@ function viewHouseMembers(houseId) {
       <div style="margin-bottom:8px;font-size:12px">${diseaseHtml}</div>
       <div class="hm-card-actions">
         <button class="btn btn-sm btn-outline-primary rounded-pill flex-fill" style="font-size:12px"
-          onclick="_closeHmAndRun(()=>openEditCrud('${p.person_id}'))">✎ แก้ไข</button>
+          onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎ แก้ไข</button>
         <button class="btn btn-sm rounded-pill flex-fill text-white" style="font-size:12px;background:#0f766e"
-          onclick="_closeHmAndRun(()=>openFamilyTree('${p.person_id}'))">🌳 ผัง</button>
+          onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openFamilyTree('${p.person_id}'),350)">🌳 ผัง</button>
         ${age15&&disc==='9'?`<button class="btn btn-sm rounded-pill text-white px-3" style="font-size:12px;background:#dc2626"
-          onclick="_closeHmAndRun(()=>openScreeningModal('${p.person_id}'))">🚬</button>`:''}
+          onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openScreeningModal('${p.person_id}'),350)">🚬</button>`:''}
       </div>
     </div>`;
   }).join('');
@@ -1860,46 +1859,18 @@ function buildGenoFromTree(d) {
   });
 }
 
-// แทนที่ function openFamilyTree ทั้งหมด
 function openFamilyTree(personId) {
   currentGenoPersonId=personId;
   const p=allData.find(x=>String(x.person_id)===String(personId));
   if(!p)return;
   document.getElementById('fm_title').textContent=p.fullname+' | '+p.address_display;
   clearGeno();
-  
-  const familyModalEl = document.getElementById('familyModal');
-  
-  // ป้องกัน aria-hidden: blur focus ก่อนเปิด modal
-  if (document.activeElement && document.activeElement.blur) {
-    document.activeElement.blur();
-  }
-  
-  // ถ้ามี modal อื่นเปิดอยู่ ให้รอปิดก่อน
-  const anyOpenModal = document.querySelector('.modal.show');
-  if (anyOpenModal && anyOpenModal !== familyModalEl) {
-    const bsOther = bootstrap.Modal.getInstance(anyOpenModal);
-    if (bsOther) {
-      anyOpenModal.addEventListener('hidden.bs.modal', function handler() {
-        anyOpenModal.removeEventListener('hidden.bs.modal', handler);
-        requestAnimationFrame(() => _openFamilyModalNow(personId));
-      }, { once: true });
-      bsOther.hide();
-      return;
-    }
-  }
-  
-  _openFamilyModalNow(personId);
-}
-
-function _openFamilyModalNow(personId) {
-  const familyModalEl = document.getElementById('familyModal');
-  const modal = new bootstrap.Modal(familyModalEl, { focus: false });
+  const modal=new bootstrap.Modal(document.getElementById('familyModal'));
   modal.show();
-  familyModalEl.addEventListener('shown.bs.modal', function handler() {
-    familyModalEl.removeEventListener('shown.bs.modal', handler);
+  document.getElementById('familyModal').addEventListener('shown.bs.modal',function handler(){
+    document.getElementById('familyModal').removeEventListener('shown.bs.modal',handler);
     genoAutoLoad(personId);
-  }, { once: true });
+  });
 }
 
 function genoSearchName(q) {
