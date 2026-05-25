@@ -699,7 +699,6 @@
             <line x1="17" y1="3" x2="3" y2="17" stroke="#e74c3c" stroke-width="2"/>
           </svg>
         </button>
-   </button>stroke-width="1.5"/><line x1="3" y1="3" x2="17" y2="17" stroke="#e74c3c" stroke-width="2"/><line x1="17" y1="3" x2="3" y2="17" stroke="#e74c3c" stroke-width="2"/></svg></button>
         <button class="geno-sym-btn" id="gbtn-index" title="Index Person" onclick="genoToggleFlag('index')" style="font-size:9px;font-weight:700;color:#6d28d9;">★</button>
         <div class="geno-search-wrap">
           <input id="geno-name-search" placeholder="🔍 ค้นหาชื่อเพื่อเพิ่มในผัง..." oninput="genoSearchName(this.value)" autocomplete="off">
@@ -2010,182 +2009,221 @@ function genoShowRelPanel(a,b){genoClearRelHighlight();if(genoRelPanelEl)genoRel
 function genoConfirmRel(aId,bId){const rtype=document.getElementById('geno-rel-type').value;genoAddEdge(aId,bId,rtype);genoCancelRel();}
 function genoCancelRel(){if(genoRelPanelEl){genoRelPanelEl.remove();genoRelPanelEl=null;}genoRelFirst=null;}
 
-// แทนที่ function genoAutoLoad เดิมทั้งหมด
 function genoAutoLoad(personId) {
   if (!personId) return;
-  const self = allData.find(x => String(x.person_id) === String(personId));
+
+  var self = allData.find(function(x){ return String(x.person_id) === String(personId); });
   if (!self) { alert('ไม่พบข้อมูล'); return; }
 
   function findById(id) {
-    const s = String(id || '').trim();
+    var s = String(id || '').trim();
     if (!s || s === '0' || s === 'null' || s === 'undefined') return null;
-    return allData.find(x => String(x.person_id) === s) || null;
+    return allData.find(function(x){ return String(x.person_id) === s; }) || null;
   }
 
   function findByCid(cid) {
-    const s = String(cid || '').trim();
+    var s = String(cid || '').trim();
     if (!s || s.length < 5) return null;
-    return allData.find(x => String(x.cid).trim() === s) || null;
+    return allData.find(function(x){ return String(x.cid).trim() === s; }) || null;
   }
 
-  // ค้นพ่อแม่: ลองจาก person_id ก่อน ถ้าไม่ได้ลอง cid
-  const father = findById(self.father_person_id) || findByCid(self.father_cid);
-  const mother = findById(self.mother_person_id) || findByCid(self.mother_cid);
-  const spouse = findById(self.sps_person_id)    || findByCid(self.sps_cid);
+  var father = findById(self.father_person_id) || findByCid(self.father_cid);
+  var mother = findById(self.mother_person_id) || findByCid(self.mother_cid);
+  var spouse = findById(self.sps_person_id)    || findByCid(self.sps_cid);
 
-  // ลูก: ค้นจาก father_person_id / mother_person_id ตรงกับ self
-  // และลอง cid fallback ด้วย
-  const selfPid  = String(personId);
-  const selfCid  = String(self.cid || '').trim();
-  const children = allData.filter(x => {
+  var selfPid = String(personId);
+  var selfCid = String(self.cid || '').trim();
+
+  var children = allData.filter(function(x) {
     if (String(x.person_id) === selfPid) return false;
     if (String(x.father_person_id) === selfPid) return true;
     if (String(x.mother_person_id) === selfPid) return true;
-    if (selfCid && String(x.father_cid).trim() === selfCid) return true;
-    if (selfCid && String(x.mother_cid).trim() === selfCid) return true;
+    if (selfCid && String(x.father_cid  || '').trim() === selfCid) return true;
+    if (selfCid && String(x.mother_cid  || '').trim() === selfCid) return true;
     return false;
   });
 
-  // พี่น้อง: มีพ่อหรือแม่เดียวกัน (เช็คทั้ง person_id และ cid)
-  const fPid = father ? String(father.person_id) : '';
-  const mPid = mother ? String(mother.person_id) : '';
-  const fCid = father ? String(father.cid || '').trim() : '';
-  const mCid = mother ? String(mother.cid || '').trim() : '';
+  var fPid = father ? String(father.person_id) : '';
+  var mPid = mother ? String(mother.person_id) : '';
+  var fCid = father ? String(father.cid || '').trim() : '';
+  var mCid = mother ? String(mother.cid || '').trim() : '';
 
-  const siblings = allData.filter(x => {
+  var siblings = allData.filter(function(x) {
     if (String(x.person_id) === selfPid) return false;
     if (spouse && String(x.person_id) === String(spouse.person_id)) return false;
-    // ตรงกันผ่าน person_id
     if (fPid && (String(x.father_person_id) === fPid || String(x.mother_person_id) === fPid)) return true;
     if (mPid && (String(x.father_person_id) === mPid || String(x.mother_person_id) === mPid)) return true;
-    // ตรงกันผ่าน cid
-    if (fCid && (String(x.father_cid).trim() === fCid || String(x.mother_cid).trim() === fCid)) return true;
-    if (mCid && (String(x.father_cid).trim() === mCid || String(x.mother_cid).trim() === mCid)) return true;
+    if (fCid && (String(x.father_cid || '').trim() === fCid || String(x.mother_cid || '').trim() === fCid)) return true;
+    if (mCid && (String(x.father_cid || '').trim() === mCid || String(x.mother_cid || '').trim() === mCid)) return true;
     return false;
   });
 
   clearGeno();
-  buildGenoFromTree({ self, father, mother, spouse, children, siblings });
+
+  // map allData person → format ที่ buildGenoFromTree ต้องการ
+  function toNode(p) {
+    if (!p) return null;
+    return {
+      person_id:            p.person_id,
+      fullname:             p.fullname || ((p.pname||'') + ' ' + (p.fname||'') + ' ' + (p.lname||'')).trim(),
+      sex:                  p.sex,
+      age_y:                p.age_y,
+      birthdate:            p.birthdate,
+      death:                p.death === 'Y' || p.death === true,
+      ncd_dm_history_type_id: p.ncd_dm_history_type_id,
+      ncd_ht_history_type_id: p.ncd_ht_history_type_id,
+      clinic_code_list:     p.clinic_code_list || '',
+      chronic_disease_list: p.chronic_disease_list || ''
+    };
+  }
+
+  buildGenoFromTree({
+    self:     toNode(self),
+    father:   toNode(father),
+    mother:   toNode(mother),
+    spouse:   toNode(spouse),
+    children: children.map(toNode),
+    siblings: siblings.map(toNode)
+  });
 }
 
 function clearGeno(){genoNodes.forEach(n=>n.el&&n.el.remove());genoEdges.forEach(e=>e.el&&e.el.remove());genoNodes=[];genoEdges=[];genoSelected=null;genoRelFirst=null;genoNodeId=0;genoEdgeId=0;if(genoHint)genoHint.style.display='block';document.getElementById('geno-node-panel').style.display='none';}
 
 // เพิ่มฟังก์ชันนี้ต่อจาก clearGeno() ใน Document 1
 function buildGenoFromTree(d) {
-  const COL = 130, ROW = 160, svgW = 1060, START_Y = 60;
+  var COL    = 130;
+  var ROW    = 155;
+  var svgW   = 1060;
+  var START_Y = 50;
 
-  function sortByAge(arr) {
-    return arr.filter(Boolean).sort((a, b) => {
-      function ts(p) {
-        const bd = String(p.birthdate || '').trim();
+  function sortOldest(arr) {
+    return arr.filter(Boolean).sort(function(a, b) {
+      function toTS(p) {
+        var bd = String(p.birthdate || '').trim();
         if (bd) {
-          const pts = bd.split('/');
+          var pts = bd.split('/');
           if (pts.length === 3) {
-            let y = parseInt(pts[2]);
+            var y = parseInt(pts[2]);
             if (y > 2400) y -= 543;
-            const d2 = new Date(y, parseInt(pts[1]) - 1, parseInt(pts[0]));
+            var d2 = new Date(y, parseInt(pts[1]) - 1, parseInt(pts[0]));
             if (!isNaN(d2.getTime())) return d2.getTime();
           }
         }
-        const age = parseInt(p.age_y);
+        var age = parseInt(p.age_y);
         if (!isNaN(age)) return Date.now() - age * 365.25 * 86400000;
         return 0;
       }
-      return ts(a) - ts(b);
+      return toTS(a) - toTS(b);
     });
   }
 
-  function calcX(i, total, cx) {
-    return cx - (total - 1) * COL / 2 + i * COL;
+  function calcX(index, total, centerX) {
+    return centerX - ((total - 1) * COL / 2) + index * COL;
   }
 
   // ป้องกัน node ซ้ำ
-  const addedPids = new Set();
+  var addedPids = {};
 
   function makeNode(p, x, y, isIdx) {
-    const pid = String(p.person_id || '');
-    if (pid && addedPids.has(pid)) {
-      // คืน node ที่มีอยู่แล้ว
-      return genoNodes.find(n => n.person_id && String(n.person_id) === pid) || null;
+    if (!p) return null;
+    var pid = String(p.person_id || '');
+    if (pid && addedPids[pid]) {
+      return genoNodes.find(function(n){ return n.person_id && String(n.person_id) === pid; }) || null;
     }
-    if (pid) addedPids.add(pid);
-    const name = p.fullname || ((p.pname || '') + ' ' + (p.fname || '') + ' ' + (p.lname || '')).trim();
+    if (pid) addedPids[pid] = true;
+
     return genoCreateNode({
-      x: x - (String(p.sex) === '2' ? 28 : 21), y,
-      sex: String(p.sex || ''),
-      name, age: p.age_y || '',
-      dm: _hasDM(p), ht: _hasHT(p),
-      dead: p.death === 'Y' || p.death === true,
-      isIndex: isIdx,
-      person_id: p.person_id || null
+      x: x - (String(p.sex) === '2' ? 28 : 21),
+      y: y,
+      sex:                  String(p.sex || ''),
+      name:                 p.fullname || '',
+      age:                  p.age_y || '',
+      dm:                   _hasDM(p),
+      ht:                   _hasHT(p),
+      dead:                 p.death === true || p.death === 'Y',
+      isIndex:              isIdx || false,
+      person_id:            p.person_id || null,
+      clinic_code_list:     p.clinic_code_list || '',
+      chronic_disease_list: p.chronic_disease_list || ''
     });
   }
 
-  function addE(aNode, bNode, rtype) {
-    if (!aNode || !bNode) return;
-    const dup = genoEdges.find(e =>
-      (e.from === aNode.id && e.to === bNode.id) ||
-      (e.from === bNode.id && e.to === aNode.id)
-    );
-    if (!dup) genoAddEdge(aNode.id, bNode.id, rtype);
+  function addEdgeSmart(nodeA, nodeB, relType) {
+    if (!nodeA || !nodeB) return;
+    var dup = genoEdges.find(function(e){
+      return (e.from === nodeA.id && e.to === nodeB.id) ||
+             (e.from === nodeB.id && e.to === nodeA.id);
+    });
+    if (!dup) genoAddEdge(nodeA.id, nodeB.id, relType);
   }
 
   // ── GEN 1: พ่อ-แม่ ──
-  const gen1 = [d.father, d.mother].filter(Boolean);
-  const gen1Nodes = gen1.map((p, i) =>
-    makeNode(p, calcX(i, Math.max(gen1.length, 2), svgW / 2), START_Y, false)
-  ).filter(Boolean);
-
-  const fNode = d.father ? gen1Nodes[0] : null;
-  const mNode = d.mother ? (gen1Nodes.length > 1 ? gen1Nodes[1] : gen1Nodes[0]) : null;
-  if (fNode && mNode) addE(fNode, mNode, 'spouse');
-
-  // ── GEN 2: พี่น้อง + self + spouse ──
-  const sibs = sortByAge(d.siblings || []);
-  const selfAge = parseInt(d.self.age_y) || 0;
-  const sibsBefore = sibs.filter(s => (parseInt(s.age_y) || 0) > selfAge);
-  const sibsAfter  = sibs.filter(s => (parseInt(s.age_y) || 0) <= selfAge);
-
-  // วาง spouse ข้างๆ self เสมอ
-  const gen2ordered = [...sibsBefore, d.self, ...(d.spouse ? [d.spouse] : []), ...sibsAfter];
-  const gen2Count = gen2ordered.length;
-  const gen2Nodes = gen2ordered.map((p, i) => {
-    const isIdx = String(p.person_id) === String(d.self.person_id);
-    return makeNode(p, calcX(i, gen2Count, svgW / 2), START_Y + ROW, isIdx);
+  var gen1 = [d.father, d.mother].filter(Boolean);
+  var gen1Nodes = gen1.map(function(p, i) {
+    return makeNode(p, calcX(i, Math.max(gen1.length, 2), svgW / 2), START_Y, false);
   }).filter(Boolean);
 
-  const selfIdx   = gen2ordered.findIndex(p => String(p.person_id) === String(d.self.person_id));
-  const spouseIdx = d.spouse
-    ? gen2ordered.findIndex(p => String(p.person_id) === String(d.spouse.person_id))
+  var fatherNode = d.father ? gen1Nodes[0] : null;
+  var motherNode = d.mother ? (gen1Nodes.length > 1 ? gen1Nodes[1] : gen1Nodes[0]) : null;
+  if (fatherNode && motherNode) addEdgeSmart(fatherNode, motherNode, 'spouse');
+
+  // ── GEN 2: พี่น้อง + self + spouse ──
+  var sibs       = sortOldest(d.siblings || []);
+  var selfAge    = parseInt(d.self.age_y) || 0;
+  var sibsBefore = sibs.filter(function(s){ return (parseInt(s.age_y)||0) > selfAge; });
+  var sibsAfter  = sibs.filter(function(s){ return (parseInt(s.age_y)||0) <= selfAge; });
+
+  var gen2ordered = [].concat(sibsBefore, [d.self], d.spouse ? [d.spouse] : [], sibsAfter);
+  var gen2Count   = gen2ordered.length;
+
+  var allSibsForRank = sortOldest([d.self].concat(d.siblings || []));
+
+  var selfIdx   = gen2ordered.findIndex(function(p){ return String(p.person_id) === String(d.self.person_id); });
+  var spouseIdx = d.spouse
+    ? gen2ordered.findIndex(function(p){ return String(p.person_id) === String(d.spouse.person_id); })
     : selfIdx;
-  const selfNode   = selfIdx   >= 0 ? gen2Nodes[selfIdx]   : null;
-  const spouseNode = spouseIdx >= 0 ? gen2Nodes[spouseIdx] : null;
+
+  var gen2Nodes = gen2ordered.map(function(p, i) {
+    var isSpouse = d.spouse && String(p.person_id) === String(d.spouse.person_id);
+    var rank     = !isSpouse
+      ? allSibsForRank.findIndex(function(s){ return String(s.person_id) === String(p.person_id); }) + 1
+      : null;
+    var node = makeNode(p, calcX(i, gen2Count, svgW / 2), START_Y + ROW,
+      String(p.person_id) === String(d.self.person_id));
+    if (node) node.childOrder = isSpouse ? null : rank;
+    return node;
+  }).filter(Boolean);
+
+  var selfNode   = gen2Nodes[selfIdx]   || null;
+  var spouseNode = d.spouse ? (gen2Nodes[spouseIdx] || null) : null;
 
   // เชื่อม gen1 → gen2 (ยกเว้น spouse)
-  gen2Nodes.forEach((sN, i) => {
-    if (!sN) return;
-    const p = gen2ordered[i];
-    if (d.spouse && String(p.person_id) === String(d.spouse.person_id)) return;
-    if (fNode) addE(fNode, sN, 'parent-child');
-    if (mNode) addE(mNode, sN, 'parent-child');
+  gen2ordered.forEach(function(p, i) {
+    var isSpouse = d.spouse && String(p.person_id) === String(d.spouse.person_id);
+    if (isSpouse) return;
+    var sN = gen2Nodes[i];
+    if (fatherNode) addEdgeSmart(fatherNode, sN, 'parent-child');
+    if (motherNode) addEdgeSmart(motherNode, sN, 'parent-child');
   });
 
-  if (selfNode && spouseNode) addE(selfNode, spouseNode, 'spouse');
+  if (selfNode && spouseNode) addEdgeSmart(selfNode, spouseNode, 'spouse');
 
   // ── GEN 3: ลูก ──
-  const children = sortByAge(d.children || []);
-  // midX คือกึ่งกลางระหว่าง self กับ spouse
-  const selfX   = selfNode   ? selfNode.x   + (d.self.sex === '2' ? 28 : 21) : svgW / 2;
-  const spouseX = spouseNode ? spouseNode.x + (d.spouse && d.spouse.sex === '2' ? 28 : 21) : selfX;
-  const midX    = (selfX + spouseX) / 2;
+  var children = sortOldest(d.children || []);
 
-  children.forEach((p, i) => {
-    const half = (children.length - 1) / 2;
-    const cx = midX + (i - half) * COL;
-    const cN = makeNode(p, cx - (String(p.sex) === '2' ? 28 : 21), START_Y + ROW * 2, false);
+  // midX คำนวณจาก pixel จริง
+  var selfCX   = selfNode   ? (selfNode.x   + (d.self.sex   === '2' ? 28 : 21)) : svgW / 2;
+  var spouseCX = spouseNode ? (spouseNode.x + (d.spouse && d.spouse.sex === '2' ? 28 : 21)) : selfCX;
+  var midX     = (selfCX + spouseCX) / 2;
+
+  children.forEach(function(p, i) {
+    var half = (children.length - 1) / 2;
+    var cx   = midX + (i - half) * COL;
+    var cN   = makeNode(p, cx - (String(p.sex) === '2' ? 28 : 21), START_Y + ROW * 2, false);
     if (!cN) return;
-    if (selfNode)   addE(selfNode,   cN, 'parent-child');
-    if (spouseNode) addE(spouseNode, cN, 'parent-child');
+    if (cN) cN.childOrder = i + 1;
+    if (selfNode)   addEdgeSmart(selfNode,   cN, 'parent-child');
+    if (spouseNode) addEdgeSmart(spouseNode, cN, 'parent-child');
   });
 }
 
