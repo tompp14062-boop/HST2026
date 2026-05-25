@@ -139,7 +139,6 @@
     }
     .spin { width: 48px; height: 48px; border: 4px solid #ede9fe; border-top-color: #6d28d9; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes ldot { 0%,80%,100%{transform:scale(1);opacity:.3} 40%{transform:scale(1.4);opacity:1} }
 
     /* ─── TABLE ─── */
     .table-green-stripe tbody tr:nth-child(odd) td { background: #fdfbf0; }
@@ -186,10 +185,6 @@
     .relation-info.found { border-color: #a78bfa; background: #f5f3ff; }
     .relation-info.empty { color: #94a3b8; font-style: italic; }
 
-    /* ─── SCREENING ─── */
-    #scr_cig_panel .form-check-label,
-    #scr_alc_panel .form-check-label { font-size: 13px; }
-
     /* ─── FORM SELECT FIX ─── */
     select, .form-select {
       font-size: 16px !important;
@@ -227,20 +222,16 @@
     .profile-img { width: 65px; height: 65px; border-radius: 15px; object-fit: cover; background: #f1f5f9; }
     .modal { outline: none; }
     .btn { min-height: 40px; font-size: 14px; touch-action: manipulation; }
-    #overviewMap { width: 100%; height: 500px; border-radius: 20px; }
-    #editMap { width: 100%; height: 400px; border-radius: 16px; }
     .table-green-stripe { font-size: 13px; }
     #supabase-config-banner { background: #fef9c3; border-bottom: 1px solid #f59e0b; padding: 8px 16px; font-size: 12px; color: #92400e; display: none; }
   </style>
 </head>
 <body>
 
-<!-- Supabase Config Banner -->
 <div id="supabase-config-banner">
-  ⚠️ กรุณาตั้งค่า Supabase URL และ Anon Key ในไฟล์ <strong>config.js</strong> ก่อนใช้งาน
+  ⚠️ ไม่สามารถเชื่อมต่อ Supabase ได้ กรุณาตรวจสอบ URL และ Key
 </div>
 
-<!-- LOADING -->
 <div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.75);z-index:9999;align-items:center;justify-content:center;">
   <div class="spin-box">
     <div class="spin"></div>
@@ -277,7 +268,6 @@
 
 <!-- ═══ MAIN APP ═══ -->
 <div id="mainApp">
-  <!-- Topbar -->
   <div id="topbar">
     <div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="white" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -290,7 +280,6 @@
   </div>
 
   <div class="container py-3">
-    <!-- TABS -->
     <ul class="nav nav-pills mb-4 justify-content-center" id="mainTab" style="flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;">
       <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#dashPanel" onclick="if(!dashRendered&&allData.length>0){renderDashboard();dashRendered=true;}">📊 สถิติ</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#housePanel" onclick="initHouseTab()">🏠 บ้าน</button></li>
@@ -300,8 +289,6 @@
     </ul>
 
     <div class="tab-content">
-
-      <!-- ══ DASHBOARD ══ -->
       <div class="tab-pane fade show active" id="dashPanel">
         <div id="dashContent">
           <div class="text-center py-5 text-muted">
@@ -311,7 +298,6 @@
         </div>
       </div>
 
-      <!-- ══ HOUSE TAB ══ -->
       <div class="tab-pane fade" id="housePanel">
         <div class="k-card p-3 mb-3">
           <div class="row g-2 align-items-end">
@@ -339,7 +325,6 @@
           </div>
         </div>
         <div id="ht_summary" class="d-flex gap-2 flex-wrap mb-3" style="font-size:13px;"></div>
-        <!-- Desktop Table -->
         <div class="k-card p-0" style="overflow:hidden" id="ht_table_wrap">
           <div style="overflow-x:auto">
             <table class="table table-hover mb-0 table-green-stripe" style="min-width:900px;">
@@ -368,7 +353,6 @@
             </div>
           </div>
         </div>
-        <!-- Mobile Cards -->
         <div id="ht_card_list" style="display:none">
           <div id="ht_card_container"></div>
           <div class="d-flex justify-content-between align-items-center px-1 py-2" style="font-size:13px">
@@ -381,7 +365,6 @@
         </div>
       </div>
 
-      <!-- ══ POPULATION LIST ══ -->
       <div class="tab-pane fade" id="listPanel">
         <div class="k-card p-3 mb-4">
           <div class="row g-2">
@@ -425,7 +408,6 @@
         <div id="personContainer" class="row"></div>
       </div>
 
-      <!-- ══ SEARCH TAB ══ -->
       <div class="tab-pane fade" id="searchPanel">
         <div class="k-card p-3 mb-3">
           <div class="row g-2 align-items-end">
@@ -499,7 +481,6 @@
         </div>
       </div>
 
-      <!-- ══ IMPORT TAB ══ -->
       <div class="tab-pane fade" id="importPanel">
         <div id="import_lock_screen" class="text-center py-5">
           <div style="max-width:360px;margin:0 auto">
@@ -583,10 +564,9 @@
           </div>
         </div>
       </div>
-
-    </div><!-- /tab-content -->
-  </div><!-- /container -->
-</div><!-- /mainApp -->
+    </div>
+  </div>
+</div>
 
 <!-- ═══ MODAL: แก้ไขบุคคล ═══ -->
 <div class="modal fade" id="crudModal" tabindex="-1">
@@ -700,21 +680,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 // ══════════════════════════════════════════════
-// SUPABASE CONFIG — แก้ไขค่าของคุณที่นี่
+// SUPABASE CONFIG
 // ══════════════════════════════════════════════
 const SUPABASE_URL = 'https://jhqnsdrvrzgbskzonvoc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpocW5zZHJ2cnpnYnNrem9udm9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTQ3NTIsImV4cCI6MjA5NTE3MDc1Mn0.3sB4K805x0O1bmlQHKv1Fdo2h5mg7hDnPy65ESIo4Qs';
-const IMPORT_PASSWORD = 'admin1234'; // รหัสผ่านสำหรับหน้า Import
+const IMPORT_PASSWORD = 'admin1234';
 
-// ── Init Supabase ──
+// ── Init Supabase ── (แก้ไขแล้ว: ใช้ supabaseClient แทนการทับ window.supabase)
 let sb;
 try {
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  window.supabase = sb;
-  if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
-    document.getElementById('supabase-config-banner').style.display = 'block';
-  }
+  const supabaseLib = window.supabase; // namespace จาก CDN
+  sb = supabaseLib.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 } catch(e) {
+  console.error('Supabase init error:', e);
   document.getElementById('supabase-config-banner').style.display = 'block';
 }
 
@@ -745,7 +723,7 @@ function forceHideLoading() {
 }
 
 // ══════════════════════════════════════════════
-// AUTH — Login/Logout
+// AUTH
 // ══════════════════════════════════════════════
 async function doLogin() {
   const username = document.getElementById('loginUser').value.trim();
@@ -755,6 +733,11 @@ async function doLogin() {
 
   if (!username || !password) {
     errEl.textContent = 'กรุณากรอก Username และ Password';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!sb) {
+    errEl.textContent = 'ไม่สามารถเชื่อมต่อ Supabase ได้ กรุณา refresh หน้าใหม่';
     errEl.style.display = 'block';
     return;
   }
@@ -815,7 +798,6 @@ function showMainApp() {
   refreshData();
 }
 
-// ── Check session on load ──
 window.addEventListener('DOMContentLoaded', () => {
   Chart.register(ChartDataLabels);
   const saved = sessionStorage.getItem('hs_user');
@@ -830,21 +812,18 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ══════════════════════════════════════════════
-// DATA LOADING — Supabase
+// DATA LOADING
 // ══════════════════════════════════════════════
 async function refreshData() {
   showLoading('กำลังโหลดข้อมูล...');
   dashRendered = false;
   try {
-    // Load villages
     const { data: villages } = await sb.from('village').select('*');
     allVillages = (villages || []).filter(v => String(v.village_id) !== '1');
 
-    // Load house
     const { data: houses } = await sb.from('house').select('*');
     const houseArr = houses || [];
 
-    // Load person
     let personData = [];
     let from = 0, pageSize = 1000;
     while (true) {
@@ -858,15 +837,12 @@ async function refreshData() {
       from += pageSize;
     }
 
-    // Build village map
     const villageMap = {};
     allVillages.forEach(v => { villageMap[String(v.village_id)] = v; });
 
-    // Build house map
     const houseMap = {};
     houseArr.forEach(h => { houseMap[String(h.house_id)] = h; });
 
-    // Join person + house + village
     allData = [];
     personData.forEach(p => {
       const hid = String(p.house_id || '').trim();
@@ -924,7 +900,6 @@ async function refreshData() {
       });
     });
 
-    // Build house data with members
     allHouseData = houseArr
       .filter(h => {
         const vid = String(h.village_id || '').trim();
@@ -1076,7 +1051,6 @@ function renderDashboard() {
       <div class="db-card"><p class="sec-title">การกระจายอายุ</p><div style="position:relative;height:220px"><canvas id="dAgeDistChart"></canvas></div></div>
     </div>`;
 
-  // Pyramid
   const bands = ['0','5','10','15','20','25','30','35','40','45','50','55','60','65','70','75','80','85','90','95','100'];
   const mB = new Array(bands.length).fill(0), fB = new Array(bands.length).fill(0);
   alive.forEach(p => {
@@ -1093,7 +1067,6 @@ function renderDashboard() {
     pyrEl.appendChild(row);
   }
 
-  // Risk doughnut
   let rH=0,rD=0,rT=0,rE=0,rN=0;
   alive.forEach(p => {
     const isDM = p.ncd_dm_history_type_id==='1'||p.ncd_dm_history_type_id==='2'||(p.chronic_disease_list||'').indexOf('เบาหวาน')>=0;
@@ -1105,7 +1078,6 @@ function renderDashboard() {
   dashCharts.push(new Chart(document.getElementById('dRiskDoughnut'),{type:'doughnut',data:{labels:rL,datasets:[{data:rV,backgroundColor:rC,borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}}));
   document.getElementById('dRiskLegend').innerHTML=rL.map((l,i)=>`<div class="risk-row"><span style="width:10px;height:10px;border-radius:2px;background:${rC[i]};flex-shrink:0;display:inline-block"></span><span style="font-size:12px;color:#64748b;width:60px">${l}</span><div class="risk-bar-bg"><div class="risk-bar" style="width:${Math.round(rV[i]/total*100)}%;background:${rC[i]}"></div></div><span style="font-size:12px;color:#1e293b;min-width:28px;text-align:right">${rV[i]}</span></div>`).join('');
 
-  // Village chart
   const vm={},vmM={},vmF={};
   alive.forEach(p => {
     const k = p.village_moo?'ม.'+p.village_moo+' '+(p.village_name||''):('หมู่'+(p.village_id||'?'));
@@ -1115,13 +1087,11 @@ function renderDashboard() {
   const ve = Object.entries(vm).sort((a,b)=>{const ma=parseInt(a[0].replace('ม.',''))||0,mb=parseInt(b[0].replace('ม.',''))||0;return ma-mb;});
   dashCharts.push(new Chart(document.getElementById('dVillageChart'),{type:'bar',data:{labels:ve.map(e=>e[0]),datasets:[{label:'ชาย',data:ve.map(e=>vmM[e[0]]||0),backgroundColor:'#2B5C9E',borderRadius:4},{label:'หญิง',data:ve.map(e=>vmF[e[0]]||0),backgroundColor:'#E8A0B0',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'end',font:{size:9,weight:'bold'},formatter:v=>v>0?v:''}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{ticks:{font:{size:10}}}}}}));
 
-  // Age distribution
   const ad = new Array(21).fill(0);
   alive.forEach(p => { const a=getAge(p); if(a===null||a<0) return; ad[Math.min(Math.floor(a/5),20)]++; });
   dashCharts.push(new Chart(document.getElementById('dAgeDistChart'),{type:'bar',data:{labels:Array.from({length:21},(_,i)=>i<20?i*5+'–'+(i*5+4):'100+'),datasets:[{data:ad,backgroundColor:'#5DCAA5',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{ticks:{font:{size:10}}}}}}));
 }
 
-// ══ LIST CHART ══
 function updateChart() {
   if (riskChart) riskChart.destroy();
   const male = currentData.filter(p=>p.sex==='1').length;
@@ -1214,7 +1184,7 @@ function renderSearchTable() {
     const dClass=discClass[disc]||'bg-secondary-subtle text-secondary';
     const sexHtml=p.sex==='1'?'<span style="color:#1d4ed8;font-weight:600">ชาย</span>':'<span style="color:#be185d;font-weight:600">หญิง</span>';
     const addr=(p.address_display||'')+(p.village_moo?' ม.'+p.village_moo+' '+p.village_name:'');
-    return `<tr style="cursor:pointer" onclick="openEditCrud('${p.person_id}')"><td class="px-3 text-muted" style="font-size:12px">${no}</td><td class="px-3" style="font-family:monospace;font-size:12px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:12px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong></td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center;font-weight:600">${p.age_y||'—'}</td><td class="px-3" style="font-size:12px;color:#64748b;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${addr}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center" onclick="event.stopPropagation()"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="openEditCrud('${p.person_id}')">✎</button></td></tr>`;
+    return `<tr style="cursor:pointer" onclick="openEditCrud('${p.person_id}')"><td class="px-3 text-muted" style="font-size:12px">${no}</td><td class="px-3" style="font-family:monospace;font-size:12px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:12px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong></td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center">${p.age_y||'—'}</td><td class="px-3" style="font-size:12px;color:#64748b;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${addr}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center" onclick="event.stopPropagation()"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="openEditCrud('${p.person_id}')">✎</button></td></tr>`;
   }).join('');
 }
 
@@ -1307,11 +1277,8 @@ function htChangePage(dir) {
   renderHouseTable();
 }
 
-function _rebuildVmsDropdown(villageId) {
-  // ง่าย — ไม่ filter ตาม moo (อาจเพิ่มทีหลัง)
-}
+function _rebuildVmsDropdown(villageId) {}
 
-// ══ VIEW HOUSE MEMBERS ══
 function viewHouseMembers(houseId) {
   const h=allHouseData.find(x=>String(x.house_id)===String(houseId));
   if(!h){alert('ไม่พบข้อมูลบ้าน');return;}
@@ -1332,9 +1299,8 @@ function viewHouseMembers(houseId) {
     const sexHtml=p.sex==='1'?'<span style="color:#1d4ed8;font-weight:600">ชาย</span>':'<span style="color:#be185d;font-weight:600">หญิง</span>';
     const isDead=p.death==='Y'||disc==='1';
     const diseaseHtml=_buildDiseaseHtml(p.clinic_code_list||'',p.chronic_disease_list||'');
-    return `<tr style="${isDead?'opacity:0.55':''}"><td class="px-3 text-muted">${idx+1}</td><td class="px-3" style="font-family:monospace;font-size:11.5px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:11px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong>${isDead?' <span class="badge bg-danger" style="font-size:9px">เสียชีวิต</span>':''}</td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center;font-weight:600">${p.age_y||'—'}</td><td class="px-3">${diseaseHtml}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎</button></td></tr>`;
+    return `<tr style="${isDead?'opacity:0.55':''}"><td class="px-3 text-muted">${idx+1}</td><td class="px-3" style="font-family:monospace;font-size:11.5px">${p.cid||'—'}</td><td class="px-3"><span class="text-muted" style="font-size:11px">${p.pname||''}</span> <strong>${(p.fname||'')+' '+(p.lname||'')}</strong>${isDead?' <span class="badge bg-danger" style="font-size:9px">เสียชีวิต</span>':''}</td><td class="px-3 text-center">${sexHtml}</td><td class="px-3" style="font-size:12px;color:#64748b">${toBE(p.birthdate)||'—'}</td><td class="px-3 text-center">${p.age_y||'—'}</td><td class="px-3">${diseaseHtml}</td><td class="px-3 text-center"><span class="badge ${dClass}">${dLabel}</span></td><td class="px-3 text-center"><button class="btn btn-sm btn-outline-primary rounded-pill px-2" style="font-size:11px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎</button></td></tr>`;
   }).join('');
-  // Mobile cards
   document.getElementById('hm_card_container').innerHTML=members.map(p=>`<div class="hm-card"><div class="hm-card-name">${p.pname||''} ${p.fname||''} ${p.lname||''}</div><div class="hm-card-cid">${p.cid||'—'}</div><div class="hm-card-meta"><span style="color:${p.sex==='1'?'#1d4ed8':'#be185d'};font-weight:600">${p.sex==='1'?'ชาย':'หญิง'}</span><span>อายุ ${p.age_y||'?'} ปี</span></div><div style="font-size:12px">${_buildDiseaseHtml(p.clinic_code_list||'',p.chronic_disease_list||'')}</div><div class="hm-card-actions mt-2"><button class="btn btn-sm btn-outline-primary rounded-pill flex-fill" style="font-size:12px" onclick="document.querySelector('#houseMembersModal [data-bs-dismiss]').click();setTimeout(()=>openEditCrud('${p.person_id}'),350)">✎ แก้ไข</button></div></div>`).join('');
   new bootstrap.Modal(document.getElementById('houseMembersModal')).show();
 }
@@ -1594,7 +1560,6 @@ async function exportSheetData(sheet,format) {
   }catch(e){hideLoading();Swal.fire({icon:'error',title:'Error',text:e.message,confirmButtonColor:'#6d28d9'});}
 }
 
-// Safety timeout
 setTimeout(forceHideLoading, 30000);
 </script>
 </body>
