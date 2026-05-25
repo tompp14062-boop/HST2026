@@ -1052,13 +1052,29 @@ function toBE(dateStr) {
 }
 
 function toCE(dateStr) {
-  if (!dateStr) return '';
-  const parts = String(dateStr).trim().split('/');
-  if (parts.length!==3) return dateStr;
-  let y = parseInt(parts[2]);
-  if (isNaN(y)) return dateStr;
-  if (y>2400) y-=543;
-  return parts[0]+'/'+parts[1]+'/'+y;
+  if (!dateStr) return null;
+  var s = String(dateStr).trim();
+  if (!s || s === 'undefined' || s === 'null') return null;
+
+  var parts = s.split('/');
+  if (parts.length !== 3) return null;
+
+  var d = parts[0].padStart(2, '0');
+  var m = parts[1].padStart(2, '0');
+  var y = parseInt(parts[2]);
+
+  if (isNaN(y) || isNaN(parseInt(d)) || isNaN(parseInt(m))) return null;
+
+  // แปลง พ.ศ. → ค.ศ.
+  if (y > 2400) y -= 543;
+
+  // ตรวจสอบช่วงวันที่ให้ valid
+  if (y < 1900 || y > 2100) return null;
+  if (parseInt(m) < 1 || parseInt(m) > 12) return null;
+  if (parseInt(d) < 1 || parseInt(d) > 31) return null;
+
+  // ส่งกลับเป็น ISO format YYYY-MM-DD ที่ Supabase รับได้แน่นอน
+  return y + '-' + m + '-' + d;
 }
 
 function getDefaultAvatar(sex) {
@@ -1659,8 +1675,11 @@ function _loadRelationFromLocal(p) {
       return;
     }
 
-    // ── STEP 4: ไม่มีข้อมูลเลย → แสดงช่องว่างให้กรอก ──
-    _showNameOnly('');
+    // ── STEP 4: ไม่มีข้อมูลเลย → แสดง "ยังไม่ระบุ" + ซ่อนช่องชื่อ ──
+    var el4 = document.getElementById('crud_' + r.role + '_info');
+    el4.className = 'relation-info empty';
+    el4.textContent = 'ยังไม่ระบุ';
+    _showNameFallback(r.role, false);
   });
 }
 
