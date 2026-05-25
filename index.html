@@ -1245,6 +1245,34 @@ function htChangePage(dir) {
   renderHouseTable();
 }
 
+// เพิ่มฟังก์ชันนี้ก่อน viewHouseMembers
+let _hmModalInstance = null;
+
+function _closeHmAndRun(callback) {
+  // blur focus ก่อนปิด เพื่อป้องกัน aria-hidden error
+  const activeEl = document.activeElement;
+  if (activeEl && activeEl.blur) activeEl.blur();
+  
+  const modalEl = document.getElementById('houseMembersModal');
+  
+  // ดึง bootstrap instance ที่มีอยู่
+  const bsModal = bootstrap.Modal.getInstance(modalEl);
+  
+  if (bsModal) {
+    // รอให้ modal ปิดสนิทก่อนค่อย callback
+    modalEl.addEventListener('hidden.bs.modal', function handler() {
+      modalEl.removeEventListener('hidden.bs.modal', handler);
+      // รอ 1 frame ให้ DOM settle
+      requestAnimationFrame(() => {
+        setTimeout(callback, 50);
+      });
+    }, { once: true });
+    bsModal.hide();
+  } else {
+    callback();
+  }
+}
+
 // แทนที่ทั้ง function viewHouseMembers
 function viewHouseMembers(houseId) {
   const h=allHouseData.find(x=>String(x.house_id)===String(houseId));
@@ -1832,18 +1860,46 @@ function buildGenoFromTree(d) {
   });
 }
 
+// แทนที่ function openFamilyTree ทั้งหมด
 function openFamilyTree(personId) {
   currentGenoPersonId=personId;
   const p=allData.find(x=>String(x.person_id)===String(personId));
   if(!p)return;
   document.getElementById('fm_title').textContent=p.fullname+' | '+p.address_display;
   clearGeno();
-  const modal=new bootstrap.Modal(document.getElementById('familyModal'));
+  
+  const familyModalEl = document.getElementById('familyModal');
+  
+  // ป้องกัน aria-hidden: blur focus ก่อนเปิด modal
+  if (document.activeElement && document.activeElement.blur) {
+    document.activeElement.blur();
+  }
+  
+  // ถ้ามี modal อื่นเปิดอยู่ ให้รอปิดก่อน
+  const anyOpenModal = document.querySelector('.modal.show');
+  if (anyOpenModal && anyOpenModal !== familyModalEl) {
+    const bsOther = bootstrap.Modal.getInstance(anyOpenModal);
+    if (bsOther) {
+      anyOpenModal.addEventListener('hidden.bs.modal', function handler() {
+        anyOpenModal.removeEventListener('hidden.bs.modal', handler);
+        requestAnimationFrame(() => _openFamilyModalNow(personId));
+      }, { once: true });
+      bsOther.hide();
+      return;
+    }
+  }
+  
+  _openFamilyModalNow(personId);
+}
+
+function _openFamilyModalNow(personId) {
+  const familyModalEl = document.getElementById('familyModal');
+  const modal = new bootstrap.Modal(familyModalEl, { focus: false });
   modal.show();
-  document.getElementById('familyModal').addEventListener('shown.bs.modal',function handler(){
-    document.getElementById('familyModal').removeEventListener('shown.bs.modal',handler);
+  familyModalEl.addEventListener('shown.bs.modal', function handler() {
+    familyModalEl.removeEventListener('shown.bs.modal', handler);
     genoAutoLoad(personId);
-  });
+  }, { once: true });
 }
 
 function genoSearchName(q) {
