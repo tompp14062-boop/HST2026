@@ -945,18 +945,17 @@ async function refreshData() {
     const houseMap = {};
     houseArr.forEach(h => { houseMap[String(h.house_id)] = h; });
     
-    // เก็บ raw person ทั้งหมด (ไม่กรอง village) สำหรับ lookup ความสัมพันธ์
     allPersonRaw = personData.map(p => ({
       person_id: String(p.person_id || '').trim(),
-      cid:       String(p.cid       || '').trim(),
-      pname:     String(p.pname     || ''),
-      fname:     String(p.fname     || ''),
-      lname:     String(p.lname     || ''),
+      cid:       String(p.cid || '').trim().replace(/[^\d]/g, ''), // ← กรองเฉพาะตัวเลข
+      pname:     String(p.pname || ''),
+      fname:     String(p.fname || ''),
+      lname:     String(p.lname || ''),
       fullname:  (String(p.pname||'') + ' ' + String(p.fname||'') + ' ' + String(p.lname||'')).trim(),
-      sex:       String(p.sex       || ''),
-      age_y:     String(p.age_y     || ''),
+      sex:       String(p.sex || ''),
+      age_y:     String(p.age_y || ''),
       birthdate: String(p.birthdate || ''),
-      death:     String(p.death     || 'N'),
+      death:     String(p.death || 'N'),
       ncd_dm_history_type_id: String(p.ncd_dm_history_type_id || ''),
       ncd_ht_history_type_id: String(p.ncd_ht_history_type_id || ''),
     }));
