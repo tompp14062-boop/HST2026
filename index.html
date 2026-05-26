@@ -852,7 +852,7 @@ let dashRendered = false, riskChart, dashCharts = [];
 let currentUser = null;
 let oMap = null, editMapObj = null, editMarker = null, editLat = null, editLng = null;
 let _importUnlocked = false, _importData = { house: null, person: null };
-
+let allPersonRaw = []; // เก็บ person ทุกคนไม่กรอง village
 // ══ LOADING ══
 let _loadingCount = 0;
 function showLoading(msg) {
@@ -944,6 +944,22 @@ async function refreshData() {
     allVillages.forEach(v => { villageMap[String(v.village_id)] = v; });
     const houseMap = {};
     houseArr.forEach(h => { houseMap[String(h.house_id)] = h; });
+    
+    // เก็บ raw person ทั้งหมด (ไม่กรอง village) สำหรับ lookup ความสัมพันธ์
+    allPersonRaw = personData.map(p => ({
+      person_id: String(p.person_id || '').trim(),
+      cid:       String(p.cid       || '').trim(),
+      pname:     String(p.pname     || ''),
+      fname:     String(p.fname     || ''),
+      lname:     String(p.lname     || ''),
+      fullname:  (String(p.pname||'') + ' ' + String(p.fname||'') + ' ' + String(p.lname||'')).trim(),
+      sex:       String(p.sex       || ''),
+      age_y:     String(p.age_y     || ''),
+      birthdate: String(p.birthdate || ''),
+      death:     String(p.death     || 'N'),
+      ncd_dm_history_type_id: String(p.ncd_dm_history_type_id || ''),
+      ncd_ht_history_type_id: String(p.ncd_ht_history_type_id || ''),
+    }));
 
     allData = [];
     personData.forEach(p => {
@@ -1588,8 +1604,10 @@ function _loadRelationFromLocal(p) {
     }
   ];
 
+  // ใช้ allPersonRaw แทน allData เพื่อค้นหาได้ทุก village
+  var pool = (allPersonRaw && allPersonRaw.length) ? allPersonRaw : allData;
+
   roles.forEach(function(r) {
-    // reset UI ทุกช่องก่อน
     document.getElementById('crud_' + r.role + '_cid').value = '';
     document.getElementById('crud_' + r.role + '_pid').value = '';
     var nameInp = document.getElementById('crud_' + r.role + '_name');
@@ -1597,7 +1615,6 @@ function _loadRelationFromLocal(p) {
     _setRelationInfo(r.role, null);
     _showNameFallback(r.role, false);
 
-    // ── helper: พบข้อมูลใน allData ──
     function _showFound(match) {
       document.getElementById('crud_' + r.role + '_cid').value = match.cid || '';
       document.getElementById('crud_' + r.role + '_pid').value = match.person_id;
@@ -1612,7 +1629,6 @@ function _loadRelationFromLocal(p) {
       _showNameFallback(r.role, false);
     }
 
-    // ── helper: ไม่พบ → แสดงช่องชื่อ fallback ──
     function _showNameOnly(name) {
       var el = document.getElementById('crud_' + r.role + '_info');
       if (name && name.trim()) {
@@ -1624,43 +1640,38 @@ function _loadRelationFromLocal(p) {
         el.className = 'relation-info empty';
         el.textContent = 'ยังไม่ระบุ';
       }
-      // แสดงช่องชื่อเสมอ (ว่างหรือมีค่า)
       _showNameFallback(r.role, true, name || '');
     }
 
-    // ── STEP 1: ค้นจาก person_id ──
-    if (r.pid && r.pid !== '0') {
-      var byPid = allData.find(function(x) {
-        return String(x.person_id) === r.pid;
+    // STEP 1: ค้นจาก person_id (เทียบ String ทั้งคู่ ตัด whitespace)
+    if (r.pid && r.pid !== '0' && r.pid !== '') {
+      var byPid = pool.find(function(x) {
+        return String(x.person_id).trim() === r.pid;
       });
       if (byPid) { _showFound(byPid); return; }
     }
 
-    // ── STEP 2: ค้นจาก CID ──
-    if (r.cid && r.cid.length >= 10) {
-      var byCid = allData.find(function(x) {
+    // STEP 2: ค้นจาก CID (ต้องยาวอย่างน้อย 5 หลัก)
+    if (r.cid && r.cid.length >= 5) {
+      var byCid = pool.find(function(x) {
         return String(x.cid).trim() === r.cid;
       });
       if (byCid) { _showFound(byCid); return; }
 
-      // มี CID แต่ไม่พบ → แสดง warning + ช่องชื่อ
       document.getElementById('crud_' + r.role + '_cid').value = r.cid;
       var el2 = document.getElementById('crud_' + r.role + '_info');
       el2.className = 'relation-info';
       el2.innerHTML =
         '<span style="color:#f59e0b;font-size:11px">⚠ เลขบัตร ' + r.cid + ' ไม่พบในระบบ</span>' +
-        (r.savedName
-          ? '<br><span style="color:#6d28d9;font-size:11px">📝 ' + r.savedName + '</span>'
-          : '');
-      // แสดงช่องชื่อ prefill ด้วยชื่อที่มีอยู่
+        (r.savedName ? '<br><span style="color:#6d28d9;font-size:11px">📝 ' + r.savedName + '</span>' : '');
       _showNameFallback(r.role, true, r.savedName);
       return;
     }
 
-    // ── STEP 3: ค้นจากชื่อ ──
+    // STEP 3: ค้นจากชื่อ
     if (r.savedName && r.savedName.length > 1) {
       var nameClean = r.savedName.replace(/\s+/g, ' ').trim();
-      var byName = allData.find(function(x) {
+      var byName = pool.find(function(x) {
         var full  = ((x.pname||'') + ' ' + (x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g,' ').trim();
         var short = ((x.fname||'') + ' ' + (x.lname||'')).replace(/\s+/g,' ').trim();
         return full === nameClean || short === nameClean;
@@ -1670,12 +1681,11 @@ function _loadRelationFromLocal(p) {
         _showFound(byName);
         return;
       }
-      // ไม่พบแม้แต่ชื่อ → แสดงชื่อใน fallback
       _showNameOnly(r.savedName);
       return;
     }
 
-    // ── STEP 4: ไม่มีข้อมูลเลย → แสดง "ยังไม่ระบุ" + ซ่อนช่องชื่อ ──
+    // STEP 4: ไม่มีข้อมูล
     var el4 = document.getElementById('crud_' + r.role + '_info');
     el4.className = 'relation-info empty';
     el4.textContent = 'ยังไม่ระบุ';
@@ -1683,18 +1693,35 @@ function _loadRelationFromLocal(p) {
   });
 }
 
-function lookupRelative(role,val) {
-  const dropEl=document.getElementById('crud_'+role+'_cid_drop');
-  val=String(val||'').trim();
-  if(!val){dropEl.style.display='none';return;}
-  const isNum=/^\d+$/.test(val);
-  let results=[];
-  if(isNum&&val.length===13)results=allData.filter(p=>String(p.cid)===val).slice(0,1);
-  else if(isNum&&val.length>=3)results=allData.filter(p=>String(p.cid||'').startsWith(val)).slice(0,8);
-  else if(!isNum&&val.length>=2)results=allData.filter(p=>(p.fullname||'').includes(val)||(p.fname||'').includes(val)).slice(0,8);
-  if(!results.length){dropEl.style.display='none';return;}
-  dropEl.innerHTML=results.map(p=>`<div class="rel-drop-item" onclick="selectRelative('${role}','${p.person_id}')"><div class="rel-name">${p.pname||''}${p.fname||''} ${p.lname||''}</div><div class="rel-meta">${p.cid} | ${p.sex==='1'?'ชาย':'หญิง'} ${p.age_y||'?'}ปี</div></div>`).join('');
-  dropEl.style.display='block';
+function lookupRelative(role, val) {
+  const dropEl = document.getElementById('crud_' + role + '_cid_drop');
+  val = String(val || '').trim();
+  if (!val) { dropEl.style.display = 'none'; return; }
+
+  // ใช้ allPersonRaw ถ้ามี ไม่งั้น fallback allData
+  const pool = (allPersonRaw && allPersonRaw.length) ? allPersonRaw : allData;
+
+  const isNum = /^\d+$/.test(val);
+  let results = [];
+  if (isNum && val.length === 13)
+    results = pool.filter(p => String(p.cid).trim() === val).slice(0, 1);
+  else if (isNum && val.length >= 3)
+    results = pool.filter(p => String(p.cid || '').startsWith(val)).slice(0, 8);
+  else if (!isNum && val.length >= 2)
+    results = pool.filter(p =>
+      (p.fullname || '').includes(val) ||
+      (p.fname    || '').includes(val)
+    ).slice(0, 8);
+
+  if (!results.length) { dropEl.style.display = 'none'; return; }
+
+  dropEl.innerHTML = results.map(p =>
+    `<div class="rel-drop-item" onclick="selectRelative('${role}','${p.person_id}')">
+      <div class="rel-name">${p.pname||''}${p.fname||''} ${p.lname||''}</div>
+      <div class="rel-meta">${p.cid} | ${p.sex === '1' ? 'ชาย' : 'หญิง'} ${p.age_y||'?'}ปี</div>
+    </div>`
+  ).join('');
+  dropEl.style.display = 'block';
 }
 
 function selectRelative(role,personId) {
